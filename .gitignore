@@ -1,0 +1,6 @@
+/target/
+/data/
+/.idea/
+*.log
+/node_modules/
+/test-results/
