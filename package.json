@@ -1,0 +1,12 @@
+{
+  "name": "optilens-checks",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Optional browser and graph checks; the application itself is served by Java.",
+  "scripts": {
+    "test": "node --test tests/graph.test.mjs",
+    "test:browser": "node tests/browser.cjs",
+    "test:forwarding": "node tests/forwarding.cjs"
+  },
+  "devDependencies": { "@playwright/test": "1.51.1" }
+}

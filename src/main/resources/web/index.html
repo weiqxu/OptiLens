@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>OptiLens · 优化之镜</title><link rel="stylesheet" href="/styles.css"><script type="module" src="/app.mjs"></script></head>
+<body>
+<header class="topbar"><a class="brand" href="/" aria-label="OptiLens 首页"><span class="brand-mark">◎</span>OptiLens <span class="brand-sub">优化之镜</span></a><span class="engine">CALCITE 1.39.0 <span class="dot"></span> 本地研究环境</span></header>
+<main>
+  <section class="intro"><div><div class="eyebrow">QUERY OPTIMIZER EXPLORER</div><h1>看见优化发生的地方。</h1><p>从真实规则事件出发，逐步探索查询计划的变化。</p></div><div class="record-actions"><button id="import-button" class="secondary">导入记录</button><input id="import-file" type="file" accept=".json,application/json" hidden><a id="export" class="secondary disabled" aria-disabled="true">导出记录</a></div></section>
+  <section class="editor panel" aria-label="优化实验输入">
+    <div class="section-head"><h2><span class="section-index">01</span>查询实验</h2><label class="example-label">案例<select id="examples" aria-label="选择内置案例"><option>正在加载…</option></select></label></div>
+    <div class="database-row"><label for="database">数据库类型</label><select id="database" aria-label="数据库类型" disabled><option value="calcite">Apache Calcite · 1.39.0</option></select><span class="muted small">目前支持 Calcite 优化器</span></div>
+    <label class="field-label" for="sql">SQL</label><textarea id="sql" rows="5" spellcheck="false" aria-describedby="example-note"></textarea>
+    <div id="example-note" class="muted small"></div>
+    <details class="schema-details"><summary>表结构 <span class="muted">可编辑 JSON · 不连接真实数据库</span></summary><label class="field-label" for="schema">表名、列名与类型</label><textarea id="schema" rows="12" spellcheck="false"></textarea><p class="small muted">支持 INTEGER、BIGINT、DOUBLE、DECIMAL(18,2)、VARCHAR(255)、BOOLEAN、DATE、TIMESTAMP；类型字段填写不带括号的名称。</p></details>
+    <div class="rule-label">优化规则组与单条规则 <span id="rule-count" class="muted small" aria-live="polite"></span></div>
+    <div class="rule-toolbar"><input id="rule-search" disabled type="search" placeholder="搜索规则名、算子或实现" aria-label="搜索优化规则"><select id="rule-category" disabled aria-label="筛选规则分类"><option value="">全部分类</option></select><button id="rule-recommended" disabled class="secondary">常用组合</button><button id="rule-clear" disabled class="secondary">清空选择</button></div>
+    <p class="muted small">按目录顺序执行；搜索不会取消已有选择。最多选择 32 项，清空后可查看初始计划。</p>
+    <div id="rule-options" class="rule-options" aria-label="Calcite 规则目录"></div>
+    <p id="rule-empty" class="muted small" hidden>没有匹配的规则，请更换关键词或分类。</p>
+    <details class="rule-scope"><summary>规则目录范围</summary><p id="rule-scope" class="muted small"></p></details>
+    <div class="run-row"><span class="muted small">受控 HepPlanner 实验 · 仅优化，不执行查询</span><button id="run" class="primary" disabled>运行优化 <span aria-hidden="true">→</span></button></div>
+  </section>
+  <div id="status" role="status" aria-live="polite" class="status">正在连接本地服务…</div>
+  <div class="workspace-head"><h2><span class="section-index">02</span>优化过程</h2><label class="history-label">最近记录<select id="history"><option value="">选择历史运行</option></select></label></div>
+  <section id="empty" class="empty panel"><span class="empty-symbol">⌘</span><h3>从一个查询开始</h3><p>运行后，这里会展示实际阶段快照与规则事件。</p><p class="small muted">没有预填的优化结果，每次运行都由 Calcite 生成。</p></section>
+  <section id="workspace" class="workspace panel" hidden>
+    <nav id="steps" aria-label="优化阶段与规则事件"></nav>
+    <div class="analysis">
+      <div class="analysis-heading"><div><span id="scope" class="badge"></span><h3 id="selection-title"></h3></div><div class="legend"><span class="legend-before">变换前差异</span><span class="legend-after">变换后差异</span></div></div>
+      <p id="provenance" class="provenance"></p>
+      <div class="plan-pair">
+        <section class="plan-panel"><div class="plan-title"><h4 id="before-title">应用前</h4><div class="zoom-controls"><button data-zoom="before:-1" aria-label="缩小应用前计划">−</button><button data-zoom="before:0" aria-label="重置应用前计划缩放">1:1</button><button data-zoom="before:1" aria-label="放大应用前计划">+</button></div></div><div id="before" class="graph-scroll" tabindex="0" aria-label="应用前计划图，可滚动"></div></section>
+        <section class="plan-panel"><div class="plan-title"><h4 id="after-title">应用后</h4><div class="zoom-controls"><button data-zoom="after:-1" aria-label="缩小应用后计划">−</button><button data-zoom="after:0" aria-label="重置应用后计划缩放">1:1</button><button data-zoom="after:1" aria-label="放大应用后计划">+</button></div></div><div id="after" class="graph-scroll" tabindex="0" aria-label="应用后计划图，可滚动"></div></section>
+      </div>
+      <div class="explanation"><h4 id="change-title"></h4><p id="description"></p><p id="conditions" class="muted small"></p><a id="source" target="_blank" rel="noopener noreferrer">查看规则源码 ↗</a></div>
+      <details id="node-details" class="evidence"><summary>节点详情 <span id="node-label" class="muted small">点击图中的算子</span></summary><pre id="node-content">请选择一个节点。</pre></details>
+      <details class="evidence"><summary>原始计划与尝试记录</summary><div class="raw-pair"><div><h4>应用前 · Calcite 输出</h4><pre id="raw-before"></pre></div><div><h4>应用后 · Calcite 输出</h4><pre id="raw-after"></pre></div></div><h4>本阶段规则尝试</h4><pre id="attempts"></pre></details>
+      <details class="evidence"><summary>本次运行的范围与限制</summary><ul id="limitations"></ul><pre id="metadata"></pre></details>
+    </div>
+  </section>
+  <footer>OptiLens 0.1.0 <span>规则产生候选 ≠ 最终采用 ≠ 性能提升</span></footer>
+</main>
+</body></html>
