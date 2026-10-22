@@ -2,6 +2,7 @@
   "name": "optilens-checks",
   "version": "0.1.0",
   "private": true,
+  "license": "Apache-2.0",
   "description": "Optional browser and graph checks; the application itself is served by Java.",
   "scripts": {
     "test": "node --test tests/graph.test.mjs",
