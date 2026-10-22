@@ -15,6 +15,7 @@ The documentation, interface, built-in examples, rule catalog descriptions, and 
 Implemented features:
 
 - Database selection (currently Calcite only), a searchable rule catalog with category filters, and selection of individual rules or common rule groups.
+- A dedicated rule explorer with a database selector, searchable rule list, and 26 verified single-rule SQL examples with live before/after plans.
 - Editable SQL and declarative table schemas.
 - Real rule attempts and expression production events from Calcite 1.39.0 / HepPlanner.
 - Visual comparisons of initial and final plans, stage boundaries, and individual rule events.
@@ -46,6 +47,16 @@ OPTILENS_PORT=8081 OPTILENS_DATA_DIR=./data/runs java -jar target/optilens.jar
 The service listens only on `127.0.0.1` and is intended for local research. Records are stored in `data/runs/` by default, which Git ignores. Stop the service before backing up this directory. On restart, the service restores records and marks interrupted jobs as failed.
 
 Browser access through another local forwarding port is supported, such as `http://localhost:49894`. Address validation accepts valid ports on `localhost`, `127.0.0.1`, and `[::1]`; the browser port does not have to match the backend port. Non-local addresses are still rejected.
+
+## Rule explorer
+
+Open [http://127.0.0.1:8080/rules](http://127.0.0.1:8080/rules), or use **Rule explorer** from the query lab. Choose a database (currently Calcite), then select a rule from the left-hand list. Search by rule name or implementation, filter by category, or show only rules with verified examples.
+
+The explorer lists 222 individual catalog entries; common multi-rule groups remain in the query lab. For 26 rules, selecting an entry automatically submits a real SQL example with only that rule enabled. The right panel shows the SQL, table schema, explanation, and complete before/after plans. Use the View menu for local rule events, select graph nodes for details, inspect raw plans, or download the run. Each example is checked against Calcite 1.39.0 to ensure it produces an event; no diagram is a simulated transformation.
+
+Completed and pending examples are reused within the current page session. **Run again** creates a new run. Example runs are stored in normal history and count toward the existing job and record limits. Switching rules never assigns a late result to the newly selected rule.
+
+Entries without a verified example explicitly say so. Rules requiring additional configuration explain what is missing. **Try in Query lab** opens the selected rule and its example SQL when available; otherwise it provides an editable starting query without claiming it matches the rule. Date-range rules require Calcite connection/time-zone configuration and are currently listed as unavailable.
 
 ## Reading the results
 
@@ -91,6 +102,7 @@ Supported types are `INTEGER`, `BIGINT`, `DOUBLE`, `DECIMAL`, `VARCHAR`, `BOOLEA
 | --- | --- |
 | `GET /api/health` | Service health |
 | `GET /api/catalog` | Database types, rule catalog, catalog scope, and built-in examples |
+| `GET /api/rule-examples` | Verified single-rule example definitions for the rule explorer |
 | `POST /api/runs` | Submit `{database, sql, schema, rules}` and receive a job ID |
 | `GET /api/runs` | Summaries of the 30 most recent runs |
 | `GET /api/runs/{id}` | Job status and result |
@@ -131,6 +143,7 @@ Optional browser tests require a running service:
 npm ci
 npx playwright install chromium
 npm run test:browser
+npm run test:rules
 ```
 
 The local port-forwarding regression test starts its own temporary backend and proxy. Run `mvn package` first:
@@ -152,6 +165,7 @@ src/main/java/dev/optilens/
   Snapshots.java     Independent snapshots, Hep node unwrapping, and raw plans
   Model.java         Versioned run data structures
   Rules.java         Rule programs and source references
+  RuleExamples.java  Verified SQL examples for individual rules
   Input.java         Schema validation and built-in examples
   Records.java       Imported record validation
 src/main/resources/web/  Web interface without external CDN dependencies

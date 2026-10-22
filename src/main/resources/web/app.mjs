@@ -128,5 +128,15 @@ try{
   $('examples').replaceChildren(...catalog.examples.map(e=>new Option(e.title,e.id)));
   $('database').replaceChildren(...catalog.databases.map(d=>new Option(`${d.title} · ${d.version}`,d.id)));
   renderRules();
-  loadExample(catalog.examples[0]);setBusy(false);status('Ready · Select an example or enter a query');await refreshHistory();
+  loadExample(catalog.examples[0]);
+  const requestedRule=new URL(location.href).searchParams.get('rule');
+  if(requestedRule){
+    const rule=catalog.rules.find(r=>r.id===requestedRule&&r.runnable);
+    if(!rule)throw new Error('The requested rule is unknown or unavailable.');
+    const examples=await api('/api/rule-examples');
+    const example=examples.examples.find(e=>e.id===requestedRule);
+    loadExample(example||{input:{...catalog.examples[0].input,rules:[requestedRule]},note:'Only the selected rule is enabled. Edit the SQL to match its pattern; this query is not a verified example for that rule.'});
+    $('examples').value='';
+  }
+  setBusy(false);status('Ready · Select an example or enter a query');await refreshHistory();
 }catch(error){status('Unable to load the service: '+error.message,true);}

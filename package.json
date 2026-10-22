@@ -6,7 +6,8 @@
   "scripts": {
     "test": "node --test tests/graph.test.mjs",
     "test:browser": "node tests/browser.cjs",
-    "test:forwarding": "node tests/forwarding.cjs"
+    "test:forwarding": "node tests/forwarding.cjs",
+    "test:rules": "node tests/rules.cjs"
   },
   "devDependencies": { "@playwright/test": "1.51.1" }
 }

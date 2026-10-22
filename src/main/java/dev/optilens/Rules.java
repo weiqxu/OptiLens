@@ -42,7 +42,7 @@ public final class Rules {
     collect(result, "rel.rules.CoreRules", "Core logical rules", "");
     collect(result, "rel.rules.PruneEmptyRules", "Empty-result pruning", "");
     collect(result, "rel.rules.SingleValuesOptimizationRules", "Single-row values", "");
-    collect(result, "rel.rules.DateRangeRules", "Date ranges", "");
+    collect(result, "rel.rules.DateRangeRules", "Date ranges", "Requires Calcite connection and time-zone configuration");
     collect(result, "rel.rules.MeasureRules", "Measures", "Measure types are not configured in the current SQL and schema environment");
     collect(result, "rel.rules.SpatialRules", "Spatial rules", "Spatial functions are not registered in the current SQL environment");
     collect(result, "rel.rules.materialize.MaterializedViewRules", "Materialized views", "Requires registered materialized views and matching metadata");

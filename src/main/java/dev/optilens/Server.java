@@ -12,7 +12,7 @@ public final class Server implements AutoCloseable {
   private final HttpServer http;
   private final Jobs jobs;
   private final ExecutorService requests=Executors.newFixedThreadPool(8);
-  private static final Map<String,String> ASSETS=Map.of("/","index.html","/index.html","index.html","/app.mjs","app.mjs","/graph.mjs","graph.mjs","/styles.css","styles.css");
+  private static final Map<String,String> ASSETS=Map.of("/","index.html","/index.html","index.html","/app.mjs","app.mjs","/graph.mjs","graph.mjs","/styles.css","styles.css","/rules","rules.html","/rules.html","rules.html","/rules.mjs","rules.mjs","/rules.css","rules.css");
   public Server(int port,Path data) throws Exception {
     jobs=new Jobs(data);http=HttpServer.create(new InetSocketAddress("127.0.0.1",port),32);
     http.createContext("/",this::handle);http.setExecutor(requests);http.start();
@@ -32,6 +32,7 @@ public final class Server implements AutoCloseable {
           if(type==null||!type.toLowerCase(Locale.ROOT).startsWith("application/json")){reply(x,415,Map.of("error","Use Content-Type: application/json"));return;}
         }
         if(path.equals("/api/health") && method.equals("GET")){reply(x,200,Map.of("status","ok","version","0.1.0"));return;}
+        if(path.equals("/api/rule-examples") && method.equals("GET")){reply(x,200,Map.of("database","calcite","engineVersion","1.39.0","examples",RuleExamples.all()));return;}
         if(path.equals("/api/catalog") && method.equals("GET")){reply(x,200,Map.of("rules",Rules.cards(),"examples",Input.examples(),"engineVersion","1.39.0","databases",List.of(Map.of("id","calcite","title","Apache Calcite","version","1.39.0")),"scope",Rules.SCOPE,"maxSelected",Rules.MAX_SELECTED));return;}
         if(path.equals("/api/runs")){
           if(method.equals("GET")){reply(x,200,jobs.list());return;}
