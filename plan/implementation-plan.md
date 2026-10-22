@@ -1,282 +1,293 @@
-# OptiLens 设计与实施计划
+# OptiLens design and implementation plan
 
-状态：0.1 首版已实现；M3 持续完善，M4 尚未开始
+Status: Version 0.1 implemented; M3 in progress; M4 not started
 
-更新时间：2026-10-20
+Updated: 2026-10-22
 
-实际技术选择、验证范围和剩余工作见 [首版实现记录](v0.1-implementation.md)。
+See the [first-release implementation record](v0.1-implementation.md) for actual technology choices, validation scope, and remaining work.
 
-## 1. 项目目标
+## Project language
 
-构建一个研究数据库查询优化规则的服务，结合源码、计划与运行证据，回答以下问题：
+**English is required throughout the project.** Documentation, plans, user interface text, error messages, logs, code identifiers and comments, test descriptions, example explanations, commit messages, and pull request descriptions must use English. Apply the [project language policy](../README.md#project-language) to all new contributions and updates.
 
-1. 某个数据库版本实现了哪些优化，适用条件是什么？
-2. 对一条具体 SQL，优化器尝试或应用了哪些规则？
-3. 每次变换改变了哪些算子、表达式、属性或连接关系？
-4. 规则生成的候选是否进入最终计划？
-5. 不同数据库在相同案例上的优化行为有哪些异同？
+Language migration status:
 
-核心观察对象是逻辑计划、关系表达式及物理计划。SQL AST 可作为补充视图，但不将所有优化解释为 SQL 语法树改写。
+- [x] Translate the README and all documents in `plan/` into English, including diagrams, tables, and acceptance criteria.
+- [ ] Migrate existing non-English interface text, messages, logs, comments, and test/example descriptions to English, updating affected assertions as needed.
 
-## 2. 输入和结论边界
+The remaining migration is separate from this documentation update; the current interface has not yet been translated.
 
-| 输入 | 可提供的证据 | 不能单独确认的结论 |
+## 1. Project goals
+
+Build a service for researching database query optimization rules. Combine source code, plans, and runtime evidence to answer these questions:
+
+1. Which optimizations does a specific database version implement, and under what conditions do they apply?
+2. Which rules did the optimizer attempt or apply for a particular SQL query?
+3. Which operators, expressions, attributes, or input relationships changed in each transformation?
+4. Did a rule-generated candidate become part of the final plan?
+5. How does optimization behavior differ across databases for the same example?
+
+The primary objects of study are logical plans, relational expressions, and physical plans. A SQL AST can be a supplementary view, but not every optimization should be described as a SQL syntax-tree rewrite.
+
+## 2. Inputs and limits of inference
+
+| Input | Evidence it can provide | Conclusions it cannot establish on its own |
 | --- | --- | --- |
-| 源码及测试 | 规则实现、匹配模式、适用条件、测试覆盖 | 某条 SQL 实际触发了规则 |
-| 一份执行计划 | 输出算子、表达式、连接顺序及估算信息 | 完整的中间变换历史 |
-| 两份执行计划 | 结构和属性差异 | 差异由哪一条规则独立造成 |
-| 优化 trace 或插桩 | 已采集的规则事件、输入和输出表达式 | 未被记录的拒绝原因或搜索过程 |
-| 开关对照实验 | 某项配置变化后的计划及性能差异 | 每条内部规则的独立因果贡献 |
+| Source code and tests | Rule implementations, match patterns, applicability conditions, and test coverage | Whether a particular SQL query actually triggered a rule |
+| One execution plan | Output operators, expressions, join order, and estimates | The complete intermediate transformation history |
+| Two execution plans | Structural and attribute differences | Which single rule independently caused a difference |
+| Optimization trace or instrumentation | Captured rule events and input/output expressions | Unrecorded rejection reasons or search steps |
+| Experiments with optimization settings enabled or disabled | Plan and performance differences after a configuration change | The independent causal contribution of each internal rule |
 
-界面应区分“运行事件确认”“计划差异观察”“源码解释”“推断”和“演示数据”。不使用没有依据的置信度百分数。
+The interface should distinguish runtime-confirmed events, observed plan differences, source-based explanations, inferences, and demonstration data. Do not display unsupported confidence percentages.
 
-## 3. 首版范围
+## 3. First-release scope
 
-首版以 Calcite 为唯一执行与采集后端，优先使用 HepPlanner 和显式规则集合，完成可复现的逻辑优化闭环。
+The first release uses Calcite as the only optimization and collection backend. Prioritize HepPlanner and explicit rule sets to provide a reproducible logical optimization workflow.
 
-### 必须实现
+### Required features
 
-- 输入 SELECT SQL 和声明式表结构；提供内置案例，降低使用门槛。
-- 解析、校验 SQL，并生成初始逻辑计划。
-- 按已配置的规则程序运行优化，记录真实事件与计划数据。
-- 展示初始计划、相关变换步骤及最终逻辑计划。
-- 对选中步骤展示前后关系表达式或计划快照，突出差异。
-- 点击算子查看表达式、输入输出及可获得的属性。
-- 展示规则说明、适用条件与对应证据。
-- 导出可重新导入的运行记录，支持离线复查。
-- 标注引擎版本、配置、数据来源和缺失的信息。
+- Accept SELECT SQL and declarative table schemas, with built-in examples to make the tool easier to use.
+- Parse and validate SQL, then generate an initial logical plan.
+- Optimize using the configured rule program and collect real events and plan data.
+- Display the initial plan, relevant transformation steps, and final logical plan.
+- Compare before/after relational expressions or plan snapshots for the selected step and highlight differences.
+- Allow users to inspect expressions, inputs, outputs, and available attributes by selecting an operator.
+- Display rule explanations, applicability conditions, and supporting evidence.
+- Export run records that can be imported again for offline review.
+- Identify the engine version, configuration, data provenance, and missing information.
 
-### 暂不纳入首版
+### Outside the first release
 
-- 自动理解任意数据库的全部源码和规则。
-- 从一份 EXPLAIN 结果完整恢复优化历史。
-- 查询执行及性能基准测试。
-- 完整的 Volcano/Cascades 搜索空间回放。
-- 多数据库在线连接、团队权限和托管部署。
+- Automatically understanding every rule in an arbitrary database's source code.
+- Reconstructing a complete optimization history from one EXPLAIN result.
+- Query execution and performance benchmarking.
+- Complete replay of a Volcano/Cascades search space.
+- Live connections to multiple databases, team permissions, and hosted deployment.
 
-首版结果表示逻辑优化行为，不宣称已经测得执行性能收益。
+First-release results describe logical optimization behavior and do not claim measured execution performance gains.
 
-## 4. 服务架构
+## 4. Service architecture
 
 ```mermaid
 flowchart LR
-    A[SQL 与表结构] --> B[优化任务服务]
-    B --> C[Calcite 适配器]
-    C --> D[原始计划与事件]
-    D --> E[结构化解析与差异分析]
-    F[规则知识库] --> G[证据关联]
+    A[SQL and table schemas] --> B[Optimization job service]
+    B --> C[Calcite adapter]
+    C --> D[Raw plans and events]
+    D --> E[Structured parsing and difference analysis]
+    F[Rule knowledge base] --> G[Evidence linking]
     E --> G
-    G --> H[前后树对比与步骤回放]
-    I[导入运行记录] --> E
+    G --> H[Before/after trees and step replay]
+    I[Imported run records] --> E
 ```
 
-建议分为四个职责清晰的模块：
+Separate the system into four modules with clear responsibilities:
 
-| 模块 | 职责 |
+| Module | Responsibilities |
 | --- | --- |
-| 任务服务 | 输入校验、任务生命周期、超时、结果存取与导出 |
-| 引擎适配器 | 解析与优化、采集原始事件、声明支持的能力 |
-| 分析层 | 统一展示表示、差异计算、规则与证据关联 |
-| 前端 | 步骤选择、树与图展示、节点详情、原始证据查看 |
+| Job service | Input validation, job lifecycle, timeouts, result storage/retrieval, and export |
+| Engine adapter | Parsing and optimization, raw event collection, and supported-capability declarations |
+| Analysis layer | A shared display representation, difference calculation, and links between rules and evidence |
+| Frontend | Step selection, tree and graph display, node details, and raw evidence inspection |
 
-源码分析是后续独立模块；先手工维护经核查的少量规则卡片。
+Source analysis is a separate future module. Initially, maintain a small set of verified rule cards manually.
 
-### 初步技术选择
+### Initial technology proposals
 
-- 后端：Java + Apache Calcite；服务框架在技术验证后确定。
-- 前端：TypeScript；建议评估 React 与支持有向图布局的组件库。
-- 数据保存：首版可使用本地运行目录和 JSON，无需先引入数据库。
-- 依赖版本：技术验证时固定版本，记录在构建配置和运行结果中。
+- Backend: Java and Apache Calcite; select a service framework after technical validation.
+- Frontend: TypeScript; evaluate React and libraries that support directed graph layout.
+- Persistence: local run directories and JSON are sufficient for the first release; a database is not initially required.
+- Dependency versions: pin versions during technical validation and record them in build configuration and run results.
 
-以上为设计建议，不是已经完成的技术选型或现有仓库结构。
+These are original design proposals, not a description of completed technology choices or the current repository layout.
 
-## 5. Calcite 采集设计
+## 5. Calcite event collection
 
-使用 RelOptListener 监听规则尝试、表达式产生、等价关系及最终选择事件。RuleMatchVisualizer 可作为技术验证工具和参考实现；自有适配器负责输出 OptiLens 的版本化数据格式。
+Use RelOptListener to observe rule attempts, expression production, equivalence relationships, and final selection events. RuleMatchVisualizer can serve as a validation tool and reference implementation. The OptiLens adapter is responsible for emitting the project's versioned data format.
 
-需要在技术验证阶段确认：
+Technical validation must establish:
 
-- HepPlanner 各类事件的顺序、内容及规则调用标识。
-- 成功事件前后回调的配对方式，避免重复计为两次变换。
-- 局部输入输出表达式与完整计划之间的关系。
-- 初始计划、阶段边界及最终计划的快照采集点。
-- 表达式复用、包装节点及节点标识随阶段变化的行为。
+- The order and content of HepPlanner events, including rule invocation identifiers.
+- How to pair callbacks before and after a successful production without counting one transformation twice.
+- The relationship between local input/output expressions and complete plans.
+- Where to capture the initial plan, stage boundaries, and final plan.
+- How expression sharing, wrapper nodes, and node identifiers behave across stages.
 
-不能把事件提供的局部表达式直接宣称为完整全局计划。若某一步仅能可靠采集局部输入输出，就展示“局部变换”；完整计划只在已验证的采集点展示。
+A local expression supplied by an event must not be presented as a complete global plan. When only local input/output expressions can be captured reliably, label the view as a local transformation. Display complete plans only at validated collection points.
 
-首版可按明确阶段运行选定规则并采集阶段快照，但必须区分“阶段前后变化”和“单次规则事件”。不把拆分后的受控实验冒充引擎默认优化流程。
+The first release may execute selected rules in explicit stages and collect stage snapshots. It must distinguish changes across stage boundaries from individual rule events and must not present the controlled experiment as the engine's default optimization pipeline.
 
-快照必须保存当时的数据，避免保留可变对象引用导致历史结果被覆盖。
+Snapshots must preserve values at capture time. Keeping mutable object references can overwrite historical results and must be avoided.
 
-## 6. 核心数据模型
+## 6. Core data model
 
-### OptimizationRun：一次优化运行
+### OptimizationRun: one optimization run
 
-- 运行 ID、记录格式版本、创建时间及状态。
-- 引擎名称、版本与可获得的源码提交标识。
-- SQL、表结构、可用统计信息及优化配置。
-- 规则程序、执行顺序和停止条件。
-- 初始快照、最终快照、事件序列及原始数据位置。
-- 采集能力与缺失信息说明。
+- Run ID, record format version, creation time, and status.
+- Engine name, version, and source commit identifier when available.
+- SQL, table schemas, available statistics, and optimization settings.
+- Rule program, execution order, and stopping conditions.
+- Initial and final snapshots, event sequence, and raw data locations.
+- Collection capabilities and descriptions of missing information.
 
-### PlanSnapshot：计划或表达式快照
+### PlanSnapshot: a plan or expression snapshot
 
-- 快照 ID、阶段、范围：完整计划或局部表达式。
-- 根节点、节点集合、输入边及输入顺序。
-- 原生算子类型与统一展示类型。
-- 表达式、输出列、连接类型和其他引擎属性。
-- 可获得的估计行数、cost 及其来源；缺失时保持为空。
-- 原始引擎输出。
+- Snapshot ID, stage, and scope: complete plan or local expression.
+- Root node, node collection, input edges, and input order.
+- Native operator type and shared display type.
+- Expressions, output columns, join types, and other engine attributes.
+- Estimated row counts and costs, with provenance when available; leave missing values empty.
+- Raw engine output.
 
-模型允许节点共享和有向无环图；后续扩展等价集合及物理属性，不仅保存嵌套树。
+The model must support shared nodes and directed acyclic graphs rather than only nested trees. Equivalence sets and physical properties can be added later.
 
-### RuleEvent：规则相关事件
+### RuleEvent: a rule-related event
 
-- 事件序号、事件类型、规则标识及调用标识。
-- 输入与输出表达式、关联快照、匹配节点。
-- 状态：尝试、产生结果、发现等价关系等。
-- 引擎明确提供的原因或附加信息。
-- 证据来源和原始记录引用。
+- Sequence number, event type, rule identifier, and invocation identifier.
+- Input/output expressions, associated snapshots, and matched nodes.
+- State, such as attempted, produced an expression, or discovered equivalence.
+- Reasons or additional information explicitly supplied by the engine.
+- Evidence provenance and references to raw records.
 
-不将“事件中未给出拒绝理由”改写为“规则不适用”。最终选择信息与变换事件分别保存；无法可靠关联时，最终采用状态为未知。
+Do not reinterpret a missing rejection reason as proof that a rule is inapplicable. Store final-selection information separately from transformation events. If they cannot be linked reliably, the candidate's final adoption status is unknown.
 
-### RuleCard：规则知识卡片
+### RuleCard: a rule knowledge card
 
-- 规则名称、引擎、版本范围和概念分类。
-- 源码文件、符号及固定提交链接。
-- 匹配模式、适用条件与语义限制。
-- 变换说明、示例 SQL 和关联测试。
-- 信息来源及核查状态。
+- Rule name, engine, applicable version range, and conceptual category.
+- Source file, symbol, and link pinned to a specific commit.
+- Match pattern, applicability conditions, and semantic restrictions.
+- Transformation explanation, example SQL, and related tests.
+- Information sources and verification status.
 
-规则概念与引擎实现允许多对多关联，避免假设不同数据库存在一一对应的规则。
+Allow many-to-many relationships between optimization concepts and engine implementations. Do not assume that rules in different databases correspond one to one.
 
-## 7. 差异分析
+## 7. Difference analysis
 
-优先使用同一运行中的可靠节点标识和事件关系；缺少标识时，结合算子类型、表达式、输入结构和列来源进行匹配。
+Prefer reliable node identifiers and event relationships within the same run. When identifiers are unavailable, combine operator types, expressions, input structure, and column provenance to establish matches.
 
-显示以下差异：
+Display these differences:
 
-- 节点新增或删除。
-- 节点移动和输入边变化。
-- 表达式变化，例如常量折叠。
-- 输出列及物理属性变化。
+- Added or removed nodes.
+- Node movement and changes to input edges.
+- Expression changes, such as constant folding.
+- Changes to output columns and physical properties.
 
-匹配不唯一时保留歧义，避免把两个相似子树强行判为同一节点。规范化应保留 NULL、类型、排序、连接语义及重复行语义；不要为让图形一致而丢掉这些信息。
+Preserve ambiguity when matching is not unique; do not force two similar subtrees to represent the same node. Normalization must preserve NULL behavior, types, ordering, join semantics, and duplicate-row semantics rather than discard them to make graphs look alike.
 
-跨运行、跨数据库的差异只能先描述观察到的变化。规则归因需要额外事件或源码证据。
+Comparisons across runs or databases should initially describe observed changes only. Attribution to rules requires additional event or source evidence.
 
-## 8. 图形界面
+## 8. Graphical interface
 
-默认采用双树对比布局：
+Use a side-by-side tree comparison as the default layout:
 
 ```text
-SQL、表结构与运行配置
-┌────────────┬───────────────────┬───────────────────┐
-│ 规则步骤   │ 应用前计划/表达式 │ 应用后计划/表达式 │
-│            │                   │                   │
-│ 常量折叠   │ 节点与输入连线    │ 高亮变化节点      │
-│ 谓词下推   │                   │                   │
-│ 列裁剪     │                   │                   │
-├────────────┴───────────────────┴───────────────────┤
-│ 变化说明、适用条件、证据类型、节点详情与源码链接   │
-└───────────────────────────────────────────────────┘
+SQL, table schemas, and run configuration
++------------------+-------------------------+-------------------------+
+| Rule steps       | Plan/expression before  | Plan/expression after   |
+|                  |                         |                         |
+| Constant folding | Nodes and input edges   | Highlighted changes     |
+| Predicate push   |                         |                         |
+| Column pruning   |                         |                         |
++------------------+-------------------------+-------------------------+
+| Change explanation, conditions, evidence type, details, source links |
++--------------------------------------------------------------------+
 ```
 
-- 切换步骤后同时更新前后树和说明。
-- 差异使用颜色与文字双重标识，不能只依赖颜色。
-- 点击节点查看完整表达式、输出列和原始属性。
-- 保持可对应节点的布局尽量稳定，减少视觉跳动。
-- 大计划支持缩放、定位和子树折叠；窄屏改为上下对比。
-- 初始与最终状态明确标识，局部事件单独标注范围。
-- 后续增加等价候选图，以表达成本优化器的搜索过程。
+- Update both trees and the explanation when the selected step changes.
+- Identify differences using both color and text, never color alone.
+- Show complete expressions, output columns, and raw attributes when a node is selected.
+- Keep corresponding nodes as stable as possible in the layout to reduce visual movement.
+- Support zoom, navigation, and subtree collapsing for large plans; stack comparisons vertically on narrow screens.
+- Clearly identify initial and final states, and label the scope of local events separately.
+- Add equivalent-candidate graphs later to represent the search process of cost-based optimizers.
 
-已有交互讨论稿只用于说明布局和交互，不作为真实规则行为的证据。
+The existing interactive design mockup illustrates layout and interaction only. It is not evidence of actual rule behavior.
 
-## 9. 分阶段实施与验收
+## 9. Implementation milestones and acceptance criteria
 
-### M0：采集技术验证
+### M0: Validate event collection
 
-- [x] 固定 Java 与 Calcite 版本，建立最小构建和测试入口。
-- [x] 定义内存表结构，完成 SELECT 的解析、校验和计划生成。
-- [x] 验证 HepPlanner 监听事件及完整快照的采集方式。
-- [x] 用一条可复现 SQL 导出真实前后数据及事件。
+- [x] Pin Java and Calcite versions and establish a minimal build and test entry point.
+- [x] Define in-memory table schemas and implement SELECT parsing, validation, and plan generation.
+- [x] Validate HepPlanner listener events and complete snapshot collection.
+- [x] Export real before/after data and events for one reproducible SQL query.
 
-验收：同一案例能够重新运行；证据可追溯到具体规则事件；清楚区分局部表达式与完整计划。
+Acceptance: the same example can be rerun, evidence is traceable to specific rule events, and local expressions are clearly distinguished from complete plans.
 
-### M1：优化任务服务
+### M1: Optimization job service
 
-- [x] 实现任务提交、状态查询、结果获取和记录导出。
-- [x] 实现版本化运行格式、原始数据保存和导入校验。
-- [x] 设置 SQL 大小、优化时间、事件数量及图规模上限。
-- [x] 限制首版输入为支持的查询类型和声明式表结构。
-- [x] 返回可理解的解析错误、优化失败和超时状态。
+- [x] Implement job submission, status queries, result retrieval, and record export.
+- [x] Implement a versioned run format, raw data persistence, and import validation.
+- [x] Set limits on SQL size, optimization time, event count, and graph size.
+- [x] Restrict first-release input to supported query types and declarative table schemas.
+- [x] Return understandable parse errors, optimization failures, and timeout states.
 
-验收：通过服务提交案例可获取真实结果；失败任务有明确状态；导出记录可重新导入。
+Acceptance: examples submitted through the service produce real results, failed jobs have explicit states, and exported records can be imported again.
 
-### M2：图形对比与回放
+### M2: Visual comparison and replay
 
-- [x] 实现步骤列表、前后计划布局和节点详情。
-- [x] 实现结构及属性差异高亮。
-- [x] 显示证据类型、采集范围、版本和缺失信息。
-- [x] 支持初始与最终计划查看。
+- [x] Implement the step list, before/after plan layout, and node details.
+- [x] Highlight structural and attribute differences.
+- [x] Show evidence type, collection scope, version, and missing information.
+- [x] Support inspection of initial and final plans.
 
-验收：选择不同事件会显示对应数据；差异和事件一致；可核查原始记录；窄屏及键盘操作可用。
+Acceptance: selecting an event displays its associated data, differences agree with events, raw records can be inspected, and narrow-screen and keyboard interaction work.
 
-### M3：规则案例库
+### M3: Rule example library
 
-- [x] 建立 5～10 个典型案例，并关联规则卡片及源码。
-- [x] 覆盖常量折叠、谓词下推、投影裁剪等规则类别。
-- [ ] 添加外连接、NULL、类型转换和重复行相关边界案例。
-- [x] 明确区分适用、产生变换、不产生变换及原因未知。
+- [x] Create five to ten typical examples and link them to rule cards and source code.
+- [x] Cover constant folding, predicate pushdown, projection pruning, and related rule categories.
+- [ ] Add boundary examples for outer joins, NULL, type conversion, and duplicate rows.
+- [x] Distinguish applicability, observed transformations, absence of transformations, and unknown reasons.
 
-验收：案例具有稳定的检查点；没有把模拟数据混入真实运行记录；规则条件有源码或测试依据。
+Acceptance: examples have stable checkpoints, simulated data is not mixed into real run records, and rule conditions are supported by source code or tests.
 
-### M4：第二引擎与扩展研究
+### M4: A second engine and further research
 
-- [ ] 优先评估 Spark 规则变更日志适配，验证跨引擎表示。
-- [ ] 按引擎能力加入 DuckDB 或 PostgreSQL 的计划导入。
-- [ ] 增加等价候选图和规则开关对照实验。
-- [ ] 评估源码索引与大模型辅助规则解释。
+- [ ] Prioritize evaluating a Spark rule-change log adapter to validate the cross-engine representation.
+- [ ] Add DuckDB or PostgreSQL plan import according to engine capabilities.
+- [ ] Add equivalent-candidate graphs and experiments with rule settings enabled or disabled.
+- [ ] Evaluate source indexing and model-assisted rule explanations.
 
-验收：每个适配器明确报告支持什么，不支持什么；纯计划输入不会生成伪造的规则历史。
+Acceptance: each adapter explicitly reports supported and unsupported capabilities, and plan-only inputs never produce fabricated rule histories.
 
-## 10. 验证策略
+## 10. Validation strategy
 
-- 解析和优化：用真实 Calcite 运行结果验证，避免只测试手工模拟事件。
-- 采集：验证回调配对、快照独立性、最终状态和导出导入一致性。
-- 差异：覆盖表达式变化、节点移动、共享输入和匹配歧义。
-- 语义：选取小型固定数据，必要时在测试中比较优化前后结果；此测试不代表产品已提供执行服务。
-- 界面：验证步骤切换、节点详情与实际记录对应，并检查响应式布局。
-- 版本升级：保存经核查的案例记录，检查规则行为和记录格式变化。
+- Parsing and optimization: validate against real Calcite runs rather than only manually simulated events.
+- Collection: verify callback pairing, snapshot independence, final states, and export/import consistency.
+- Differences: cover expression changes, node movement, shared inputs, and ambiguous matching.
+- Semantics: use small fixed datasets and compare results before and after optimization in tests when necessary. Such tests do not imply that the product provides a query execution service.
+- Interface: verify that step selection and node details correspond to actual records, and check responsive layout.
+- Version upgrades: retain verified example records and check for changes to rule behavior and record formats.
 
-不要求所有运行产生相同节点编号或完全相同的事件顺序；稳定性检查以语义、配置及可解释差异为主。
+Do not require identical node identifiers or event ordering in every run. Stability checks should focus on semantics, configuration, and explainable differences.
 
-## 11. 关键风险与处理
+## 11. Key risks and mitigations
 
-| 风险 | 处理方式 |
+| Risk | Mitigation |
 | --- | --- |
-| 事件不含完整计划 | 区分局部事件和阶段快照，先做采集验证 |
-| 一个开关影响多条优化 | 将其标为配置对照实验，避免单规则归因 |
-| 计划和源码版本不一致 | 运行记录绑定版本，源码链接固定提交 |
-| 规则或搜索空间过大 | 限制事件及图规模，保留截断标识 |
-| 不同引擎丢失语义 | 保留原生输出与属性，按能力逐步适配 |
-| 自动源码解释出错 | 保留依据与核查状态，不把模型输出当运行事实 |
+| Events do not contain complete plans | Distinguish local events from stage snapshots and validate collection first |
+| One setting affects multiple optimizations | Label the operation as a configuration comparison and avoid attribution to a single rule |
+| Plan and source versions differ | Bind records to engine versions and pin source links to specific commits |
+| Rules or search spaces become too large | Limit event and graph sizes and preserve any truncation markers |
+| Cross-engine representations lose semantics | Preserve native output and attributes and adapt incrementally according to capabilities |
+| Automated source explanations are incorrect | Preserve supporting evidence and verification status; do not treat model output as runtime fact |
 
-## 12. 待技术验证确定的事项
+## 12. Original questions for technical validation
 
-1. HepPlanner 事件与阶段快照的具体关联方案。
-2. 首批规则的确切实现名称、配置与适用版本。
-3. 前端图布局组件和后端服务框架。
-4. 第二个引擎的接入优先级。
+1. The specific relationship between HepPlanner events and stage snapshots.
+2. Exact implementation names, configurations, and applicable versions for the initial rules.
+3. The frontend graph layout library and backend service framework.
+4. The priority of the second engine integration.
 
-优先解决前两项，再扩展界面和服务，确保展示内容有真实证据支撑。
+The original plan prioritized the first two questions before expanding the interface and service, so that displayed results would be supported by real evidence. Decisions reached in the first release are recorded in the [implementation record](v0.1-implementation.md).
 
-## 13. 参考资料
+## 13. References
 
 - [Calcite RuleMatchVisualizer](https://calcite.apache.org/javadocAggregate/org/apache/calcite/plan/visualizer/RuleMatchVisualizer.html)
 - [Calcite RelOptListener](https://calcite.apache.org/javadocAggregate/org/apache/calcite/plan/RelOptListener.html)
-- [Calcite 查询优化教程](https://calcite.apache.org/docs/tutorial.html)
+- [Calcite query optimization tutorial](https://calcite.apache.org/docs/tutorial.html)
 - [Spark RuleExecutor](https://github.com/apache/spark/blob/master/sql/catalyst/src/main/scala/org/apache/spark/sql/catalyst/rules/RuleExecutor.scala)
 - [PostgreSQL EXPLAIN](https://www.postgresql.org/docs/current/sql-explain.html)
 
-实施时需核对固定版本对应的 API 与行为，不能直接将主分支文档视为所有版本的保证。
+During implementation, verify APIs and behavior against the pinned version. Documentation for a project's main branch is not a guarantee for all versions.
