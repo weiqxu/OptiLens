@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Rule Explorer · OptiLens</title><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/rules.css"><script type="module" src="/rules.mjs"></script></head>
+<body>
+<header class="topbar"><a class="brand" href="/" aria-label="OptiLens home"><span class="brand-mark">◎</span>OptiLens <span class="brand-sub">Optimizer Explorer</span></a><nav class="page-nav" aria-label="Main navigation"><a href="/">Query lab</a><a href="/rules" aria-current="page">Rule explorer</a></nav></header>
+<main class="explorer-main">
+  <section class="explorer-intro"><div><div class="eyebrow">RULE EXPLORER</div><h1>One rule. See the transformation.</h1><p>Choose a database, explore its rules, and inspect a real before-and-after example.</p></div><label class="database-picker" for="explorer-database">Database<select id="explorer-database" disabled><option value="calcite">Apache Calcite · 1.39.0</option></select><span class="small muted">Calcite is currently the only supported engine.</span></label></section>
+  <p id="catalog-status" class="status" role="status">Loading the rule catalog…</p>
+  <section id="rule-explorer" class="explorer-layout">
+    <aside class="rule-sidebar panel" aria-label="Database rules">
+      <div class="sidebar-controls"><h2>Rule catalog <span id="catalog-total" class="badge"></span></h2><label class="field-label" for="explorer-search">Search rules</label><input id="explorer-search" type="search" placeholder="Name, operator, or implementation" disabled><label class="field-label" for="explorer-category">Category</label><select id="explorer-category" disabled><option value="">All categories</option></select><label class="example-filter"><input id="examples-only" type="checkbox" disabled> With verified examples</label><p id="list-count" class="small muted" aria-live="polite"></p></div>
+      <div id="explorer-list" class="explorer-list" aria-label="Select a rule"></div><p id="list-empty" class="list-empty muted small" hidden>No rules match these filters.</p>
+      <details class="catalog-scope"><summary>Catalog scope</summary><p id="catalog-scope" class="small muted"></p></details>
+    </aside>
+    <article class="rule-detail panel" aria-label="Selected rule">
+      <div id="detail-empty" class="detail-empty"><span class="empty-symbol">⇄</span><h2>Select a rule</h2><p>Its explanation and transformation example will appear here.</p></div>
+      <div id="detail-content" hidden>
+        <header class="detail-header"><div class="detail-kicker"><span id="detail-category" class="eyebrow"></span><span id="detail-availability" class="badge"></span></div><h2 id="detail-title" tabindex="-1"></h2><code id="detail-id"></code><p id="detail-description"></p><p id="detail-conditions" class="small muted"></p><div class="detail-actions"><a id="detail-source" target="_blank" rel="noopener noreferrer">Rule source ↗</a><a id="open-lab" class="secondary">Try in Query lab →</a></div></header>
+        <section id="no-example" class="example-unavailable" hidden><span class="empty-symbol">◇</span><h3 id="no-example-title"></h3><p id="no-example-note"></p></section>
+        <section id="example-section" hidden>
+          <div class="example-heading"><div><div class="eyebrow">TRANSFORMATION EXAMPLE</div><h3 id="example-title"></h3></div><button id="rerun-example" class="secondary" disabled>Run again</button></div>
+          <p id="example-note"></p><pre id="example-sql" class="example-sql" aria-label="Example SQL"></pre>
+          <details class="example-schema"><summary>Table schema</summary><pre id="example-schema"></pre></details>
+          <p class="small muted">Only this rule is enabled. The initial plan is captured after SQL conversion.</p>
+          <p id="example-status" class="status" role="status" aria-live="polite"></p>
+          <div id="example-result" hidden>
+            <div class="result-toolbar"><span class="badge">Live Calcite evidence</span><label for="example-view">View<select id="example-view"></select></label><a id="download-example" class="small">Download run ↓</a></div>
+            <p id="example-scope" class="small muted"></p>
+            <div class="plan-pair">
+              <section class="plan-panel"><div class="plan-title"><h4>Before</h4><div class="zoom-controls"><button data-zoom="before:-1" aria-label="Zoom out before">−</button><button data-zoom="before:0" aria-label="Reset before zoom">1:1</button><button data-zoom="before:1" aria-label="Zoom in before">+</button></div></div><div id="example-before" class="graph-scroll" tabindex="0" aria-label="Plan before, scrollable"></div></section>
+              <section class="plan-panel"><div class="plan-title"><h4>After</h4><div class="zoom-controls"><button data-zoom="after:-1" aria-label="Zoom out after">−</button><button data-zoom="after:0" aria-label="Reset after zoom">1:1</button><button data-zoom="after:1" aria-label="Zoom in after">+</button></div></div><div id="example-after" class="graph-scroll" tabindex="0" aria-label="Plan after, scrollable"></div></section>
+            </div>
+            <div class="result-legend"><span class="legend-before">■ Before differences</span><span class="legend-after">■ After differences</span><span id="difference-summary"></span></div>
+            <details id="example-node" class="evidence"><summary>Node details <span class="muted small">Select an operator</span></summary><pre id="example-node-content"></pre></details>
+            <details class="evidence"><summary>Raw plans and rule attempts</summary><div class="raw-pair"><div><h4>Before</h4><pre id="example-raw-before"></pre></div><div><h4>After</h4><pre id="example-raw-after"></pre></div></div><h4>Attempts</h4><pre id="example-attempts"></pre></details>
+            <details class="evidence"><summary>Run scope and limitations</summary><ul id="example-limitations"></ul></details>
+          </div>
+        </section>
+      </div>
+    </article>
+  </section>
+  <footer>OptiLens 0.1.0 <span>Candidate produced ≠ Final selection ≠ Performance gain</span></footer>
+</main>
+</body></html>

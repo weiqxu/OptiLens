@@ -21,6 +21,12 @@ class ServerTest {
     try(var server=new Server(0,directory)){
       assertEquals(200,request(server,"GET","/",null).statusCode());
       assertEquals(200,request(server,"GET","/app.mjs",null).statusCode());
+      assertEquals(200,request(server,"GET","/rules",null).statusCode());
+      assertEquals(200,request(server,"GET","/rules.mjs",null).statusCode());
+      assertEquals(200,request(server,"GET","/rules.css",null).statusCode());
+      var library=Json.MAPPER.readTree(request(server,"GET","/api/rule-examples",null).body());
+      assertEquals("calcite",library.get("database").asText());
+      assertEquals(RuleExamples.all().size(),library.get("examples").size());
       var catalog=Json.MAPPER.readTree(request(server,"GET","/api/catalog",null).body());
       assertEquals("calcite",catalog.get("databases").get(0).get("id").asText());
       assertTrue(catalog.get("rules").size()>200);
