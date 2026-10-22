@@ -183,3 +183,10 @@ The frontend uses native JavaScript modules and SVG, and the backend uses JDK HT
 - [Calcite 1.39.0 source](https://github.com/apache/calcite/tree/calcite-1.39.0)
 - [RelOptListener](https://calcite.apache.org/javadocAggregate/org/apache/calcite/plan/RelOptListener.html)
 - [RuleMatchVisualizer](https://calcite.apache.org/javadocAggregate/org/apache/calcite/plan/visualizer/RuleMatchVisualizer.html)
+
+## License
+
+Copyright 2026 OptiLens contributors.
+
+OptiLens is licensed under the [Apache License, Version 2.0](LICENSE).
+Third-party dependencies remain subject to their respective licenses and notices.
