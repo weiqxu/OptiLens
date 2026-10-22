@@ -8,7 +8,7 @@ OptiLens is a locally hosted web research tool. Supply SQL and table schemas, co
 
 **English is the required language throughout this project.** Use English for documentation and plans, user interface text, error messages, logs, code identifiers and comments, test descriptions and example explanations, commit messages, and pull request descriptions. All new contributions and updates must follow this convention.
 
-The documentation has been translated to English. Existing non-English application text predates this policy and still needs to be migrated; this documentation update does not change the application's current interface language.
+The documentation, interface, built-in examples, rule catalog descriptions, and application-generated messages use English. Historical and imported records retain their original content and language, and user-supplied SQL and data are not translated.
 
 ## Current version: 0.1.0
 

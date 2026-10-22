@@ -44,7 +44,7 @@ const path = require('node:path');
     for (const rewriting of [false, true]) {
       rewriteHost = rewriting;
       await page.click('#run');
-      await expect(page.locator('#status')).toHaveText(/^已完成/, { timeout: 40000 });
+      await expect(page.locator('#status')).toHaveText(/^Completed/, { timeout: 40000 });
       await expect(page.locator('#after .plan-node').first()).toBeVisible();
     }
     console.log('Forwarding checks passed: page, catalog and real SQL submissions work with preserved or rewritten Host and a different browser port.');

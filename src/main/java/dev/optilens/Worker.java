@@ -13,7 +13,7 @@ public final class Worker {
       outcome=new Outcome(new Optimizer().optimize(input),null);
     }catch(Exception | StackOverflowError e){outcome=new Outcome(null,error(e));}
     byte[] bytes=Json.MAPPER.writeValueAsBytes(outcome);
-    if(bytes.length>8_000_000)bytes=Json.MAPPER.writeValueAsBytes(new Outcome(null,"运行记录超过 8 MB 上限，请缩小查询或规则集合"));
+    if(bytes.length>8_000_000)bytes=Json.MAPPER.writeValueAsBytes(new Outcome(null,"Run record exceeds the 8 MB limit. Use a smaller query or fewer rules."));
     Files.write(Path.of(args[1]),bytes);
   }
   static String error(Throwable e){

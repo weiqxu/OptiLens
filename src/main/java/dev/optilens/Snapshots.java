@@ -25,7 +25,7 @@ public final class Snapshots {
   private static void visit(RelNode original, LinkedHashMap<String,PlanNode> nodes, int depth) {
     RelNode n=unwrap(original);
     if(nodes.containsKey(id(n))) return;
-    Input.require(depth<=40 && nodes.size()<250,"计划超过 250 个节点或 40 层深度上限");
+    Input.require(depth<=40 && nodes.size()<250,"Plan exceeds the limit of 250 nodes or 40 levels");
     var writer = new Attributes(); n.explain(writer);
     var fields=n.getRowType().getFieldList().stream().map(f->f.getName()+": "+f.getType().getFullTypeString()).toList();
     nodes.put(id(n),new PlanNode(id(n),n.getRelTypeName(),Collections.unmodifiableMap(writer.values),fields,n.getInputs().stream().map(Snapshots::id).toList()));

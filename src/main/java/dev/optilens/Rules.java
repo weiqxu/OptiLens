@@ -11,44 +11,44 @@ public final class Rules {
   public record Definition(RuleCard card, List<RelOptRule> rules) {}
   private static final String SOURCE = "https://github.com/apache/calcite/blob/calcite-1.39.0/core/src/main/java/org/apache/calcite/rel/rules/";
   public static final List<Definition> ALL = List.of(
-      definition("reduce", "表达式化简", "计算常量表达式，并按 Calcite 的类型和 NULL 语义化简过滤与投影。",
-          "匹配 Filter 或 Project；仅化简引擎认为可安全求值的表达式。SQL 转换阶段可能已提前完成部分化简。",
+      definition("reduce", "Expression reduction", "Evaluate constant expressions and simplify filters and projections using Calcite type and NULL semantics.",
+          "Matches Filter or Project. Only expressions the engine considers safe to evaluate are reduced. SQL conversion may already have performed some reductions.",
           "ReduceExpressionsRule.java", CoreRules.FILTER_REDUCE_EXPRESSIONS, CoreRules.PROJECT_REDUCE_EXPRESSIONS),
-      definition("filter-join", "连接谓词下推", "将过滤或连接条件下推至允许的输入，也可能简化连接类型。",
-          "实际行为由连接类型、列引用和 NULL 拒绝条件决定；不能把内连接条件直接套用到外连接。",
+      definition("filter-join", "Join predicate pushdown", "Push filter or join conditions into eligible inputs, potentially simplifying the join type.",
+          "Behavior depends on join type, column references, and NULL-rejecting conditions. Inner-join assumptions do not automatically apply to outer joins.",
           "FilterJoinRule.java", CoreRules.FILTER_INTO_JOIN, CoreRules.JOIN_CONDITION_PUSH),
-      definition("filter-project", "过滤穿过投影", "将过滤条件改写为投影输入上的表达式，并向下移动。",
-          "匹配 Filter → Project；包含窗口等不允许穿越的表达式时可能不产生结果。",
+      definition("filter-project", "Filter through projection", "Rewrite filter conditions in terms of the projection input and push them below the projection.",
+          "Matches Filter → Project. Window expressions or other barriers may prevent a transformation.",
           "FilterProjectTransposeRule.java", CoreRules.FILTER_PROJECT_TRANSPOSE),
-      definition("project-join", "连接输入列裁剪", "在连接输入添加投影，仅保留上层输出和连接条件需要的表达式。",
-          "匹配 Project → Join。新增投影表示逻辑输出裁剪，不证明底层存储减少了读取。",
+      definition("project-join", "Join input column pruning", "Add projections to join inputs, retaining expressions needed by parent outputs and join conditions.",
+          "Matches Project → Join. Added projections indicate logical output pruning, not proof of fewer storage reads.",
           "ProjectJoinTransposeRule.java", CoreRules.PROJECT_JOIN_TRANSPOSE),
-      definition("project-cleanup", "投影整理", "合并相邻投影并删除恒等投影。",
-          "仅在引擎确认表达式合并或恒等映射成立时变换；不产生结果的具体原因未采集。",
+      definition("project-cleanup", "Projection cleanup", "Merge adjacent projections and remove identity projections.",
+          "Transforms only when the engine confirms that expression merging or an identity mapping is valid. Specific reasons for producing no result are not collected.",
           "ProjectMergeRule.java", CoreRules.PROJECT_MERGE, CoreRules.PROJECT_REMOVE));
 
   private static Definition definition(String id, String title, String description, String conditions,
       String source, RelOptRule... rules) {
     var list = List.of(rules);
     return new Definition(new RuleCard(id, title, description, conditions,
-        list.stream().map(Object::toString).toList(), SOURCE + source, "常用规则组", true, ""), list);
+        list.stream().map(Object::toString).toList(), SOURCE + source, "Common rule groups", true, ""), list);
   }
   private static final String ROOT = "https://github.com/apache/calcite/blob/calcite-1.39.0/core/src/main/java/";
-  public static final String SCOPE = "目录来自 Calcite 1.39.0 的 CoreRules、PruneEmptyRules、DateRangeRules、SingleValuesOptimizationRules、MeasureRules、SpatialRules、MaterializedViewRules、StreamRules、EnumerableRules、Bindables 和 JdbcRules。包含公开规则常量、列表及 JDBC 规则类型；不含额外适配器、自定义规则或运行时配置生成的全部变体。";
+  public static final String SCOPE = "The catalog covers Calcite 1.39.0 CoreRules, PruneEmptyRules, DateRangeRules, SingleValuesOptimizationRules, MeasureRules, SpatialRules, MaterializedViewRules, StreamRules, EnumerableRules, Bindables, and JdbcRules. It includes public rule constants, lists, and JDBC rule types, excluding additional adapters, custom rules, and the full set of runtime-configured variants.";
   private static final List<Definition> CATALOG = catalog();
 
   private static List<Definition> catalog() {
     var result = new ArrayList<>(ALL);
-    collect(result, "rel.rules.CoreRules", "核心逻辑规则", "");
-    collect(result, "rel.rules.PruneEmptyRules", "空结果裁剪", "");
-    collect(result, "rel.rules.SingleValuesOptimizationRules", "单行值优化", "");
-    collect(result, "rel.rules.DateRangeRules", "日期范围", "");
-    collect(result, "rel.rules.MeasureRules", "度量", "当前 SQL 和表结构尚未接入度量类型");
-    collect(result, "rel.rules.SpatialRules", "空间", "当前 SQL 环境尚未注册空间函数");
-    collect(result, "rel.rules.materialize.MaterializedViewRules", "物化视图", "需要注册物化视图和匹配元数据");
-    collect(result, "rel.stream.StreamRules", "流式查询", "需要流式表和流式查询环境");
-    collect(result, "adapter.enumerable.EnumerableRules", "Enumerable 物理规则", "需要物理执行约定与完整转换程序");
-    collect(result, "interpreter.Bindables", "Bindable 物理规则", "需要解释器执行约定与完整转换程序");
+    collect(result, "rel.rules.CoreRules", "Core logical rules", "");
+    collect(result, "rel.rules.PruneEmptyRules", "Empty-result pruning", "");
+    collect(result, "rel.rules.SingleValuesOptimizationRules", "Single-row values", "");
+    collect(result, "rel.rules.DateRangeRules", "Date ranges", "");
+    collect(result, "rel.rules.MeasureRules", "Measures", "Measure types are not configured in the current SQL and schema environment");
+    collect(result, "rel.rules.SpatialRules", "Spatial rules", "Spatial functions are not registered in the current SQL environment");
+    collect(result, "rel.rules.materialize.MaterializedViewRules", "Materialized views", "Requires registered materialized views and matching metadata");
+    collect(result, "rel.stream.StreamRules", "Streaming queries", "Requires streaming tables and a streaming query environment");
+    collect(result, "adapter.enumerable.EnumerableRules", "Enumerable physical rules", "Requires physical execution conventions and a complete conversion program");
+    collect(result, "interpreter.Bindables", "Bindable physical rules", "Requires interpreter execution conventions and a complete conversion program");
     try {
       var jdbc = Class.forName("org.apache.calcite.adapter.jdbc.JdbcRules");
       var classes = new ArrayList<Class<?>>(Arrays.asList(jdbc.getDeclaredClasses()));
@@ -56,8 +56,8 @@ public final class Rules {
       classes.stream().filter(c -> RelOptRule.class.isAssignableFrom(c) && !Modifier.isAbstract(c.getModifiers()))
           .sorted(Comparator.comparing(Class::getSimpleName)).forEach(c -> {
             String name = "JdbcRules." + c.getSimpleName();
-            result.add(new Definition(new RuleCard(name, name, "JDBC 适配器规则类型", "规则实例随 JDBC 方言和执行约定创建。",
-                List.of(c.getName()), source(c), "JDBC 适配器", false, "需要 JDBC 方言、数据源和执行约定"), List.of()));
+            result.add(new Definition(new RuleCard(name, name, "JDBC adapter rule type", "Rule instances are created for a JDBC dialect and execution convention.",
+                List.of(c.getName()), source(c), "JDBC adapter", false, "Requires a JDBC dialect, data source, and execution convention"), List.of()));
           });
     } catch (ReflectiveOperationException e) { throw new ExceptionInInitializerError(e); }
     return List.copyOf(result);
@@ -87,12 +87,12 @@ public final class Rules {
 
   private static void add(List<Definition> result, String id, RelOptRule rule, String category, String unavailable) {
     // These CoreRules entries require table adapters or registered star schemas.
-    if (id.contains("STAR_TABLE")) unavailable = "需要注册星型表和物化关系";
+    if (id.contains("STAR_TABLE")) unavailable = "Requires registered star tables and materialized relations";
     if (id.equals("CoreRules.FILTER_SCAN") || id.equals("CoreRules.FILTER_INTERPRETER_SCAN")
         || id.equals("CoreRules.PROJECT_TABLE_SCAN") || id.equals("CoreRules.PROJECT_INTERPRETER_TABLE_SCAN"))
-      unavailable = "需要支持过滤或投影下推的表适配器";
+      unavailable = "Requires a table adapter supporting filter or projection pushdown";
     result.add(new Definition(new RuleCard(id, id, rule.toString(),
-        "由 Calcite 的算子匹配和语义条件决定是否触发；可运行不代表当前 SQL 一定匹配。",
+        "Triggering depends on Calcite operator matching and semantic conditions. A runnable rule may not match the current SQL.",
         List.of(rule.toString()), source(rule.getClass()), category, unavailable.isEmpty(), unavailable), List.of(rule)));
   }
 
@@ -103,8 +103,8 @@ public final class Rules {
 
   public static Definition get(String id) {
     var definition = CATALOG.stream().filter(r -> r.card.id().equals(id)).findFirst()
-        .orElseThrow(() -> new IllegalArgumentException("不支持的规则：" + id));
-    Input.require(definition.card.runnable(), "规则当前不可运行：" + id + "；" + definition.card.unavailableReason());
+        .orElseThrow(() -> new IllegalArgumentException("Unsupported rule: " + id));
+    Input.require(definition.card.runnable(), "Rule is currently unavailable: " + id + "; " + definition.card.unavailableReason());
     return definition;
   }
   public static List<RuleCard> cards() { return CATALOG.stream().map(Definition::card).toList(); }
