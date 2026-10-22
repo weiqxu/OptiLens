@@ -2,7 +2,7 @@ import {diffPlans,drawPlan,layoutPlan} from './graph.mjs';
 const $=id=>document.getElementById(id);
 const text=(id,value)=>{$(id).textContent=value;};
 const counted=(n,label)=>`${n} ${label}${n===1?'':'s'}`;
-let catalog,rules=[],examples=new Map(),selected=null,job=null,revision=0,startTimer;
+let catalog,rules=[],examples=new Map(),coverage=new Map(),selected=null,job=null,revision=0,startTimer;
 const runs=new Map(),zoom={before:1,after:1};
 async function api(path,options={}){
   const response=await fetch(path,{...options,headers:{'Content-Type':'application/json',...options.headers}});
@@ -48,10 +48,13 @@ function choose(rule){
   $('example-section').hidden=!example;$('no-example').hidden=Boolean(example);
   if(!example){
     text('no-example-title',rule.runnable?'No verified example yet':'Additional environment required');
-    text('no-example-note',rule.runnable?'This rule is in the catalog, but a reproducible example has not been added. Try it with your own SQL in Query lab. No transformation is implied.':rule.unavailableReason+'. A runnable example is not available in this environment.');
+    text('no-example-note',coverage.get(rule.id)?.reason || (rule.runnable?'This rule is in the catalog, but a reproducible example has not been added. Try it with your own SQL in Query lab. No transformation is implied.':rule.unavailableReason+'. A runnable example is not available in this environment.'));
     return;
   }
   text('example-title',example.title);text('example-note',example.note);text('example-sql',example.input.sql);text('example-schema',JSON.stringify(example.input.schema,null,2));
+  $('example-program').replaceChildren(...example.input.rules.map(id=>{const li=document.createElement('li');li.textContent=(id===example.id?'Target: ':'Preparation: ')+id;return li;}));
+  const options=example.input.options;
+  text('example-settings',`Match limit per stage: ${options?.matchLimit??100}. SQL subquery expansion: ${options?.expandSubqueries===false?'disabled, preserving subqueries for the target rule':'enabled'}. Planner time zone: UTC. A bounded demonstration does not imply a fixed point or a globally optimal plan.`);
   $('rerun-example').disabled=true;setStatus('Preparing the example…');
   startTimer=setTimeout(()=>showExample(example,token),200);
 }
@@ -74,7 +77,7 @@ async function showExample(example,token){
   if(!pending){pending=execute(example);runs.set(example.id,pending);}
   try{
     const result=await pending;if(token!==revision)return;
-    job=result;const stage=job.result.stages[0];
+    job=result;const stage=targetStage();
     $('example-view').replaceChildren(new Option('Complete plan · stage boundary','stage'),...stage.events.map((event,index)=>new Option(`Local event ${index+1} · ${event.rule}`,String(index))));
     $('download-example').href=`/api/runs/${job.id}/download`;
     $('example-result').hidden=false;
@@ -86,11 +89,12 @@ async function showExample(example,token){
     if(token===revision)setStatus(error.message,true);
   }finally{if(token===revision)$('rerun-example').disabled=false;}
 }
+function targetStage(){return job.result.stages.find(stage=>stage.id===selected.id);}
 function renderPlans(fit=false){
   if(!job)return;
-  const stage=job.result.stages[0],value=$('example-view').value;
+  const stage=targetStage(),value=$('example-view').value;
   const pair=value==='stage'?stage:stage.events[Number(value)];
-  text('example-scope',value==='stage'?'Complete plans before and after this rule. Local events are available in the View menu.':'Local expressions from one rule invocation. This event does not represent the entire query plan or prove final candidate selection.');
+  text('example-scope',value==='stage'?`Complete plans immediately before and after ${selected.id}. ${job.result.stages.length-1} preparation stages precede the target; their transformations are excluded from this comparison. Local events are available in the View menu.`:'Local expressions from one rule invocation. This event does not represent the entire query plan or prove final candidate selection.');
   const diff=diffPlans(pair.before,pair.after);
   if(fit)for(const side of ['before','after'])zoom[side]=Math.min(1,Math.max(.65,($('example-'+side).clientWidth-16)/layoutPlan(pair[side]).width));
   const inspect=(node,mark,side)=>{text('example-node-content',JSON.stringify({side,difference:mark||'No marked difference',...node},null,2));$('example-node').open=true;};
@@ -107,7 +111,7 @@ $('rerun-example').addEventListener('click',()=>{const example=examples.get(sele
 document.querySelectorAll('[data-zoom]').forEach(button=>button.addEventListener('click',()=>{const [side,delta]=button.dataset.zoom.split(':');zoom[side]=Number(delta)===0?1:Math.min(1.6,Math.max(.65,zoom[side]+Number(delta)*.15));renderPlans();}));
 try{
   const [loaded,library]=await Promise.all([api('/api/catalog'),api('/api/rule-examples')]);catalog=loaded;
-  rules=catalog.rules.filter(rule=>rule.category!=='Common rule groups');examples=new Map(library.examples.map(example=>[example.id,example]));
+  rules=catalog.rules.filter(rule=>rule.category!=='Common rule groups');examples=new Map(library.examples.map(example=>[example.id,example]));coverage=new Map(library.coverage.map(item=>[item.id,item]));
   $('explorer-database').replaceChildren(...catalog.databases.map(database=>new Option(`${database.title} · ${database.version}`,database.id)));
   $('explorer-category').replaceChildren(new Option('All categories',''),...Array.from(new Set(rules.map(rule=>rule.category)),category=>new Option(category,category)));
   text('catalog-total',rules.length);text('catalog-scope',catalog.scope);
@@ -122,7 +126,7 @@ try{
   for(const id of ['explorer-database','explorer-search','explorer-category','examples-only'])$(id).disabled=false;
   const requested=new URL(location.href).searchParams.get('rule');
   const initial=rules.find(rule=>rule.id===requested)||rules.find(rule=>rule.id==='CoreRules.PROJECT_REDUCE_EXPRESSIONS');
-  text('catalog-status',`${rules.length} catalog rules · ${examples.size} verified SQL examples · Select a rule to explore. Examples run locally and appear in Query lab history.`);
+  text('catalog-status',`${rules.length} catalog rules · ${examples.size} verified SQL examples / ${rules.filter(rule=>rule.runnable).length} runnable rules · Select a rule to explore. Examples run locally and appear in Query lab history.`);
   if(requested&&!rules.some(rule=>rule.id===requested))text('catalog-status','The requested rule was not found. Showing the constant projection example.');
   choose(initial);
 }catch(error){text('catalog-status','Unable to load the rule explorer: '+error.message);$('catalog-status').className='status error';}

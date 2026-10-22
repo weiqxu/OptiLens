@@ -27,6 +27,7 @@ class ServerTest {
       var library=Json.MAPPER.readTree(request(server,"GET","/api/rule-examples",null).body());
       assertEquals("calcite",library.get("database").asText());
       assertEquals(RuleExamples.all().size(),library.get("examples").size());
+      assertEquals(RuleExamples.coverage().size(),library.get("coverage").size());
       var catalog=Json.MAPPER.readTree(request(server,"GET","/api/catalog",null).body());
       assertEquals("calcite",catalog.get("databases").get(0).get("id").asText());
       assertTrue(catalog.get("rules").size()>200);

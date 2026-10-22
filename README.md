@@ -15,7 +15,7 @@ The documentation, interface, built-in examples, rule catalog descriptions, and 
 Implemented features:
 
 - Database selection (currently Calcite only), a searchable rule catalog with category filters, and selection of individual rules or common rule groups.
-- A dedicated rule explorer with a database selector, searchable rule list, and 26 verified single-rule SQL examples with live before/after plans.
+- A dedicated rule explorer with a database selector, searchable rule list, and 126 verified rule examples with live before/after plans and explicit preparation stages where needed.
 - Editable SQL and declarative table schemas.
 - Real rule attempts and expression production events from Calcite 1.39.0 / HepPlanner.
 - Visual comparisons of initial and final plans, stage boundaries, and individual rule events.
@@ -52,11 +52,11 @@ Browser access through another local forwarding port is supported, such as `http
 
 Open [http://127.0.0.1:8080/rules](http://127.0.0.1:8080/rules), or use **Rule explorer** from the query lab. Choose a database (currently Calcite), then select a rule from the left-hand list. Search by rule name or implementation, filter by category, or show only rules with verified examples.
 
-The explorer lists 222 individual catalog entries; common multi-rule groups remain in the query lab. For 26 rules, selecting an entry automatically submits a real SQL example with only that rule enabled. The right panel shows the SQL, table schema, explanation, and complete before/after plans. Use the View menu for local rule events, select graph nodes for details, inspect raw plans, or download the run. Each example is checked against Calcite 1.39.0 to ensure it produces an event; no diagram is a simulated transformation.
+The explorer lists 222 individual catalog entries; common multi-rule groups remain in the query lab. For 126 rules, selecting an entry submits a real SQL example. Some programs first apply preparation rules to construct a Calc, Window, MultiJoin, semijoin, or empty input. The selected target rule is always the final stage, and the explorer compares only that stage, not the preparation results. The preparation program and conversion settings are visible below the SQL. The right panel shows the SQL, table schema, explanation, and complete before/after plans. Use the View menu for local rule events, select graph nodes for details, inspect raw plans, or download the run. Each example is checked against Calcite 1.39.0 to ensure its named target produces an event and an observable expression change; no diagram is a simulated transformation.
 
 Completed and pending examples are reused within the current page session. **Run again** creates a new run. Example runs are stored in normal history and count toward the existing job and record limits. Switching rules never assigns a late result to the newly selected rule.
 
-Entries without a verified example explicitly say so. Rules requiring additional configuration explain what is missing. **Try in Query lab** opens the selected rule and its example SQL when available; otherwise it provides an editable starting query without claiming it matches the rule. Date-range rules require Calcite connection/time-zone configuration and are currently listed as unavailable.
+Entries without a verified example explicitly say so. Rules requiring additional configuration explain what is missing. **Try in Query lab** opens the selected rule and its example SQL when available; otherwise it provides an editable starting query without claiming it matches the rule. Date-range rules now use an explicit UTC connection context and have a verified example. Coverage is 126 of 141 runnable entries (222 total catalog entries). The remaining 15 runnable entries explain their missing plan shape, metadata, or planner requirements, or why no observable rewrite is claimed. The other 81 entries require specialized environments such as physical conventions, adapters, materialized views, or streaming schemas. See the [coverage report](plan/rule-example-coverage.md).
 
 ## Reading the results
 
@@ -66,7 +66,7 @@ Entries without a verified example explicitly say so. Rules requiring additional
 4. **Node details:** attributes, output fields, input nodes, and the basis for difference matching.
 5. **Raw records:** Calcite output, invocation identifiers, matched nodes, and recorded attempts.
 
-Rule groups run in page order. This is a controlled experiment, not Calcite's default optimization pipeline. The before/after callbacks for a rule production are counted only once. Snapshots store independent values instead of references to mutable plan objects.
+Rules and groups run in selection order. Loaded examples and imported records preserve their recorded program order. This is a controlled experiment, not Calcite's default optimization pipeline. The before/after callbacks for a rule production are counted only once. Snapshots store independent values instead of references to mutable plan objects.
 
 Difference matching first uses node identifiers within the same run, then attempts unique attribute or operator/table-origin matching. Structural inference is labeled in node details, and ambiguous matches are not forced. A node appearing only before or after a transformation means no correspondence was established; it does not necessarily prove deletion or insertion.
 
@@ -78,7 +78,7 @@ Selecting Apache Calcite loads the built-in rule catalog for the pinned dependen
 
 The catalog reads public static rules and rule lists from `CoreRules`, `PruneEmptyRules`, `SingleValuesOptimizationRules`, `DateRangeRules`, `MeasureRules`, `SpatialRules`, `MaterializedViewRules`, `StreamRules`, `EnumerableRules`, and `Bindables`. It also lists concrete `JdbcRules` types and JDBC-to-Enumerable conversion. Public constant aliases are shown separately; list entries already exposed as constants are not added again. This scope excludes additional adapters, custom rules, and the full set of variants created by runtime configuration. Calcite has no fixed global rule set spanning all plugins.
 
-Logical rules can be selected individually. Physical conversion, streaming, spatial, measure, materialized-view, and adapter rules show their required environment; entries that cannot currently run are disabled. Selecting a rule does not guarantee that it will match the current SQL or that arbitrary combinations are compatible. A run accepts up to 32 rules or groups, executed in catalog order. Common groups can overlap with individual rules; any resulting repeated execution is part of the selected program.
+Logical rules can be selected individually. Physical conversion, streaming, spatial, measure, materialized-view, and adapter rules show their required environment; entries that cannot currently run are disabled. Selecting a rule does not guarantee that it will match the current SQL or that arbitrary combinations are compatible. A run accepts up to 32 rules or groups, executed in request order. Common groups can overlap with individual rules; any resulting repeated execution is part of the selected program.
 
 ## Table schema format
 
@@ -102,7 +102,7 @@ Supported types are `INTEGER`, `BIGINT`, `DOUBLE`, `DECIMAL`, `VARCHAR`, `BOOLEA
 | --- | --- |
 | `GET /api/health` | Service health |
 | `GET /api/catalog` | Database types, rule catalog, catalog scope, and built-in examples |
-| `GET /api/rule-examples` | Verified single-rule example definitions for the rule explorer |
+| `GET /api/rule-examples` | Verified example programs and per-rule coverage reasons |
 | `POST /api/runs` | Submit `{database, sql, schema, rules}` and receive a job ID |
 | `GET /api/runs` | Summaries of the 30 most recent runs |
 | `GET /api/runs/{id}` | Job status and result |
@@ -111,12 +111,14 @@ Supported types are `INTEGER`, `BIGINT`, `DOUBLE`, `DECIMAL`, `VARCHAR`, `BOOLEA
 
 POST requests use `Content-Type: application/json`. The only supported `database` value is currently `calcite`; older requests that omit it default to Calcite. `rules` is an ordered list of runnable catalog entry IDs, such as `CoreRules.PROJECT_REDUCE_EXPRESSIONS`. Legacy group IDs remain supported: `reduce`, `filter-join`, `filter-project`, `project-join`, and `project-cleanup`. An empty list produces only the initial plan.
 
+Requests may include `options: {"expandSubqueries": false, "matchLimit": 1}`. Subquery expansion defaults to `true`; disabling it preserves subqueries for subquery-removal rules. The match limit defaults to `100`. Small limits make reversible rules such as join commuting useful as bounded demonstrations. They do not establish an optimizer fixed point. These settings and the ordered preparation program survive export/import and the Query lab handoff. Older requests without `options` retain the defaults. Planner connection time zone is UTC.
+
 Job states are `queued`, `running`, `succeeded`, and `failed`. Successful results use `formatVersion: 1` and contain `input`, `initial`, `finalPlan`, `stages`, and `limitations`.
 
 ## Resource limits
 
 - At most two concurrent optimization workers and eight queued jobs, with a 384 MB heap per worker.
-- A 25-second timeout per worker and a match limit of 100 per rule group.
+- A 25-second timeout per worker and a configurable match limit of 1–100 per stage (default 100).
 - Up to 10,000 SQL characters, 16 tables, and 32 columns per table.
 - Up to 250 nodes and 40 levels per snapshot, 500 attempts per run, and 80 transformations per stage.
 - An 8 MB limit on imports and worker output, with at most 200 stored local records.

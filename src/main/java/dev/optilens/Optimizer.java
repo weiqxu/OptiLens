@@ -3,6 +3,8 @@ package dev.optilens;
 import java.time.Instant;
 import java.util.*;
 import org.apache.calcite.config.Lex;
+import org.apache.calcite.config.CalciteConnectionConfigImpl;
+import org.apache.calcite.plan.Contexts;
 import org.apache.calcite.plan.RelOptListener;
 import org.apache.calcite.plan.hep.HepPlanner;
 import org.apache.calcite.plan.hep.HepProgramBuilder;
@@ -22,6 +24,8 @@ import static dev.optilens.Model.*;
 public final class Optimizer {
   public Run optimize(Request request) throws Exception {
     Input.validate(request);
+    boolean expand=request.options()==null || !Boolean.FALSE.equals(request.options().expandSubqueries());
+    int matchLimit=request.options()==null || request.options().matchLimit()==null ? 100 : request.options().matchLimit();
     var schema=Frameworks.createRootSchema(true);
     for(var table:request.schema())schema.add(table.name(),new AbstractTable(){
       @Override public RelDataType getRowType(RelDataTypeFactory f){
@@ -33,9 +37,12 @@ public final class Optimizer {
         }return b.build();
       }
     });
-    var config=Frameworks.newConfigBuilder().defaultSchema(schema)
+    var connectionProperties=new Properties();
+    connectionProperties.setProperty("timeZone", "UTC");
+    var context=Contexts.of(new CalciteConnectionConfigImpl(connectionProperties));
+    var config=Frameworks.newConfigBuilder().defaultSchema(schema).context(context)
         .parserConfig(SqlParser.config().withLex(Lex.MYSQL).withCaseSensitive(false))
-        .sqlToRelConverterConfig(SqlToRelConverter.config().withTrimUnusedFields(false).withExpand(true)).build();
+        .sqlToRelConverterConfig(SqlToRelConverter.config().withTrimUnusedFields(false).withExpand(expand)).build();
     try(var parser=Frameworks.getPlanner(config)){
       var parsed=parser.parse(request.sql());
       Input.require(parsed.getKind().belongsTo(SqlKind.QUERY),"This release supports queries such as SELECT and WITH only; DDL and data modifications are not executed");
@@ -50,9 +57,9 @@ public final class Optimizer {
       for(String ruleId:request.rules()){
         var d=Rules.get(ruleId); var card=d.card();
         var before=Snapshots.capture(current,"full-plan");
-        var program=new HepProgramBuilder().addMatchLimit(100);
+        var program=new HepProgramBuilder().addMatchLimit(matchLimit);
         d.rules().forEach(program::addRuleInstance);
-        var planner=new HepPlanner(program.build());
+        var planner=new HepPlanner(program.build(),context);
         planner.setExecutor(new RexExecutorImpl(DataContexts.EMPTY));
         List<Attempt> attempts=new ArrayList<>(); List<Event> events=new ArrayList<>();
         planner.addListener(new RelOptListener(){
@@ -81,9 +88,10 @@ public final class Optimizer {
       }
       return new Run(1,"Apache Calcite","1.39.0",Instant.now().toString(),request,initial,
           Snapshots.capture(current,"full-plan"),List.copyOf(stages),List.of(
-          "A controlled HepPlanner experiment in stages, not the default Calcite optimization pipeline. Each group has a limit of 100 matches.",
-          "The initial snapshot is captured after SQL conversion. Individual rewrites during parsing, validation, and conversion are not traced.",
+          "A controlled HepPlanner experiment in stages, not the default Calcite optimization pipeline. Each stage has a limit of " + matchLimit + " matches.",
+          "The initial snapshot is captured after SQL conversion (subquery expansion: " + expand + "). Individual rewrites during parsing, validation, and conversion are not traced.",
           "Rule events show local expressions; stage boundaries show complete plans. Final candidate selection and rejection reasons are not collected.",
+          "Planner connection time zone: UTC. Date range rewrites use this fixed setting.",
           "Only table schemas are declared, with no real data or statistics. Queries are not executed, and performance or cost benefits are not measured."));
     }
   }

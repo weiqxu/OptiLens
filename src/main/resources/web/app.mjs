@@ -1,6 +1,6 @@
 import {diffPlans,drawPlan} from './graph.mjs';
 const $=id=>document.getElementById(id);
-let catalog,current,selection={kind:'overview'},epoch=0,busy=false;
+let catalog,current,selection={kind:'overview'},epoch=0,busy=false,ruleOrder=[];
 const zoom={before:1,after:1};
 const counted=(count,singular,plural=singular+'s')=>`${count} ${count===1?singular:plural}`;
 const text=(id,value)=>{$(id).textContent=value;};
@@ -10,13 +10,16 @@ async function api(path,options={}){
   const data=await response.json();if(!response.ok)throw new Error(data.error||`Request failed (${response.status})`);return data;
 }
 function button(label,handler,className=''){const b=document.createElement('button');b.type='button';b.textContent=label;b.className=className;b.addEventListener('click',handler);return b;}
-function setBusy(value){busy=value;$('run').disabled=value||!catalog;$('import-button').disabled=value;$('history').disabled=value;for(const id of ['sql','schema','examples','database','rule-search','rule-category','rule-recommended','rule-clear'])$(id).disabled=value;for(const input of $('rule-options').querySelectorAll('input'))input.disabled=value||input.dataset.runnable!=='true';}
+function setBusy(value){busy=value;$('run').disabled=value||!catalog;$('import-button').disabled=value;$('history').disabled=value;for(const id of ['sql','schema','examples','database','rule-search','rule-category','rule-recommended','rule-clear','match-limit','expand-subqueries'])$(id).disabled=value;for(const input of $('rule-options').querySelectorAll('input'))input.disabled=value||input.dataset.runnable!=='true';}
 function loadExample(example){
   $('sql').value=example.input.sql;$('schema').value=JSON.stringify(example.input.schema,null,2);text('example-note',example.note);
   selectRules(example.input);
 }
 function applyRequest(input){$('sql').value=input.sql;$('schema').value=JSON.stringify(input.schema,null,2);selectRules(input);$('examples').value='';text('example-note','Loaded the SQL and schema from this record. Run again to collect new local evidence.');}
 function selectRules(input){
+  ruleOrder=[...input.rules];
+  $('match-limit').value=input.options?.matchLimit??100;
+  $('expand-subqueries').checked=input.options?.expandSubqueries!==false;
   $('database').value=input.database||'calcite';
   for(const c of $('rule-options').querySelectorAll('input'))c.checked=c.dataset.runnable==='true'&&input.rules.includes(c.value);
   updateRules();
@@ -42,7 +45,11 @@ function updateRules(){
   const query=$('rule-search').value.trim().toLowerCase(),category=$('rule-category').value;
   let visible=0;
   for(const row of $('rule-options').children){row.hidden=!(row.dataset.search.includes(query)&&(!category||row.dataset.category===category));if(!row.hidden)visible++;}
-  const selected=$('rule-options').querySelectorAll('input:checked').length;
+  const checked=[...$('rule-options').querySelectorAll('input:checked')].map(input=>input.value);
+  ruleOrder=ruleOrder.filter(id=>checked.includes(id));
+  for(const id of checked)if(!ruleOrder.includes(id))ruleOrder.push(id);
+  const selected=checked.length;
+  $('rule-program').replaceChildren(...ruleOrder.map(id=>{const li=document.createElement('li');li.textContent=id;return li;}));
   const presets=catalog.rules.filter(r=>r.category==='Common rule groups').length;
   text('rule-count',`${catalog.rules.length-presets} built-in entries + ${presets} common groups · Selected ${selected} / ${catalog.maxSelected} · Showing ${counted(visible,'item')}`);
   $('rule-empty').hidden=visible!==0;
@@ -103,11 +110,13 @@ async function poll(id,token){
 }
 $('run').addEventListener('click',async()=>{
   if(busy)return;setBusy(true);const token=++epoch;status('Submitting optimization job…');
-  try{const schema=JSON.parse($('schema').value);const rules=[...$('rule-options').querySelectorAll('input:checked')].map(i=>i.value);
-    const job=await api('/api/runs',{method:'POST',body:JSON.stringify({database:$('database').value,sql:$('sql').value,schema,rules})});await poll(job.id,token);
+  try{const schema=JSON.parse($('schema').value);const rules=[...ruleOrder];
+    const options={matchLimit:Number($('match-limit').value),expandSubqueries:$('expand-subqueries').checked};
+    const job=await api('/api/runs',{method:'POST',body:JSON.stringify({database:$('database').value,sql:$('sql').value,schema,rules,options})});await poll(job.id,token);
   }catch(e){if(token===epoch){setBusy(false);status(e.message+(current?' (The last successful result remains below.)':''),true);refreshHistory().catch(()=>{});}}
 });
 function inputChanged(){if(current)status('Inputs changed. The previous result is still shown below. Select Run optimization to generate a new result.');}
+$('match-limit').addEventListener('input',inputChanged);$('expand-subqueries').addEventListener('change',inputChanged);
 $('sql').addEventListener('input',inputChanged);$('schema').addEventListener('input',inputChanged);$('rule-options').addEventListener('change',e=>{
   if($('rule-options').querySelectorAll('input:checked').length>catalog.maxSelected){e.target.checked=false;status(`Select at most ${catalog.maxSelected} rules per run`,true);}
   else inputChanged();
