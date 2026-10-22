@@ -53,7 +53,7 @@ class ServerTest {
     try(var jobs=new Jobs(directory,0)){
       var job=jobs.submit(Input.examples().get(0).input());
       for(int i=0;i<100&&!jobs.get(job.id()).status().equals("failed");i++)Thread.sleep(50);
-      assertEquals("failed",jobs.get(job.id()).status());assertTrue(jobs.get(job.id()).error().contains("秒"));
+      assertEquals("failed",jobs.get(job.id()).status());assertTrue(jobs.get(job.id()).error().contains("seconds"));
     }
   }
   @Test void forwardedLoopbackAuthorityWorksForPagesAndSubmittingQueries() throws Exception {

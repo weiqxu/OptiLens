@@ -22,7 +22,7 @@ public final class Jobs implements AutoCloseable {
           var job=Json.MAPPER.readValue(p.toFile(),Job.class);
           if(!p.getFileName().toString().equals(job.id()+".json"))continue;
           if("succeeded".equals(job.status()))Records.validate(job.result());
-          if(!Set.of("succeeded","failed").contains(job.status()))job=new Job(job.id(),"failed",job.imported(),job.submittedAt(),"服务已重启，上次运行中断",null);
+          if(!Set.of("succeeded","failed").contains(job.status()))job=new Job(job.id(),"failed",job.imported(),job.submittedAt(),"The service restarted and interrupted the previous run",null);
           save(job);
         }catch(Exception e){System.err.println("Skipped unreadable run: "+p.getFileName());}
       }
@@ -41,7 +41,7 @@ public final class Jobs implements AutoCloseable {
     Records.validate(run);capacity();
     Job job=new Job(UUID.randomUUID().toString(),"succeeded",true,Instant.now().toString(),null,run);save(job);return job;
   }
-  private void capacity(){Input.require(jobs.size()<200,"已达到 200 条本地记录上限，请关闭服务后备份并清理 data/runs");}
+  private void capacity(){Input.require(jobs.size()<200,"The limit of 200 local records has been reached. Stop the service, then back up and clean data/runs.");}
   public Job get(String id){return jobs.get(id);}
   public List<Map<String,Object>> list(){
     return jobs.values().stream().sorted(Comparator.comparing(Job::submittedAt).reversed()).limit(30)
@@ -55,16 +55,16 @@ public final class Jobs implements AutoCloseable {
       String cp=System.getProperty("surefire.test.class.path",System.getProperty("java.class.path"));
       process=new ProcessBuilder(java,"-Xmx384m","-Xss1m","-cp",cp,Worker.class.getName(),input.toString(),output.toString())
           .redirectOutput(ProcessBuilder.Redirect.DISCARD).redirectError(ProcessBuilder.Redirect.DISCARD).start();
-      if(!process.waitFor(timeoutSeconds,TimeUnit.SECONDS))throw new TimeoutException("优化超过 "+timeoutSeconds+" 秒，工作进程已终止");
-      if(process.exitValue()!=0 || !Files.exists(output))throw new IllegalStateException("优化工作进程异常退出；可能超出内存或查询复杂度限制");
-      if(Files.size(output)>8_000_000)throw new IllegalStateException("运行记录超过大小上限");
+      if(!process.waitFor(timeoutSeconds,TimeUnit.SECONDS))throw new TimeoutException("Optimization exceeded "+timeoutSeconds+" seconds; the worker has been terminated");
+      if(process.exitValue()!=0 || !Files.exists(output))throw new IllegalStateException("The optimization worker exited unexpectedly; memory or query complexity limits may have been exceeded");
+      if(Files.size(output)>8_000_000)throw new IllegalStateException("Run record exceeds the size limit");
       var outcome=Json.MAPPER.readValue(output.toFile(),Worker.Outcome.class);
       if(outcome.error()!=null)throw new IllegalArgumentException(outcome.error());
       Records.validate(outcome.result());
       save(new Job(original.id(),"succeeded",false,original.submittedAt(),null,outcome.result()));
     }catch(Exception e){
       try{save(new Job(original.id(),"failed",false,original.submittedAt(),Worker.error(e),null));}
-      catch(Exception storageError){jobs.put(original.id(),new Job(original.id(),"failed",false,original.submittedAt(),"保存运行记录失败",null));}
+      catch(Exception storageError){jobs.put(original.id(),new Job(original.id(),"failed",false,original.submittedAt(),"Failed to save the run record",null));}
       if(e instanceof InterruptedException)Thread.currentThread().interrupt();
     }finally{
       if(process!=null && process.isAlive()){process.destroyForcibly();try{process.waitFor(5,TimeUnit.SECONDS);}catch(InterruptedException ignored){Thread.currentThread().interrupt();}}

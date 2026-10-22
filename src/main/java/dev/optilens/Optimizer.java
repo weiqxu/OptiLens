@@ -38,7 +38,7 @@ public final class Optimizer {
         .sqlToRelConverterConfig(SqlToRelConverter.config().withTrimUnusedFields(false).withExpand(true)).build();
     try(var parser=Frameworks.getPlanner(config)){
       var parsed=parser.parse(request.sql());
-      Input.require(parsed.getKind().belongsTo(SqlKind.QUERY),"首版仅支持 SELECT / WITH 等查询，不执行 DDL 或数据修改");
+      Input.require(parsed.getKind().belongsTo(SqlKind.QUERY),"This release supports queries such as SELECT and WITH only; DDL and data modifications are not executed");
       var validated=parser.validate(parsed);
       RelNode current=parser.rel(validated).project();
       // ReduceExpressionsRule resolves its executor through the relation's cluster planner,
@@ -58,7 +58,7 @@ public final class Optimizer {
         planner.addListener(new RelOptListener(){
           public void ruleAttempted(RuleAttemptedEvent e){
             if(!e.isBefore())return;
-            Input.require(++total[0]<=500,"规则尝试次数超过 500 次上限，运行已停止");
+            Input.require(++total[0]<=500,"The run stopped after exceeding the limit of 500 rule attempts");
             var call=e.getRuleCall();
             attempts.add(new Attempt(call.id,call.getRule().toString(),Arrays.stream(call.rels).map(r->String.valueOf(Snapshots.unwrap(r).getId())).toList()));
           }
@@ -66,7 +66,7 @@ public final class Optimizer {
             // Before-registration callback contains both the old match and the new expression.
             // Its after-registration counterpart is deliberately not counted again.
             if(!e.isBefore())return;
-            Input.require(events.size()<80,"单阶段变换超过 80 次上限，运行已停止");
+            Input.require(events.size()<80,"The run stopped after exceeding the limit of 80 transformations per stage");
             var call=e.getRuleCall();
             events.add(new Event(events.size()+1,call.id,call.getRule().toString(),
                 Snapshots.capture(call.rels[0],"local-expression"),Snapshots.capture(e.getRel(),"local-expression")));
@@ -81,10 +81,10 @@ public final class Optimizer {
       }
       return new Run(1,"Apache Calcite","1.39.0",Instant.now().toString(),request,initial,
           Snapshots.capture(current,"full-plan"),List.copyOf(stages),List.of(
-          "受控 HepPlanner 分阶段实验，不代表 Calcite 默认优化流程。每组最多匹配 100 次。",
-          "初始快照位于 SQL 转换之后；解析、校验和转换阶段的改写没有逐条追踪。",
-          "规则事件展示局部表达式，阶段边界展示完整计划。候选最终采用关系与拒绝原因未采集。",
-          "仅声明表结构，没有真实表数据或统计信息；未执行查询，也未测量性能或成本收益。"));
+          "A controlled HepPlanner experiment in stages, not the default Calcite optimization pipeline. Each group has a limit of 100 matches.",
+          "The initial snapshot is captured after SQL conversion. Individual rewrites during parsing, validation, and conversion are not traced.",
+          "Rule events show local expressions; stage boundaries show complete plans. Final candidate selection and rejection reasons are not collected.",
+          "Only table schemas are declared, with no real data or statistics. Queries are not executed, and performance or cost benefits are not measured."));
     }
   }
 }

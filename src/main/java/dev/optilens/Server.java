@@ -22,14 +22,14 @@ public final class Server implements AutoCloseable {
     try{
       String host=x.getRequestHeaders().getFirst("Host");
       // Browser previews can expose a different loopback port and may rewrite Host.
-      if(!LocalAccess.allowsHost(host)){reply(x,403,Map.of("error","仅允许本地访问"));return;}
+      if(!LocalAccess.allowsHost(host)){reply(x,403,Map.of("error","Only local access is allowed"));return;}
       String path=x.getRequestURI().getPath(),method=x.getRequestMethod();
       if(path.startsWith("/api/")){
         if(method.equals("POST")){
           String origin=x.getRequestHeaders().getFirst("Origin");
-          if(!LocalAccess.allowsOrigin(origin)){reply(x,403,Map.of("error","请求来源不允许"));return;}
+          if(!LocalAccess.allowsOrigin(origin)){reply(x,403,Map.of("error","Request origin is not allowed"));return;}
           String type=x.getRequestHeaders().getFirst("Content-Type");
-          if(type==null||!type.toLowerCase(Locale.ROOT).startsWith("application/json")){reply(x,415,Map.of("error","请使用 application/json"));return;}
+          if(type==null||!type.toLowerCase(Locale.ROOT).startsWith("application/json")){reply(x,415,Map.of("error","Use Content-Type: application/json"));return;}
         }
         if(path.equals("/api/health") && method.equals("GET")){reply(x,200,Map.of("status","ok","version","0.1.0"));return;}
         if(path.equals("/api/catalog") && method.equals("GET")){reply(x,200,Map.of("rules",Rules.cards(),"examples",Input.examples(),"engineVersion","1.39.0","databases",List.of(Map.of("id","calcite","title","Apache Calcite","version","1.39.0")),"scope",Rules.SCOPE,"maxSelected",Rules.MAX_SELECTED));return;}
@@ -40,28 +40,28 @@ public final class Server implements AutoCloseable {
         if(path.equals("/api/import") && method.equals("POST")){reply(x,201,jobs.imported(Json.MAPPER.readValue(body(x,8_000_000),Run.class)));return;}
         if(method.equals("GET") && path.matches("/api/runs/[0-9a-f-]{36}(/download)?")){
           String id=path.split("/")[3];var job=jobs.get(id);
-          if(job==null){reply(x,404,Map.of("error","记录不存在"));return;}
+          if(job==null){reply(x,404,Map.of("error","Record not found"));return;}
           if(path.endsWith("/download")){
-            if(job.result()==null){reply(x,409,Map.of("error","该运行还没有可导出的结果"));return;}
+            if(job.result()==null){reply(x,409,Map.of("error","This run has no result to export yet"));return;}
             x.getResponseHeaders().set("Content-Disposition","attachment; filename=optilens-"+id+".json");reply(x,200,job.result());
           }else reply(x,200,job);return;
         }
-        reply(x,404,Map.of("error","接口或请求方法不存在"));return;
+        reply(x,404,Map.of("error","Endpoint or request method not found"));return;
       }
-      if(!method.equals("GET")||!ASSETS.containsKey(path)){reply(x,404,Map.of("error","页面不存在"));return;}
+      if(!method.equals("GET")||!ASSETS.containsKey(path)){reply(x,404,Map.of("error","Page not found"));return;}
       String asset=ASSETS.get(path);
       try(var input=Server.class.getResourceAsStream("/web/"+asset)){
-        if(input==null){reply(x,404,Map.of("error","页面资源不存在"));return;}
+        if(input==null){reply(x,404,Map.of("error","Page asset not found"));return;}
         String type=asset.endsWith(".css")?"text/css":asset.endsWith(".mjs")?"text/javascript":"text/html";
         send(x,200,type+"; charset=utf-8",input.readAllBytes());
       }
-    }catch(RejectedExecutionException e){safeError(x,429,"优化队列已满，请稍后重试");}
+    }catch(RejectedExecutionException e){safeError(x,429,"The optimization queue is full. Try again later.");}
     catch(IllegalArgumentException | com.fasterxml.jackson.core.JsonProcessingException e){safeError(x,400,Worker.error(e));}
-    catch(Exception e){System.err.println("Request failed: "+e.getClass().getSimpleName());safeError(x,500,"服务处理失败，请检查本地存储和服务日志");}
+    catch(Exception e){System.err.println("Request failed: "+e.getClass().getSimpleName());safeError(x,500,"Request processing failed. Check local storage and service logs.");}
     finally{x.close();}
   }
   private byte[] body(HttpExchange x,int limit) throws Exception {
-    byte[] b=x.getRequestBody().readNBytes(limit+1);Input.require(b.length<=limit,"请求内容超过大小上限");return b;
+    byte[] b=x.getRequestBody().readNBytes(limit+1);Input.require(b.length<=limit,"Request body exceeds the size limit");return b;
   }
   private void safeError(HttpExchange x,int status,String message){try{reply(x,status,Map.of("error",message));}catch(Exception ignored){}}
   private void reply(HttpExchange x,int status,Object obj) throws Exception {send(x,status,"application/json; charset=utf-8",Json.MAPPER.writeValueAsBytes(obj));}

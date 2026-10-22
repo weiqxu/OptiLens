@@ -13,9 +13,9 @@ See the [first-release implementation record](v0.1-implementation.md) for actual
 Language migration status:
 
 - [x] Translate the README and all documents in `plan/` into English, including diagrams, tables, and acceptance criteria.
-- [ ] Migrate existing non-English interface text, messages, logs, comments, and test/example descriptions to English, updating affected assertions as needed.
+- [x] Migrate existing non-English interface text, messages, logs, comments, and test/example descriptions to English, updating affected assertions as needed.
 
-The remaining migration is separate from this documentation update; the current interface has not yet been translated.
+The interface and application-generated messages now use English. Historical and imported record content, along with user-supplied SQL and data, is preserved in its original language.
 
 ## 1. Project goals
 
