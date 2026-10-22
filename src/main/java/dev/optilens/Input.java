@@ -26,6 +26,8 @@ public final class Input {
       }
     }
     require(r.rules() != null && r.rules().size() <= Rules.MAX_SELECTED, "Select at most " + Rules.MAX_SELECTED + " rules or rule groups per run");
+    if (r.options() != null && r.options().matchLimit() != null)
+      require(r.options().matchLimit() >= 1 && r.options().matchLimit() <= 100, "Match limit must be between 1 and 100");
     var seen = new HashSet<String>();
     for (String id : r.rules()) { require(id != null && seen.add(id), "Rule IDs must not be null or duplicated"); Rules.get(id); }
   }

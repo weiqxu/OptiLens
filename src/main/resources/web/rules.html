@@ -21,8 +21,9 @@
           <div class="example-heading"><div><div class="eyebrow">TRANSFORMATION EXAMPLE</div><h3 id="example-title"></h3></div><button id="rerun-example" class="secondary" disabled>Run again</button></div>
           <p id="example-note"></p><pre id="example-sql" class="example-sql" aria-label="Example SQL"></pre>
           <details class="example-schema"><summary>Table schema</summary><pre id="example-schema"></pre></details>
-          <p class="small muted">Only this rule is enabled. The initial plan is captured after SQL conversion.</p>
+          <p class="small muted">The program runs the listed preparation rules followed by the selected target. Plans shown below isolate the target transformation.</p>
           <p id="example-status" class="status" role="status" aria-live="polite"></p>
+          <details class="evidence" id="example-program-details"><summary>Preparation and execution settings</summary><p class="small muted">Preparation stages build the required input shape. The diagrams show only the selected target rule.</p><ol id="example-program"></ol><p id="example-settings" class="small muted"></p></details>
           <div id="example-result" hidden>
             <div class="result-toolbar"><span class="badge">Live Calcite evidence</span><label for="example-view">View<select id="example-view"></select></label><a id="download-example" class="small">Download run ↓</a></div>
             <p id="example-scope" class="small muted"></p>

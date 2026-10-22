@@ -7,8 +7,10 @@ public final class Model {
   private Model() {}
   public record Column(String name, String type, Boolean nullable) {}
   public record Table(String name, List<Column> columns) {}
-  public record Request(String sql, List<Table> schema, List<String> rules, String database) {
+  public record Options(Boolean expandSubqueries, Integer matchLimit) {}
+  public record Request(String sql, List<Table> schema, List<String> rules, String database, Options options) {
     public Request { if (database == null) database = "calcite"; }
+    public Request(String sql, List<Table> schema, List<String> rules, String database) { this(sql, schema, rules, database, null); }
     public Request(String sql, List<Table> schema, List<String> rules) { this(sql, schema, rules, "calcite"); }
   }
   public record PlanNode(String id, String type, Map<String, String> attributes,

@@ -32,7 +32,7 @@ public final class Server implements AutoCloseable {
           if(type==null||!type.toLowerCase(Locale.ROOT).startsWith("application/json")){reply(x,415,Map.of("error","Use Content-Type: application/json"));return;}
         }
         if(path.equals("/api/health") && method.equals("GET")){reply(x,200,Map.of("status","ok","version","0.1.0"));return;}
-        if(path.equals("/api/rule-examples") && method.equals("GET")){reply(x,200,Map.of("database","calcite","engineVersion","1.39.0","examples",RuleExamples.all()));return;}
+        if(path.equals("/api/rule-examples") && method.equals("GET")){reply(x,200,Map.of("database","calcite","engineVersion","1.39.0","examples",RuleExamples.all(),"coverage",RuleExamples.coverage()));return;}
         if(path.equals("/api/catalog") && method.equals("GET")){reply(x,200,Map.of("rules",Rules.cards(),"examples",Input.examples(),"engineVersion","1.39.0","databases",List.of(Map.of("id","calcite","title","Apache Calcite","version","1.39.0")),"scope",Rules.SCOPE,"maxSelected",Rules.MAX_SELECTED));return;}
         if(path.equals("/api/runs")){
           if(method.equals("GET")){reply(x,200,jobs.list());return;}
