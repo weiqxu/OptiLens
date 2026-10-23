@@ -6,8 +6,9 @@ import static dev.optilens.Model.*;
 /** Validate imported data structurally; importing does not verify its claimed provenance. */
 public final class Records {
   public static void validate(Run run) {
-    Input.require(run != null && run.formatVersion()==1,"Unsupported record format. Import an OptiLens format-version 1 run record.");
+    Input.require(run != null && (run.formatVersion()==1 || run.formatVersion()==2),"Unsupported record format. Import an OptiLens format-version 1 or 2 run record.");
     text(run.engine(),120);text(run.engineVersion(),80);text(run.createdAt(),80);
+    Input.require(run.formatVersion()!=1 || run.input()!=null && "sql".equals(run.input().inputMode()),"Version 1 records must use SQL input");
     Input.validate(run.input());snapshot(run.initial());snapshot(run.finalPlan());
     Input.require(run.stages()!=null && run.stages().size()<=Rules.MAX_SELECTED,"Invalid stage count");
     Input.require(run.stages().size()==run.input().rules().size(),"Stages do not match the rule program");
@@ -17,6 +18,10 @@ public final class Records {
       Input.require(run.input().rules().get(i).equals(s.id()),"Stage order does not match the rule program");
       text(s.title(),120);text(s.description(),4000);text(s.conditions(),4000);text(s.source(),1000);
       snapshot(s.before());snapshot(s.after());
+      if(run.formatVersion()==2){
+        Input.require(s.scopeBeforeRootId()!=null && s.before().nodes().stream().anyMatch(n->n.id().equals(s.scopeBeforeRootId())),"Invalid scope root before stage");
+        Input.require(s.scopeAfterRootId()!=null && s.after().nodes().stream().anyMatch(n->n.id().equals(s.scopeAfterRootId())),"Invalid scope root after stage");
+      }
       Input.require(s.attempts()!=null && s.attempts().size()<=500 && s.events()!=null && s.events().size()<=80,"Invalid event count");
       count+=s.attempts().size();
       Set<String> calls=new HashSet<>();
@@ -33,6 +38,12 @@ public final class Records {
     Input.require(count<=500,"Too many recorded attempts");
     Input.require(run.limitations()!=null && run.limitations().size()<=20,"Missing or excessive capability descriptions");
     run.limitations().forEach(s->text(s,4000));
+    if(run.editableResult()!=null){
+      var editable=run.editableResult();
+      Input.require(editable.reasons()!=null&&editable.reasons().size()<=250,"Invalid editable result reasons");
+      editable.reasons().forEach(reason->text(reason,4000));
+      if(editable.plan()!=null){Plans.validateStructure(editable.plan());Input.require(editable.reasons().isEmpty(),"Editable plan must not also have unsupported reasons");}
+    }
   }
   private static void text(String s,int max){Input.require(s!=null && s.length()<=max,"Record field is missing or too long");}
   private static void snapshot(Snapshot p){

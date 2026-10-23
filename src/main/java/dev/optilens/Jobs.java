@@ -41,6 +41,32 @@ public final class Jobs implements AutoCloseable {
     Records.validate(run);capacity();
     Job job=new Job(UUID.randomUUID().toString(),"succeeded",true,Instant.now().toString(),null,run);save(job);return job;
   }
+  public PlanValidation validatePlan(Request request) throws Exception {
+    try{Input.require(request!=null&&"plan".equals(request.inputMode()),"Plan validation requires plan mode");Input.validate(request);}
+    catch(Plans.Invalid e){return new PlanValidation(false,null,Map.of(),List.of(e.issue));}
+    catch(IllegalArgumentException e){return new PlanValidation(false,null,Map.of(),List.of(new PlanIssue(null,"plan",Worker.error(e))));}
+    // Shares the bounded worker queue with optimization, but creates no history record.
+    var future=executor.submit(()->{
+      Path input=Files.createTempFile(directory,"validation-",".input.json"),output=input.resolveSibling(input.getFileName()+".output.json");Process process=null;
+      try{
+        Json.MAPPER.writeValue(input.toFile(),request);
+        String java=Path.of(System.getProperty("java.home"),"bin","java").toString();
+        String cp=System.getProperty("surefire.test.class.path",System.getProperty("java.class.path"));
+        process=new ProcessBuilder(java,"-Xmx384m","-Xss1m","-cp",cp,Worker.class.getName(),input.toString(),output.toString(),"validate")
+            .redirectOutput(ProcessBuilder.Redirect.DISCARD).redirectError(ProcessBuilder.Redirect.DISCARD).start();
+        if(!process.waitFor(timeoutSeconds,TimeUnit.SECONDS))throw new TimeoutException("Plan validation exceeded the worker time limit");
+        if(process.exitValue()!=0 || !Files.exists(output) || Files.size(output)>8_000_000)throw new IllegalArgumentException("Plan validation worker failed or exceeded the output limit");
+        var outcome=Json.MAPPER.readValue(output.toFile(),Worker.Outcome.class);
+        if(outcome.error()!=null)throw new IllegalArgumentException(outcome.error());
+        return outcome.validation();
+      }finally{
+        if(process!=null&&process.isAlive()){process.destroyForcibly();process.waitFor(5,TimeUnit.SECONDS);}
+        Files.deleteIfExists(input);Files.deleteIfExists(output);
+      }
+    });
+    try{return future.get();}catch(ExecutionException e){throw new IllegalArgumentException(Worker.error(e.getCause()),e.getCause());}
+    catch(InterruptedException e){future.cancel(true);Thread.currentThread().interrupt();throw e;}
+  }
   private void capacity(){Input.require(jobs.size()<200,"The limit of 200 local records has been reached. Stop the service, then back up and clean data/runs.");}
   public Job get(String id){return jobs.get(id);}
   public List<Map<String,Object>> list(){

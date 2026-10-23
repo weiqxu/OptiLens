@@ -2,7 +2,7 @@
 
 See every step of SQL optimization.
 
-OptiLens is a locally hosted web research tool. Supply SQL and table schemas, collect real optimization events from Apache Calcite, and explore complete plan snapshots and individual rule transformations in your browser.
+OptiLens is a locally hosted web research tool. Supply SQL or build a logical operator tree with table schemas, collect real optimization events from Apache Calcite, and explore complete plan snapshots and individual rule transformations in your browser.
 
 ## Project language
 
@@ -15,8 +15,10 @@ The documentation, interface, built-in examples, rule catalog descriptions, and 
 Implemented features:
 
 - Database selection (currently Calcite only), a searchable rule catalog with category filters, and selection of individual rules or common rule groups.
-- A dedicated rule explorer with a database selector, searchable rule list, and 126 verified rule examples with live before/after plans and explicit preparation stages where needed.
+- A dedicated rule explorer with a database selector, searchable rule list, and 135 verified rule examples (126 SQL and nine hand-built plans) with live before/after plans and explicit preparation stages where needed.
 - Editable SQL and declarative table schemas.
+- Plan Lab: drag-and-connect logical operators, structured expression editing, JSON interchange, undo/redo, and isolated validation.
+- Whole-tree or selected-subtree rule programs, with lossless supported results available as the next editable input.
 - Real rule attempts and expression production events from Calcite 1.39.0 / HepPlanner.
 - Visual comparisons of initial and final plans, stage boundaries, and individual rule events.
 - Difference highlighting, graph zoom, node details, and raw plan inspection.
@@ -52,15 +54,25 @@ Browser access through another local forwarding port is supported, such as `http
 
 Open [http://127.0.0.1:8080/rules](http://127.0.0.1:8080/rules), or use **Rule explorer** from the query lab. Choose a database (currently Calcite), then select a rule from the left-hand list. Search by rule name or implementation, filter by category, or show only rules with verified examples.
 
-The explorer lists 222 individual catalog entries; common multi-rule groups remain in the query lab. For 126 rules, selecting an entry submits a real SQL example. Some programs first apply preparation rules to construct a Calc, Window, MultiJoin, semijoin, or empty input. The selected target rule is always the final stage, and the explorer compares only that stage, not the preparation results. The preparation program and conversion settings are visible below the SQL. The right panel shows the SQL, table schema, explanation, and complete before/after plans. Use the View menu for local rule events, select graph nodes for details, inspect raw plans, or download the run. Each example is checked against Calcite 1.39.0 to ensure its named target produces an event and an observable expression change; no diagram is a simulated transformation.
+The explorer lists 222 individual catalog entries; common multi-rule groups remain in the query lab. For 135 rules, selecting an entry submits a real example: 126 use SQL and nine use a directly constructed logical plan. Some programs first apply preparation rules to construct a Calc, Window, MultiJoin, semijoin, or empty input. The selected target rule is always the final stage, and the explorer compares only that stage, not the preparation results. The preparation program and conversion settings are visible below the SQL. The right panel shows the SQL or plan document, table schema, explanation, and complete before/after plans. Use the View menu for local rule events, select graph nodes for details, inspect raw plans, or download the run. Each example is checked against Calcite 1.39.0 to ensure its named target produces an event and an observable expression change; no diagram is a simulated transformation.
 
 Completed and pending examples are reused within the current page session. **Run again** creates a new run. Example runs are stored in normal history and count toward the existing job and record limits. Switching rules never assigns a late result to the newly selected rule.
 
-Entries without a verified example explicitly say so. Rules requiring additional configuration explain what is missing. **Try in Query lab** opens the selected rule and its example SQL when available; otherwise it provides an editable starting query without claiming it matches the rule. Date-range rules now use an explicit UTC connection context and have a verified example. Coverage is 126 of 141 runnable entries (222 total catalog entries). The remaining 15 runnable entries explain their missing plan shape, metadata, or planner requirements, or why no observable rewrite is claimed. The other 81 entries require specialized environments such as physical conventions, adapters, materialized views, or streaming schemas. See the [coverage report](plan/rule-example-coverage.md).
+Entries without a verified example explicitly say so. Rules requiring additional configuration explain what is missing. **Try in Query lab** opens the selected rule and its example SQL when available; otherwise it provides an editable starting query without claiming it matches the rule. **Try in Plan Lab** opens hand-built examples for editing. Date-range rules use an explicit UTC connection context and have a verified example. Coverage is 135 of 141 runnable entries (222 total catalog entries). The remaining six runnable entries explain their missing plan shape, metadata, or planner requirements, or why no observable rewrite is claimed. The other 81 entries require specialized environments such as physical conventions, adapters, materialized views, or streaming schemas. See the [coverage report](plan/rule-example-coverage.md).
+
+## Plan Lab
+
+Open [http://127.0.0.1:8080/plan-lab](http://127.0.0.1:8080/plan-lab). Drag operators from the palette, connect a child’s top output to a parent’s bottom input, and edit the selected node in the inspector. Join ports distinguish left and right inputs. Set the root, choose ordered rules and an optional subtree scope, then use **Validate & preview** and **Run rules**.
+
+The canvas supports subtree copying, input reordering, auto layout, zoom, undo/redo, and JSON editing. Invalid JSON leaves the existing canvas intact. Export/import preserves the schema, editor geometry, rule order, and scope. The original input stays unchanged when a run completes; results provide complete plans, selected-subtree comparisons, and local rule events.
+
+**Use result as input** copies a supported complete result into a new experiment and clears rules and scope. Unsupported operators or metadata remain visible as read-only results with an explanation. Plan construction uses logical factories and Rex expressions directly, so redundant Projects, constant-true Filters, single-input Unions, and zero-output Aggregates are available for rule experiments.
+
+Supported operators include TableScan, Values, Filter, Project, six Join types, Aggregate, Sort, Union/Intersect/Minus, Calc, Exchange, SortExchange, and inner MultiJoin. The inspector provides field references, typed literals, operator calls, CAST, and CASE. Type conversions must be explicit. See [Plan Lab design and input format](plan/plan-lab.md) for operator attributes, expression examples, API responses, and limits.
 
 ## Reading the results
 
-1. **Initial to final:** the initial logical plan after SQL conversion and the final output of the selected rule program.
+1. **Initial to final:** the initial logical plan after SQL conversion or direct plan construction and the final output of the selected rule program.
 2. **Rule stage:** the complete plan before and after a rule group; a group may contain several Calcite rules.
 3. **Local event:** the expression matched by a single rule invocation and the expression it produced, rather than the entire query plan.
 4. **Node details:** attributes, output fields, input nodes, and the basis for difference matching.
@@ -103,7 +115,9 @@ Supported types are `INTEGER`, `BIGINT`, `DOUBLE`, `DECIMAL`, `VARCHAR`, `BOOLEA
 | `GET /api/health` | Service health |
 | `GET /api/catalog` | Database types, rule catalog, catalog scope, and built-in examples |
 | `GET /api/rule-examples` | Verified example programs and per-rule coverage reasons |
-| `POST /api/runs` | Submit `{database, sql, schema, rules}` and receive a job ID |
+| `POST /api/runs` | Submit a SQL or plan request and receive a job ID |
+| `GET /api/plan-capabilities` | Supported operators, expressions, parameters, types, and limits |
+| `POST /api/plans/validate` | Validate a plan in an isolated worker without creating history |
 | `GET /api/runs` | Summaries of the 30 most recent runs |
 | `GET /api/runs/{id}` | Job status and result |
 | `GET /api/runs/{id}/download` | Export the result as JSON |
@@ -111,15 +125,18 @@ Supported types are `INTEGER`, `BIGINT`, `DOUBLE`, `DECIMAL`, `VARCHAR`, `BOOLEA
 
 POST requests use `Content-Type: application/json`. The only supported `database` value is currently `calcite`; older requests that omit it default to Calcite. `rules` is an ordered list of runnable catalog entry IDs, such as `CoreRules.PROJECT_REDUCE_EXPRESSIONS`. Legacy group IDs remain supported: `reduce`, `filter-join`, `filter-project`, `project-join`, and `project-cleanup`. An empty list produces only the initial plan.
 
-Requests may include `options: {"expandSubqueries": false, "matchLimit": 1}`. Subquery expansion defaults to `true`; disabling it preserves subqueries for subquery-removal rules. The match limit defaults to `100`. Small limits make reversible rules such as join commuting useful as bounded demonstrations. They do not establish an optimizer fixed point. These settings and the ordered preparation program survive export/import and the Query lab handoff. Older requests without `options` retain the defaults. Planner connection time zone is UTC.
+Use `inputMode: "plan"`, `plan: {planVersion: 1, rootId, nodes, layout?}`, and optional `scopeNodeId` for hand-built plans. Omitted `inputMode` means SQL. Both modes share `schema`, `database`, `rules`, and match limits; a request cannot contain both SQL and a plan.
 
-Job states are `queued`, `running`, `succeeded`, and `failed`. Successful results use `formatVersion: 1` and contain `input`, `initial`, `finalPlan`, `stages`, and `limitations`.
+Requests may include `options: {"expandSubqueries": false, "matchLimit": 1}`. Subquery expansion defaults to `true`; disabling it preserves subqueries for subquery-removal rules. The match limit defaults to `100`. Small limits make reversible rules such as join commuting useful as bounded demonstrations. They do not establish an optimizer fixed point. These settings and the ordered preparation program survive export/import and the Query lab handoff. Older requests without `options` retain the defaults. Plan mode ignores `expandSubqueries`. Planner connection time zone is UTC.
+
+Job states are `queued`, `running`, `succeeded`, and `failed`. Successful results use `formatVersion: 2` and contain `input`, `initial`, `finalPlan`, `stages`, `limitations`, and `editableResult`. Version 1 SQL records remain readable and rerunnable. Stage scope IDs identify the optimized subtree in each complete snapshot.
 
 ## Resource limits
 
 - At most two concurrent optimization workers and eight queued jobs, with a 384 MB heap per worker.
 - A 25-second timeout per worker and a configurable match limit of 1–100 per stage (default 100).
 - Up to 10,000 SQL characters, 16 tables, and 32 columns per table.
+- Manual inputs are limited to 250 operators, tree depth 40, expression depth 32, and 2,000 expression objects; request bodies are limited to 100 KB.
 - Up to 250 nodes and 40 levels per snapshot, 500 attempts per run, and 80 transformations per stage.
 - An 8 MB limit on imports and worker output, with at most 200 stored local records.
 
@@ -136,7 +153,7 @@ mvn test
 Graph difference and DAG layout tests require Node.js 18+ but no dependency installation:
 
 ```bash
-node --test tests/graph.test.mjs
+npm test
 ```
 
 Optional browser tests require a running service:
@@ -146,6 +163,7 @@ npm ci
 npx playwright install chromium
 npm run test:browser
 npm run test:rules
+npm run test:plan-lab
 ```
 
 The local port-forwarding regression test starts its own temporary backend and proxy. Run `mvn package` first:
@@ -163,7 +181,10 @@ src/main/java/dev/optilens/
   Server.java        Local HTTP API and static assets
   Jobs.java          Job queue, persistence, and worker lifecycle
   Worker.java        Isolated Calcite optimization entry point
-  Optimizer.java     SQL conversion, HepPlanner, and event collection
+  Optimizer.java     Shared SQL/plan optimization, scopes, and event collection
+  Plans.java         Typed direct logical-plan construction and capabilities
+  PlanExport.java    Lossless editable export of live relational results
+  PlanExamples.java Verified hand-built examples for additional rules
   Snapshots.java     Independent snapshots, Hep node unwrapping, and raw plans
   Model.java         Versioned run data structures
   Rules.java         Rule programs and source references

@@ -8,8 +8,16 @@ public final class Model {
   public record Column(String name, String type, Boolean nullable) {}
   public record Table(String name, List<Column> columns) {}
   public record Options(Boolean expandSubqueries, Integer matchLimit) {}
-  public record Request(String sql, List<Table> schema, List<String> rules, String database, Options options) {
-    public Request { if (database == null) database = "calcite"; }
+  public record Position(double x, double y) {}
+  public record OperatorNode(String id, String op, List<String> inputs, com.fasterxml.jackson.databind.JsonNode attributes) {}
+  public record PlanDocument(int planVersion, String rootId, List<OperatorNode> nodes, Map<String,Position> layout) {}
+  public record EditableResult(PlanDocument plan, List<String> reasons) {}
+  public record PlanIssue(String nodeId, String path, String message) {}
+  public record PlanValidation(boolean valid, Snapshot snapshot, Map<String,List<String>> fields, List<PlanIssue> errors) {}
+  public record Request(String sql, List<Table> schema, List<String> rules, String database, Options options,
+                        String inputMode, PlanDocument plan, String scopeNodeId) {
+    public Request { if (database == null) database = "calcite"; if (inputMode == null) inputMode = "sql"; }
+    public Request(String sql, List<Table> schema, List<String> rules, String database, Options options) { this(sql,schema,rules,database,options,"sql",null,null); }
     public Request(String sql, List<Table> schema, List<String> rules, String database) { this(sql, schema, rules, database, null); }
     public Request(String sql, List<Table> schema, List<String> rules) { this(sql, schema, rules, "calcite"); }
   }
@@ -19,10 +27,19 @@ public final class Model {
   public record Attempt(int callId, String rule, List<String> matchedIds) {}
   public record Event(int sequence, int callId, String rule, Snapshot before, Snapshot after) {}
   public record Stage(String id, String title, String description, String conditions, String source,
-                      Snapshot before, Snapshot after, List<Attempt> attempts, List<Event> events) {}
+                      Snapshot before, Snapshot after, List<Attempt> attempts, List<Event> events,
+                      String scopeBeforeRootId, String scopeAfterRootId) {
+    public Stage(String id,String title,String description,String conditions,String source,Snapshot before,Snapshot after,List<Attempt> attempts,List<Event> events) {
+      this(id,title,description,conditions,source,before,after,attempts,events,null,null);
+    }
+  }
   public record Run(int formatVersion, String engine, String engineVersion, String createdAt,
                     Request input, Snapshot initial, Snapshot finalPlan, List<Stage> stages,
-                    List<String> limitations) {}
+                    List<String> limitations, EditableResult editableResult) {
+    public Run(int formatVersion,String engine,String engineVersion,String createdAt,Request input,Snapshot initial,Snapshot finalPlan,List<Stage> stages,List<String> limitations) {
+      this(formatVersion,engine,engineVersion,createdAt,input,initial,finalPlan,stages,limitations,null);
+    }
+  }
   public record RuleCard(String id, String title, String description, String conditions,
                          List<String> implementations, String source, String category, boolean runnable, String unavailableReason) {}
   public record Example(String id, String title, String note, Request input) {}
