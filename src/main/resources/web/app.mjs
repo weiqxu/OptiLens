@@ -128,9 +128,9 @@ $('rule-recommended').addEventListener('click',()=>{selectRules(catalog.examples
 $('rule-clear').addEventListener('click',()=>{selectRules({database:$('database').value,rules:[]});inputChanged();});
 $('database').addEventListener('change',()=>{renderRules();selectRules(catalog.examples[0].input);inputChanged();});
 $('examples').addEventListener('change',e=>{const ex=catalog.examples.find(x=>x.id===e.target.value);if(ex)loadExample(ex);inputChanged();});
-$('history').addEventListener('change',async e=>{if(!e.target.value)return;const id=e.target.value;const token=++epoch;setBusy(true);try{const job=await api(`/api/runs/${id}`);if(job.status==='succeeded'){setBusy(false);applyRequest(job.result.input);showJob(job);}else if(job.status==='failed'){setBusy(false);status(job.error,true);}else await poll(id,token);}catch(error){setBusy(false);status(error.message,true);}});
+$('history').addEventListener('change',async e=>{if(!e.target.value)return;const id=e.target.value;const token=++epoch;setBusy(true);try{const job=await api(`/api/runs/${id}`);if(job.status==='succeeded'){setBusy(false);if(job.result.input.inputMode==='plan'){location.href='/plan-lab?run='+job.id;return;}applyRequest(job.result.input);showJob(job);}else if(job.status==='failed'){setBusy(false);status(job.error,true);}else await poll(id,token);}catch(error){setBusy(false);status(error.message,true);}});
 $('import-button').addEventListener('click',()=>$('import-file').click());
-$('import-file').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;setBusy(true);++epoch;status('Validating imported record…');try{if(file.size>8_000_000)throw new Error('Record exceeds the 8 MB limit');const job=await api('/api/import',{method:'POST',body:await file.text()});setBusy(false);applyRequest(job.result.input);showJob(job);await refreshHistory();}catch(error){setBusy(false);status(error.message,true);}finally{e.target.value='';}});
+$('import-file').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;setBusy(true);++epoch;status('Validating imported record…');try{if(file.size>8_000_000)throw new Error('Record exceeds the 8 MB limit');const job=await api('/api/import',{method:'POST',body:await file.text()});setBusy(false);if(job.result.input.inputMode==='plan'){location.href='/plan-lab?run='+job.id;return;}applyRequest(job.result.input);showJob(job);await refreshHistory();}catch(error){setBusy(false);status(error.message,true);}finally{e.target.value='';}});
 document.querySelectorAll('[data-zoom]').forEach(b=>b.addEventListener('click',()=>{const [side,delta]=b.dataset.zoom.split(':');zoom[side]=Number(delta)===0?1:Math.min(1.6,Math.max(.65,zoom[side]+Number(delta)*.15));renderSelection();}));
 try{
   catalog=await api('/api/catalog');
@@ -144,6 +144,7 @@ try{
     if(!rule)throw new Error('The requested rule is unknown or unavailable.');
     const examples=await api('/api/rule-examples');
     const example=examples.examples.find(e=>e.id===requestedRule);
+    if(example?.input.inputMode==='plan'){location.href='/plan-lab?rule='+encodeURIComponent(requestedRule);throw new Error('Opening this hand-built example in Plan lab…');}
     loadExample(example||{input:{...catalog.examples[0].input,rules:[requestedRule]},note:'Only the selected rule is enabled. Edit the SQL to match its pattern; this query is not a verified example for that rule.'});
     $('examples').value='';
   }

@@ -22,10 +22,12 @@ import org.apache.calcite.tools.Frameworks;
 import static dev.optilens.Model.*;
 
 public final class Optimizer {
-  public Run optimize(Request request) throws Exception {
-    Input.validate(request);
+  static org.apache.calcite.plan.Context context(){
+    var properties=new Properties();properties.setProperty("timeZone","UTC");
+    return Contexts.of(new CalciteConnectionConfigImpl(properties));
+  }
+  static org.apache.calcite.tools.FrameworkConfig config(Request request){
     boolean expand=request.options()==null || !Boolean.FALSE.equals(request.options().expandSubqueries());
-    int matchLimit=request.options()==null || request.options().matchLimit()==null ? 100 : request.options().matchLimit();
     var schema=Frameworks.createRootSchema(true);
     for(var table:request.schema())schema.add(table.name(),new AbstractTable(){
       @Override public RelDataType getRowType(RelDataTypeFactory f){
@@ -37,20 +39,45 @@ public final class Optimizer {
         }return b.build();
       }
     });
-    var connectionProperties=new Properties();
-    connectionProperties.setProperty("timeZone", "UTC");
-    var context=Contexts.of(new CalciteConnectionConfigImpl(connectionProperties));
-    var config=Frameworks.newConfigBuilder().defaultSchema(schema).context(context)
+    return Frameworks.newConfigBuilder().defaultSchema(schema).context(context())
         .parserConfig(SqlParser.config().withLex(Lex.MYSQL).withCaseSensitive(false))
         .sqlToRelConverterConfig(SqlToRelConverter.config().withTrimUnusedFields(false).withExpand(expand)).build();
+  }
+  public Run optimize(Request request) throws Exception {
+    Input.validate(request);var config=config(request);
+    if(request.inputMode().equals("plan")){
+      var built=Plans.build(request.plan(),config);
+      return execute(request,built.root(),request.scopeNodeId()==null?built.root():built.nodes().get(request.scopeNodeId()),config);
+    }
     try(var parser=Frameworks.getPlanner(config)){
       var parsed=parser.parse(request.sql());
       Input.require(parsed.getKind().belongsTo(SqlKind.QUERY),"This release supports queries such as SELECT and WITH only; DDL and data modifications are not executed");
-      var validated=parser.validate(parsed);
-      RelNode current=parser.rel(validated).project();
+      var validated=parser.validate(parsed);RelNode root=parser.rel(validated).project();
+      return execute(request,root,root,config);
+    }
+  }
+  public PlanValidation validate(Request request){
+    try{
+      Input.require("plan".equals(request.inputMode()),"Plan validation requires plan mode");Input.validate(request);
+      var built=Plans.build(request.plan(),config(request));var fields=new LinkedHashMap<String,List<String>>();
+      built.nodes().forEach((id,n)->fields.put(id,n.getRowType().getFieldList().stream().map(f->f.getName()+": "+f.getType().getFullTypeString()).toList()));
+      return new PlanValidation(true,Snapshots.capture(built.root(),"full-plan"),fields,List.of());
+    }catch(Plans.Invalid e){return new PlanValidation(false,null,Map.of(),List.of(e.issue));}
+    catch(Exception|AssertionError e){return new PlanValidation(false,null,Map.of(),List.of(new PlanIssue(null,"plan",Worker.error(e))));}
+  }
+  static RelNode replace(RelNode root,RelNode previous,RelNode replacement){
+    if(root==previous)return replacement;
+    var inputs=root.getInputs().stream().map(c->replace(c,previous,replacement)).toList();
+    return inputs.equals(root.getInputs())?root:root.copy(root.getTraitSet(),inputs);
+  }
+  private Run execute(Request request,RelNode current,RelNode scope,org.apache.calcite.tools.FrameworkConfig config){
+    boolean expand=request.options()==null || !Boolean.FALSE.equals(request.options().expandSubqueries());
+    int matchLimit=request.options()==null || request.options().matchLimit()==null ? 100 : request.options().matchLimit();
+    var context=config.getContext();
       // ReduceExpressionsRule resolves its executor through the relation's cluster planner,
       // which is distinct from each experimental HepPlanner below.
       current.getCluster().getPlanner().setExecutor(new RexExecutorImpl(DataContexts.EMPTY));
+      RelNode target=scope;
       Snapshot initial=Snapshots.capture(current,"full-plan");
       List<Stage> stages=new ArrayList<>();
       int[] total={0};
@@ -82,17 +109,22 @@ public final class Optimizer {
           public void relDiscarded(RelDiscardedEvent e){}
           public void relChosen(RelChosenEvent e){}
         });
-        planner.setRoot(current);current=planner.findBestExp();
+        String scopeBefore=String.valueOf(Snapshots.unwrap(target).getId());
+        RelNode previous=target;
+        planner.setRoot(target);target=planner.findBestExp();
+        if(request.scopeNodeId()!=null)Input.require(previous.getRowType().equals(target.getRowType()),
+            "Scoped rewrite changed output names, order, types or nullability; it cannot be attached to its parent");
+        current=replace(current,previous,target);
+        String scopeAfter=String.valueOf(Snapshots.unwrap(target).getId());
         stages.add(new Stage(card.id(),card.title(),card.description(),card.conditions(),card.source(),before,
-            Snapshots.capture(current,"full-plan"),List.copyOf(attempts),List.copyOf(events)));
+            Snapshots.capture(current,"full-plan"),List.copyOf(attempts),List.copyOf(events),scopeBefore,scopeAfter));
       }
-      return new Run(1,"Apache Calcite","1.39.0",Instant.now().toString(),request,initial,
+      return new Run(2,"Apache Calcite","1.39.0",Instant.now().toString(),request,initial,
           Snapshots.capture(current,"full-plan"),List.copyOf(stages),List.of(
           "A controlled HepPlanner experiment in stages, not the default Calcite optimization pipeline. Each stage has a limit of " + matchLimit + " matches.",
-          "The initial snapshot is captured after SQL conversion (subquery expansion: " + expand + "). Individual rewrites during parsing, validation, and conversion are not traced.",
+          request.inputMode().equals("plan") ? "The initial plan was constructed directly from the supplied operator tree, without SQL conversion or construction-time rule rewriting." : "The initial snapshot is captured after SQL conversion (subquery expansion: " + expand + "). Individual rewrites during parsing, validation, and conversion are not traced.",
           "Rule events show local expressions; stage boundaries show complete plans. Final candidate selection and rejection reasons are not collected.",
           "Planner connection time zone: UTC. Date range rewrites use this fixed setting.",
-          "Only table schemas are declared, with no real data or statistics. Queries are not executed, and performance or cost benefits are not measured."));
-    }
+          "Only table schemas are declared, with no real data or statistics. Queries are not executed, and performance or cost benefits are not measured."),PlanExport.export(current,config));
   }
 }

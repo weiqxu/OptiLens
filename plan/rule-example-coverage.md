@@ -1,10 +1,10 @@
 # Rule example coverage
 
-Calcite version: **1.39.0**. Verified examples: **126 / 222 catalog entries**, covering **126 / 141 runnable entries**. Common multi-rule groups are excluded from these counts. Public aliases are separate catalog entries.
+Calcite version: **1.39.0**. Verified examples: **135 / 222 catalog entries**, covering **135 / 141 runnable entries**. Common multi-rule groups are excluded from these counts. Public aliases are separate catalog entries.
 
 ## Verification and execution
 
-Each example executes real Calcite rules. Tests require an event attributed to the target rule and at least one changed local-expression snapshot. Preparation stages, when present, precede the target and are retained in exported records. The explorer compares the target stage only. Source-defined examples are in `RuleExamples.java`; additional SQL programs are in `src/main/resources/rule-examples.json`.
+Each example executes real Calcite rules. Tests require an event attributed to the target rule and at least one changed local-expression snapshot. Preparation stages, when present, precede the target and are retained in exported records. The explorer compares the target stage only. Source-defined examples are in `RuleExamples.java`; additional SQL programs are in `src/main/resources/rule-examples.json`. Nine direct-plan programs are in `src/main/resources/plan-examples.json`; they use Plan Lab without SQL conversion.
 
 Subquery-removal examples disable SQL-conversion expansion. Reversible rewrites use bounded matches, including one match for join commuting. Dates use a UTC planner context. These are optimizer demonstrations over declared schemas, not query executions or proofs of better performance. A rule producing a candidate does not establish equivalence on every possible input or global optimality.
 
@@ -138,27 +138,27 @@ Subquery-removal examples disable SQL-conversion expansion. Reversible rewrites 
 | `SingleValuesOptimizationRules.JOIN_LEFT_PROJECT_INSTANCE` | Simplify a projected single-row input | None |
 | `SingleValuesOptimizationRules.JOIN_RIGHT_INSTANCE` | Simplify a join with one literal row | None |
 | `SingleValuesOptimizationRules.JOIN_RIGHT_PROJECT_INSTANCE` | Simplify a projected single-row input | None |
+| `CoreRules.EXCHANGE_REMOVE_CONSTANT_KEYS` | Remove a constant distribution key (hand-built plan) | None |
+| `CoreRules.FILTER_EXPAND_IS_NOT_DISTINCT_FROM` | Expand null-safe equality (hand-built plan) | None |
+| `CoreRules.JOIN_PUSH_EXPRESSIONS` | Push an expression out of a join condition (hand-built plan) | None |
+| `CoreRules.JOIN_TO_SEMI_JOIN` | Simplify a join with an empty-output aggregate (hand-built plan) | None |
+| `CoreRules.MULTI_JOIN_BOTH_PROJECT` | Pull both MultiJoin projections upward (hand-built plan) | None |
+| `CoreRules.MULTI_JOIN_LEFT_PROJECT` | Pull left MultiJoin projections upward (hand-built plan) | None |
+| `CoreRules.MULTI_JOIN_RIGHT_PROJECT` | Pull right MultiJoin projections upward (hand-built plan) | None |
+| `CoreRules.SORT_EXCHANGE_REMOVE_CONSTANT_KEYS` | Remove a constant distribution key (hand-built plan) | None |
+| `CoreRules.UNION_REMOVE` | Remove a single-input union (hand-built plan) | None |
 
 ## Runnable entries without a verified example
 
-These entries remain selectable for research, but the current SQL path cannot demonstrate their target rewrite. Some need explicit relational-plan fixtures or richer metadata; others produce no observable rewrite in this version. No synthetic before/after result is presented.
+These entries remain selectable for research, but the current SQL and typed-plan paths cannot demonstrate their target rewrite. Some need intentionally mismatched inputs or richer metadata; others produce no observable rewrite in this version. No synthetic before/after result is presented.
 
 | Rule | Reason |
 | --- | --- |
 | `CoreRules.AGGREGATE_JOIN_TRANSPOSE` | In Calcite 1.39.0 this default variant treats both join inputs as unique and returns without a rewrite. Use the verified AGGREGATE_JOIN_TRANSPOSE_EXTENDED example for aggregate pushdown. |
-| `CoreRules.COERCE_INPUTS` | Requires set-operation inputs with mismatched row types. SQL validation already inserts the necessary coercions; a direct relational-plan fixture is needed. |
-| `CoreRules.EXCHANGE_REMOVE_CONSTANT_KEYS` | Requires an Exchange or SortExchange with constant distribution keys. SQL conversion in this environment does not construct distributed exchange operators. |
-| `CoreRules.FILTER_EXPAND_IS_NOT_DISTINCT_FROM` | SQL conversion expands IS NOT DISTINCT FROM before the rule stage. A direct relational-plan fixture is needed to preserve the original expression. |
+| `CoreRules.COERCE_INPUTS` | Requires set-operation inputs with mismatched row types. SQL validation already inserts the necessary coercions; Plan Lab requires type-compatible set inputs, so this rule needs a separate fixture for intentionally invalid inputs. |
 | `CoreRules.FILTER_TABLE_FUNCTION_TRANSPOSE` | Requires a registered table function with column-mapping metadata; the current schema contains only ordinary tables. |
-| `CoreRules.JOIN_PUSH_EXPRESSIONS` | SQL conversion already pushes the tested join-key expressions. A direct relational-plan fixture is needed to preserve the pre-rewrite join condition. |
-| `CoreRules.JOIN_TO_SEMI_JOIN` | Requires a join whose right input is an aggregate with no output fields. A direct relational-plan fixture is needed to preserve this shape. |
 | `CoreRules.MATCH` | This rule copies a Match operator. A copy alone does not demonstrate an observable optimization; no verified transformation is claimed. |
-| `CoreRules.MULTI_JOIN_BOTH_PROJECT` | Requires a partially flattened join tree with Project over MultiJoin under a remaining binary join. A targeted relational-plan fixture is needed; full-tree flattening removes that match. |
-| `CoreRules.MULTI_JOIN_LEFT_PROJECT` | Requires a partially flattened join tree with Project over MultiJoin under a remaining binary join. A targeted relational-plan fixture is needed; full-tree flattening removes that match. |
-| `CoreRules.MULTI_JOIN_RIGHT_PROJECT` | Requires a partially flattened join tree with Project over MultiJoin under a remaining binary join. A targeted relational-plan fixture is needed; full-tree flattening removes that match. |
-| `CoreRules.SORT_EXCHANGE_REMOVE_CONSTANT_KEYS` | Requires an Exchange or SortExchange with constant distribution keys. SQL conversion in this environment does not construct distributed exchange operators. |
 | `CoreRules.SORT_REMOVE` | Requires a planner that tracks and enforces collation traits. The current HepPlanner does not enforce requested sort traits, so removing a sort would not be a verified equivalent plan. |
-| `CoreRules.UNION_REMOVE` | Requires a Union with exactly one input. SQL UNION produces at least two inputs; a direct relational-plan fixture is needed. |
 | `PruneEmptyRules.EMPTY_TABLE_INSTANCE` | Requires table metadata proving a maximum row count of zero. Schema-only tables do not provide row-count statistics. |
 
 ## Entries requiring additional environments
@@ -178,7 +178,7 @@ The following 81 entries are disabled in Query lab. Every entry also exposes its
 
 ## Follow-up work
 
-- Add a reproducible relational-plan fixture input for expression shapes eliminated during SQL conversion.
+- Extend the typed plan language and lossless exporter when new operator families are needed.
 - Add trait-aware physical planning before demonstrating convention conversion or sort removal.
 - Supply explicit table metadata, table functions, and filter/project-capable adapters.
 - Add dedicated streaming, materialized-view, measure, spatial, and JDBC environments.

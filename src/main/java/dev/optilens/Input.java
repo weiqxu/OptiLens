@@ -11,7 +11,15 @@ public final class Input {
   public static void validate(Request r) {
     require(r != null, "Missing request");
     require("calcite".equals(r.database()), "Only Calcite is currently supported");
-    require(r.sql() != null && !r.sql().isBlank() && r.sql().length() <= 10_000, "SQL must contain 1-10000 characters");
+    require(Set.of("sql","plan").contains(r.inputMode()), "Input mode must be sql or plan");
+    if (r.inputMode().equals("plan")) {
+      require(r.sql()==null || r.sql().isBlank(), "Plan input must not also contain SQL");
+      Plans.validateStructure(r.plan());
+      require(r.scopeNodeId()==null || r.plan().nodes().stream().anyMatch(n->n.id().equals(r.scopeNodeId())), "Unknown scope node");
+    } else {
+      require(r.plan()==null && r.scopeNodeId()==null, "SQL input must not contain a plan or node scope");
+      require(r.sql() != null && !r.sql().isBlank() && r.sql().length() <= 10_000, "SQL must contain 1-10000 characters");
+    }
     require(r.schema() != null && !r.schema().isEmpty() && r.schema().size() <= 16, "Provide 1-16 tables");
     var tables = new HashSet<String>();
     for (var t : r.schema()) {

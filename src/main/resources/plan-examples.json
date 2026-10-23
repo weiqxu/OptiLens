@@ -1,0 +1,1013 @@
+[
+  {
+    "id": "CoreRules.UNION_REMOVE",
+    "title": "Remove a single-input union",
+    "note": "This hand-built Union has one input, a shape SQL UNION cannot express.",
+    "plan": {
+      "planVersion": 1,
+      "rootId": "n2",
+      "nodes": [
+        {
+          "id": "n1",
+          "op": "Values",
+          "inputs": [],
+          "attributes": {
+            "columns": [
+              {
+                "name": "id",
+                "type": "INTEGER",
+                "nullable": false
+              }
+            ],
+            "rows": [
+              [
+                1
+              ],
+              [
+                2
+              ]
+            ]
+          }
+        },
+        {
+          "id": "n2",
+          "op": "Union",
+          "inputs": [
+            "n1"
+          ],
+          "attributes": {
+            "all": true
+          }
+        }
+      ],
+      "layout": {}
+    }
+  },
+  {
+    "id": "CoreRules.FILTER_EXPAND_IS_NOT_DISTINCT_FROM",
+    "title": "Expand null-safe equality",
+    "note": "The input expression is preserved without SQL conversion so the selected rule can expand null-safe equality.",
+    "plan": {
+      "planVersion": 1,
+      "rootId": "n2",
+      "nodes": [
+        {
+          "id": "n1",
+          "op": "Values",
+          "inputs": [],
+          "attributes": {
+            "columns": [
+              {
+                "name": "id",
+                "type": "INTEGER",
+                "nullable": true
+              }
+            ],
+            "rows": [
+              [
+                1
+              ],
+              [
+                2
+              ]
+            ]
+          }
+        },
+        {
+          "id": "n2",
+          "op": "Filter",
+          "inputs": [
+            "n1"
+          ],
+          "attributes": {
+            "condition": {
+              "kind": "call",
+              "op": "IS NOT DISTINCT FROM",
+              "args": [
+                {
+                  "kind": "ref",
+                  "input": 0,
+                  "index": 0
+                },
+                {
+                  "kind": "literal",
+                  "type": "INTEGER",
+                  "nullable": false,
+                  "value": 1
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "layout": {}
+    }
+  },
+  {
+    "id": "CoreRules.JOIN_PUSH_EXPRESSIONS",
+    "title": "Push an expression out of a join condition",
+    "note": "A computed join key is intentionally kept inside the Join until the selected rule runs.",
+    "plan": {
+      "planVersion": 1,
+      "rootId": "n3",
+      "nodes": [
+        {
+          "id": "n1",
+          "op": "Values",
+          "inputs": [],
+          "attributes": {
+            "columns": [
+              {
+                "name": "a",
+                "type": "INTEGER",
+                "nullable": false
+              }
+            ],
+            "rows": [
+              [
+                1
+              ],
+              [
+                2
+              ]
+            ]
+          }
+        },
+        {
+          "id": "n2",
+          "op": "Values",
+          "inputs": [],
+          "attributes": {
+            "columns": [
+              {
+                "name": "b",
+                "type": "INTEGER",
+                "nullable": false
+              }
+            ],
+            "rows": [
+              [
+                1
+              ],
+              [
+                2
+              ]
+            ]
+          }
+        },
+        {
+          "id": "n3",
+          "op": "Join",
+          "inputs": [
+            "n1",
+            "n2"
+          ],
+          "attributes": {
+            "joinType": "INNER",
+            "condition": {
+              "kind": "call",
+              "op": "=",
+              "args": [
+                {
+                  "kind": "call",
+                  "op": "+",
+                  "args": [
+                    {
+                      "kind": "ref",
+                      "input": 0,
+                      "index": 0
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "INTEGER",
+                      "nullable": false,
+                      "value": 1
+                    }
+                  ]
+                },
+                {
+                  "kind": "ref",
+                  "input": 1,
+                  "index": 0
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "layout": {}
+    }
+  },
+  {
+    "id": "CoreRules.JOIN_TO_SEMI_JOIN",
+    "title": "Simplify a join with an empty-output aggregate",
+    "note": "The right aggregate has no grouping keys or aggregate calls, preserving a zero-field input for this rule.",
+    "plan": {
+      "planVersion": 1,
+      "rootId": "n4",
+      "nodes": [
+        {
+          "id": "n1",
+          "op": "Values",
+          "inputs": [],
+          "attributes": {
+            "columns": [
+              {
+                "name": "a",
+                "type": "INTEGER",
+                "nullable": false
+              }
+            ],
+            "rows": [
+              [
+                1
+              ],
+              [
+                2
+              ]
+            ]
+          }
+        },
+        {
+          "id": "n2",
+          "op": "Values",
+          "inputs": [],
+          "attributes": {
+            "columns": [
+              {
+                "name": "b",
+                "type": "INTEGER",
+                "nullable": false
+              }
+            ],
+            "rows": [
+              [
+                1
+              ],
+              [
+                2
+              ]
+            ]
+          }
+        },
+        {
+          "id": "n3",
+          "op": "Aggregate",
+          "inputs": [
+            "n2"
+          ],
+          "attributes": {
+            "groupKeys": [],
+            "calls": []
+          }
+        },
+        {
+          "id": "n4",
+          "op": "Join",
+          "inputs": [
+            "n1",
+            "n3"
+          ],
+          "attributes": {
+            "joinType": "INNER",
+            "condition": {
+              "kind": "literal",
+              "type": "BOOLEAN",
+              "nullable": false,
+              "value": true
+            }
+          }
+        }
+      ],
+      "layout": {}
+    }
+  },
+  {
+    "id": "CoreRules.MULTI_JOIN_BOTH_PROJECT",
+    "title": "Pull both MultiJoin projections upward",
+    "note": "A partially flattened join tree is constructed directly. The selected rule pulls projections above the remaining binary join.",
+    "plan": {
+      "planVersion": 1,
+      "rootId": "n9",
+      "nodes": [
+        {
+          "id": "n1",
+          "op": "Values",
+          "inputs": [],
+          "attributes": {
+            "columns": [
+              {
+                "name": "la",
+                "type": "INTEGER",
+                "nullable": false
+              }
+            ],
+            "rows": [
+              [
+                1
+              ],
+              [
+                2
+              ]
+            ]
+          }
+        },
+        {
+          "id": "n2",
+          "op": "Values",
+          "inputs": [],
+          "attributes": {
+            "columns": [
+              {
+                "name": "lb",
+                "type": "INTEGER",
+                "nullable": false
+              }
+            ],
+            "rows": [
+              [
+                1
+              ],
+              [
+                2
+              ]
+            ]
+          }
+        },
+        {
+          "id": "n3",
+          "op": "MultiJoin",
+          "inputs": [
+            "n1",
+            "n2"
+          ],
+          "attributes": {
+            "condition": {
+              "kind": "call",
+              "op": "=",
+              "args": [
+                {
+                  "kind": "ref",
+                  "input": 0,
+                  "index": 0
+                },
+                {
+                  "kind": "ref",
+                  "input": 1,
+                  "index": 0
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "n4",
+          "op": "Project",
+          "inputs": [
+            "n3"
+          ],
+          "attributes": {
+            "projects": [
+              {
+                "name": "lkey",
+                "expr": {
+                  "kind": "call",
+                  "op": "+",
+                  "args": [
+                    {
+                      "kind": "ref",
+                      "input": 0,
+                      "index": 0
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "INTEGER",
+                      "nullable": false,
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "n5",
+          "op": "Values",
+          "inputs": [],
+          "attributes": {
+            "columns": [
+              {
+                "name": "ra",
+                "type": "INTEGER",
+                "nullable": false
+              }
+            ],
+            "rows": [
+              [
+                1
+              ],
+              [
+                2
+              ]
+            ]
+          }
+        },
+        {
+          "id": "n6",
+          "op": "Values",
+          "inputs": [],
+          "attributes": {
+            "columns": [
+              {
+                "name": "rb",
+                "type": "INTEGER",
+                "nullable": false
+              }
+            ],
+            "rows": [
+              [
+                1
+              ],
+              [
+                2
+              ]
+            ]
+          }
+        },
+        {
+          "id": "n7",
+          "op": "MultiJoin",
+          "inputs": [
+            "n5",
+            "n6"
+          ],
+          "attributes": {
+            "condition": {
+              "kind": "call",
+              "op": "=",
+              "args": [
+                {
+                  "kind": "ref",
+                  "input": 0,
+                  "index": 0
+                },
+                {
+                  "kind": "ref",
+                  "input": 1,
+                  "index": 0
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "n8",
+          "op": "Project",
+          "inputs": [
+            "n7"
+          ],
+          "attributes": {
+            "projects": [
+              {
+                "name": "rkey",
+                "expr": {
+                  "kind": "call",
+                  "op": "+",
+                  "args": [
+                    {
+                      "kind": "ref",
+                      "input": 0,
+                      "index": 0
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "INTEGER",
+                      "nullable": false,
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "n9",
+          "op": "Join",
+          "inputs": [
+            "n4",
+            "n8"
+          ],
+          "attributes": {
+            "joinType": "INNER",
+            "condition": {
+              "kind": "call",
+              "op": "=",
+              "args": [
+                {
+                  "kind": "ref",
+                  "input": 0,
+                  "index": 0
+                },
+                {
+                  "kind": "ref",
+                  "input": 1,
+                  "index": 0
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "layout": {}
+    }
+  },
+  {
+    "id": "CoreRules.MULTI_JOIN_LEFT_PROJECT",
+    "title": "Pull left MultiJoin projections upward",
+    "note": "A partially flattened join tree is constructed directly. The selected rule pulls projections above the remaining binary join.",
+    "plan": {
+      "planVersion": 1,
+      "rootId": "n6",
+      "nodes": [
+        {
+          "id": "n1",
+          "op": "Values",
+          "inputs": [],
+          "attributes": {
+            "columns": [
+              {
+                "name": "la",
+                "type": "INTEGER",
+                "nullable": false
+              }
+            ],
+            "rows": [
+              [
+                1
+              ],
+              [
+                2
+              ]
+            ]
+          }
+        },
+        {
+          "id": "n2",
+          "op": "Values",
+          "inputs": [],
+          "attributes": {
+            "columns": [
+              {
+                "name": "lb",
+                "type": "INTEGER",
+                "nullable": false
+              }
+            ],
+            "rows": [
+              [
+                1
+              ],
+              [
+                2
+              ]
+            ]
+          }
+        },
+        {
+          "id": "n3",
+          "op": "MultiJoin",
+          "inputs": [
+            "n1",
+            "n2"
+          ],
+          "attributes": {
+            "condition": {
+              "kind": "call",
+              "op": "=",
+              "args": [
+                {
+                  "kind": "ref",
+                  "input": 0,
+                  "index": 0
+                },
+                {
+                  "kind": "ref",
+                  "input": 1,
+                  "index": 0
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "n4",
+          "op": "Project",
+          "inputs": [
+            "n3"
+          ],
+          "attributes": {
+            "projects": [
+              {
+                "name": "lkey",
+                "expr": {
+                  "kind": "call",
+                  "op": "+",
+                  "args": [
+                    {
+                      "kind": "ref",
+                      "input": 0,
+                      "index": 0
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "INTEGER",
+                      "nullable": false,
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "n5",
+          "op": "Values",
+          "inputs": [],
+          "attributes": {
+            "columns": [
+              {
+                "name": "r",
+                "type": "INTEGER",
+                "nullable": false
+              }
+            ],
+            "rows": [
+              [
+                1
+              ],
+              [
+                2
+              ]
+            ]
+          }
+        },
+        {
+          "id": "n6",
+          "op": "Join",
+          "inputs": [
+            "n4",
+            "n5"
+          ],
+          "attributes": {
+            "joinType": "INNER",
+            "condition": {
+              "kind": "call",
+              "op": "=",
+              "args": [
+                {
+                  "kind": "ref",
+                  "input": 0,
+                  "index": 0
+                },
+                {
+                  "kind": "ref",
+                  "input": 1,
+                  "index": 0
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "layout": {}
+    }
+  },
+  {
+    "id": "CoreRules.MULTI_JOIN_RIGHT_PROJECT",
+    "title": "Pull right MultiJoin projections upward",
+    "note": "A partially flattened join tree is constructed directly. The selected rule pulls projections above the remaining binary join.",
+    "plan": {
+      "planVersion": 1,
+      "rootId": "n6",
+      "nodes": [
+        {
+          "id": "n1",
+          "op": "Values",
+          "inputs": [],
+          "attributes": {
+            "columns": [
+              {
+                "name": "l",
+                "type": "INTEGER",
+                "nullable": false
+              }
+            ],
+            "rows": [
+              [
+                1
+              ],
+              [
+                2
+              ]
+            ]
+          }
+        },
+        {
+          "id": "n2",
+          "op": "Values",
+          "inputs": [],
+          "attributes": {
+            "columns": [
+              {
+                "name": "ra",
+                "type": "INTEGER",
+                "nullable": false
+              }
+            ],
+            "rows": [
+              [
+                1
+              ],
+              [
+                2
+              ]
+            ]
+          }
+        },
+        {
+          "id": "n3",
+          "op": "Values",
+          "inputs": [],
+          "attributes": {
+            "columns": [
+              {
+                "name": "rb",
+                "type": "INTEGER",
+                "nullable": false
+              }
+            ],
+            "rows": [
+              [
+                1
+              ],
+              [
+                2
+              ]
+            ]
+          }
+        },
+        {
+          "id": "n4",
+          "op": "MultiJoin",
+          "inputs": [
+            "n2",
+            "n3"
+          ],
+          "attributes": {
+            "condition": {
+              "kind": "call",
+              "op": "=",
+              "args": [
+                {
+                  "kind": "ref",
+                  "input": 0,
+                  "index": 0
+                },
+                {
+                  "kind": "ref",
+                  "input": 1,
+                  "index": 0
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "n5",
+          "op": "Project",
+          "inputs": [
+            "n4"
+          ],
+          "attributes": {
+            "projects": [
+              {
+                "name": "rkey",
+                "expr": {
+                  "kind": "call",
+                  "op": "+",
+                  "args": [
+                    {
+                      "kind": "ref",
+                      "input": 0,
+                      "index": 0
+                    },
+                    {
+                      "kind": "literal",
+                      "type": "INTEGER",
+                      "nullable": false,
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "n6",
+          "op": "Join",
+          "inputs": [
+            "n1",
+            "n5"
+          ],
+          "attributes": {
+            "joinType": "INNER",
+            "condition": {
+              "kind": "call",
+              "op": "=",
+              "args": [
+                {
+                  "kind": "ref",
+                  "input": 0,
+                  "index": 0
+                },
+                {
+                  "kind": "ref",
+                  "input": 1,
+                  "index": 0
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "layout": {}
+    }
+  },
+  {
+    "id": "CoreRules.EXCHANGE_REMOVE_CONSTANT_KEYS",
+    "title": "Remove a constant distribution key",
+    "note": "A constant projection feeds an explicit exchange. No distributed execution is performed.",
+    "plan": {
+      "planVersion": 1,
+      "rootId": "n3",
+      "nodes": [
+        {
+          "id": "n1",
+          "op": "Values",
+          "inputs": [],
+          "attributes": {
+            "columns": [
+              {
+                "name": "id",
+                "type": "INTEGER",
+                "nullable": false
+              }
+            ],
+            "rows": [
+              [
+                1
+              ],
+              [
+                2
+              ]
+            ]
+          }
+        },
+        {
+          "id": "n2",
+          "op": "Project",
+          "inputs": [
+            "n1"
+          ],
+          "attributes": {
+            "projects": [
+              {
+                "name": "id",
+                "expr": {
+                  "kind": "ref",
+                  "input": 0,
+                  "index": 0
+                }
+              },
+              {
+                "name": "constant_key",
+                "expr": {
+                  "kind": "literal",
+                  "type": "INTEGER",
+                  "nullable": false,
+                  "value": 1
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "n3",
+          "op": "Exchange",
+          "inputs": [
+            "n2"
+          ],
+          "attributes": {
+            "distribution": {
+              "type": "HASH",
+              "keys": [
+                0,
+                1
+              ]
+            }
+          }
+        }
+      ],
+      "layout": {}
+    }
+  },
+  {
+    "id": "CoreRules.SORT_EXCHANGE_REMOVE_CONSTANT_KEYS",
+    "title": "Remove a constant distribution key",
+    "note": "A constant projection feeds an explicit exchange. No distributed execution is performed.",
+    "plan": {
+      "planVersion": 1,
+      "rootId": "n3",
+      "nodes": [
+        {
+          "id": "n1",
+          "op": "Values",
+          "inputs": [],
+          "attributes": {
+            "columns": [
+              {
+                "name": "id",
+                "type": "INTEGER",
+                "nullable": false
+              }
+            ],
+            "rows": [
+              [
+                1
+              ],
+              [
+                2
+              ]
+            ]
+          }
+        },
+        {
+          "id": "n2",
+          "op": "Project",
+          "inputs": [
+            "n1"
+          ],
+          "attributes": {
+            "projects": [
+              {
+                "name": "id",
+                "expr": {
+                  "kind": "ref",
+                  "input": 0,
+                  "index": 0
+                }
+              },
+              {
+                "name": "constant_key",
+                "expr": {
+                  "kind": "literal",
+                  "type": "INTEGER",
+                  "nullable": false,
+                  "value": 1
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "n3",
+          "op": "SortExchange",
+          "inputs": [
+            "n2"
+          ],
+          "attributes": {
+            "distribution": {
+              "type": "HASH",
+              "keys": [
+                0,
+                1
+              ]
+            },
+            "keys": [
+              {
+                "index": 1,
+                "direction": "ASC",
+                "nulls": "LAST"
+              }
+            ]
+          }
+        }
+      ],
+      "layout": {}
+    }
+  }
+]

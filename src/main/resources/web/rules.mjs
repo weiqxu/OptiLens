@@ -43,7 +43,7 @@ function choose(rule){
   text('detail-availability',rule.runnable?'Available in Query lab':'Requires setup');
   text('detail-description',rule.description);text('detail-conditions',rule.conditions);
   $('detail-source').href=rule.source;
-  $('open-lab').hidden=!rule.runnable;$('open-lab').href=`/?rule=${encodeURIComponent(rule.id)}`;
+  $('open-lab').textContent='Try in Query lab →';$('open-lab').hidden=!rule.runnable;$('open-lab').href=`/?rule=${encodeURIComponent(rule.id)}`;
   const example=examples.get(rule.id);
   $('example-section').hidden=!example;$('no-example').hidden=Boolean(example);
   if(!example){
@@ -51,10 +51,11 @@ function choose(rule){
     text('no-example-note',coverage.get(rule.id)?.reason || (rule.runnable?'This rule is in the catalog, but a reproducible example has not been added. Try it with your own SQL in Query lab. No transformation is implied.':rule.unavailableReason+'. A runnable example is not available in this environment.'));
     return;
   }
-  text('example-title',example.title);text('example-note',example.note);text('example-sql',example.input.sql);text('example-schema',JSON.stringify(example.input.schema,null,2));
+  const manual=example.input.inputMode==='plan';$('open-lab').href=`/${manual?'plan-lab':''}?rule=${encodeURIComponent(rule.id)}`;$('open-lab').textContent=manual?'Try in Plan lab →':'Try in Query lab →';$('example-sql').setAttribute('aria-label',manual?'Manual plan JSON':'Example SQL');
+  text('example-title',example.title);text('example-note',example.note);text('example-sql',manual?JSON.stringify(example.input.plan,null,2):example.input.sql);text('example-schema',JSON.stringify(example.input.schema,null,2));
   $('example-program').replaceChildren(...example.input.rules.map(id=>{const li=document.createElement('li');li.textContent=(id===example.id?'Target: ':'Preparation: ')+id;return li;}));
   const options=example.input.options;
-  text('example-settings',`Match limit per stage: ${options?.matchLimit??100}. SQL subquery expansion: ${options?.expandSubqueries===false?'disabled, preserving subqueries for the target rule':'enabled'}. Planner time zone: UTC. A bounded demonstration does not imply a fixed point or a globally optimal plan.`);
+  text('example-settings',`Match limit per stage: ${options?.matchLimit??100}. Input: ${manual?'hand-built logical plan; SQL conversion is bypassed':`SQL; subquery expansion ${options?.expandSubqueries===false?'disabled, preserving subqueries for the target rule':'enabled'}`}. Planner time zone: UTC. A bounded demonstration does not imply a fixed point or a globally optimal plan.`);
   $('rerun-example').disabled=true;setStatus('Preparing the example…');
   startTimer=setTimeout(()=>showExample(example,token),200);
 }
@@ -126,7 +127,7 @@ try{
   for(const id of ['explorer-database','explorer-search','explorer-category','examples-only'])$(id).disabled=false;
   const requested=new URL(location.href).searchParams.get('rule');
   const initial=rules.find(rule=>rule.id===requested)||rules.find(rule=>rule.id==='CoreRules.PROJECT_REDUCE_EXPRESSIONS');
-  text('catalog-status',`${rules.length} catalog rules · ${examples.size} verified SQL examples / ${rules.filter(rule=>rule.runnable).length} runnable rules · Select a rule to explore. Examples run locally and appear in Query lab history.`);
+  text('catalog-status',`${rules.length} catalog rules · ${examples.size} verified examples / ${rules.filter(rule=>rule.runnable).length} runnable rules · Select a rule to explore. Examples run locally and appear in Query lab history.`);
   if(requested&&!rules.some(rule=>rule.id===requested))text('catalog-status','The requested rule was not found. Showing the constant projection example.');
   choose(initial);
 }catch(error){text('catalog-status','Unable to load the rule explorer: '+error.message);$('catalog-status').className='status error';}

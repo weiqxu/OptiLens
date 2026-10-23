@@ -16,6 +16,23 @@ class ServerTest {
     if(method.equals("POST"))b.header("Content-Type","application/json").POST(HttpRequest.BodyPublishers.ofString(data));else b.GET();
     return client.send(b.build(),HttpResponse.BodyHandlers.ofString());
   }
+  @Test void planValidationUsesWorkerWithoutCreatingHistory() throws Exception {
+    try(var server=new Server(0,directory)){
+      assertEquals(200,request(server,"GET","/plan-lab",null).statusCode());
+      assertEquals(200,request(server,"GET","/plan-editor.mjs",null).statusCode());
+      var capabilities=Json.MAPPER.readTree(request(server,"GET","/api/plan-capabilities",null).body());
+      assertEquals(14,capabilities.get("operators").size());
+      var input=PlanExamples.all().get(0).input();
+      var response=request(server,"POST","/api/plans/validate",Json.MAPPER.writeValueAsString(input));
+      assertEquals(200,response.statusCode(),response.body());assertTrue(Json.MAPPER.readTree(response.body()).get("valid").asBoolean());
+      assertEquals(0,Json.MAPPER.readTree(request(server,"GET","/api/runs",null).body()).size());
+      var broken=Json.MAPPER.valueToTree(input);
+      ((com.fasterxml.jackson.databind.node.ObjectNode)broken.get("plan")).put("rootId","missing");
+      var invalid=request(server,"POST","/api/plans/validate",broken.toString());assertEquals(422,invalid.statusCode());
+      assertTrue(Json.MAPPER.readTree(invalid.body()).get("errors").size()>0);
+      try(var files=java.nio.file.Files.list(directory)){assertEquals(0,files.count());}
+    }
+  }
   @Test void httpLifecycleImportExportAndRestart() throws Exception {
     String id;
     try(var server=new Server(0,directory)){

@@ -47,6 +47,7 @@ public final class RuleExamples {
             new Request(entry.sql(), SCHEMA, List.copyOf(program), "calcite", entry.options())));
       }
     } catch (IOException e) { throw new ExceptionInInitializerError(e); }
+    result.addAll(PlanExamples.all());
     return List.copyOf(result);
   }
   private static Example example(String rule, String title, String note, String sql) {
