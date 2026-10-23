@@ -4,8 +4,9 @@
 <body>
 <header class="topbar"><a class="brand" href="/" aria-label="OptiLens home"><span class="brand-mark">◎</span>OptiLens <span class="brand-sub">Optimizer Explorer</span></a><nav class="page-nav" aria-label="Main navigation"><a href="/">Query lab</a><a href="/rules" aria-current="page">Rule explorer</a><a href="/plan-lab">Plan lab</a></nav></header>
 <main class="explorer-main">
-  <section class="explorer-intro"><div><div class="eyebrow">RULE EXPLORER</div><h1>One rule. See the transformation.</h1><p>Choose a database, explore its rules, and inspect a real before-and-after example.</p></div><label class="database-picker" for="explorer-database">Database<select id="explorer-database" disabled><option value="calcite">Apache Calcite · 1.39.0</option></select><span class="small muted">Calcite is currently the only supported engine.</span></label></section>
+  <section class="explorer-intro"><div><div class="eyebrow">RULE EXPLORER</div><h1>One rule. See the transformation.</h1><p>Choose a database, explore its rules, and inspect a real before-and-after example.</p></div><label class="database-picker" for="explorer-database">Database<select id="explorer-database" disabled><option value="calcite">Apache Calcite · 1.39.0</option></select><span class="small muted">Choose a version-pinned optimizer.</span></label></section>
   <p id="catalog-status" class="status" role="status">Loading the rule catalog…</p>
+  <p><a id="verification-link" href="/api/starrocks/verification" target="_blank" rel="noopener" hidden>Complete StarRocks verification report ↗</a></p>
   <section id="rule-explorer" class="explorer-layout">
     <aside class="rule-sidebar panel" aria-label="Database rules">
       <div class="sidebar-controls"><h2>Rule catalog <span id="catalog-total" class="badge"></span></h2><label class="field-label" for="explorer-search">Search rules</label><input id="explorer-search" type="search" placeholder="Name, operator, or implementation" disabled><label class="field-label" for="explorer-category">Category</label><select id="explorer-category" disabled><option value="">All categories</option></select><label class="example-filter"><input id="examples-only" type="checkbox" disabled> With verified examples</label><p id="list-count" class="small muted" aria-live="polite"></p></div>
@@ -25,7 +26,7 @@
           <p id="example-status" class="status" role="status" aria-live="polite"></p>
           <details class="evidence" id="example-program-details"><summary>Preparation and execution settings</summary><p class="small muted">Preparation stages build the required input shape. The diagrams show only the selected target rule.</p><ol id="example-program"></ol><p id="example-settings" class="small muted"></p></details>
           <div id="example-result" hidden>
-            <div class="result-toolbar"><span class="badge">Live Calcite evidence</span><label for="example-view">View<select id="example-view"></select></label><a id="download-example" class="small">Download run ↓</a></div>
+            <div class="result-toolbar"><span class="badge">Live optimizer evidence</span><label for="example-view">View<select id="example-view"></select></label><a id="download-example" class="small">Download run ↓</a></div>
             <p id="example-scope" class="small muted"></p>
             <div class="plan-pair">
               <section class="plan-panel"><div class="plan-title"><h4>Before</h4><div class="zoom-controls"><button data-zoom="before:-1" aria-label="Zoom out before">−</button><button data-zoom="before:0" aria-label="Reset before zoom">1:1</button><button data-zoom="before:1" aria-label="Zoom in before">+</button></div></div><div id="example-before" class="graph-scroll" tabindex="0" aria-label="Plan before, scrollable"></div></section>

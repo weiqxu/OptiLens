@@ -16,6 +16,17 @@ class ServerTest {
     if(method.equals("POST"))b.header("Content-Type","application/json").POST(HttpRequest.BodyPublishers.ofString(data));else b.GET();
     return client.send(b.build(),HttpResponse.BodyHandlers.ofString());
   }
+  @Test void databaseCatalogAndCapabilitiesUseTheRequestedEngine() throws Exception {
+    try(var server=new Server(0,directory)) {
+      var catalog=Json.MAPPER.readTree(request(server,"GET","/api/catalog?database=starrocks",null).body());
+      assertEquals("starrocks",catalog.path("database").asText());assertEquals(StarRocks.VERSION,catalog.path("engineVersion").asText());
+      assertEquals(StarRocks.rules().size(),catalog.path("rules").size());assertEquals(2,catalog.path("databases").size());
+      var capabilities=Json.MAPPER.readTree(request(server,"GET","/api/plan-capabilities?database=starrocks",null).body());
+      assertFalse(capabilities.path("operators").has("Calc"));
+      assertEquals(200,request(server,"GET","/api/starrocks/verification",null).statusCode());
+      assertEquals(400,request(server,"GET","/api/catalog?database=invalid",null).statusCode());
+    }
+  }
   @Test void planValidationUsesWorkerWithoutCreatingHistory() throws Exception {
     try(var server=new Server(0,directory)){
       assertEquals(200,request(server,"GET","/plan-lab",null).statusCode());

@@ -1,0 +1,3908 @@
+{
+  "version": "4.0.14",
+  "commit": "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+  "scope": "All TF_, IMP_, and GP_ RuleType entries plus concrete Rule, ScalarOperatorRewriteRule, TreeRewriteRule, and IMaterializedViewRewriteRule implementations under the pinned FE optimizer source. Enum sentinels and abstract bases are excluded. Source test references do not claim that tests were executed.",
+  "ruleTypes": [
+    "TF_JOIN_ASSOCIATIVITY_INNER",
+    "TF_JOIN_ASSOCIATIVITY_OUTER",
+    "TF_JOIN_COMMUTATIVITY",
+    "TF_JOIN_LEFT_ASSCOM_INNER",
+    "TF_JOIN_LEFT_ASSCOM_OUTER",
+    "TF_JOIN_COMMUTATIVITY_WITHOUT_INNER",
+    "TF_JOIN_SEMI_REORDER",
+    "TF_MULTI_JOIN_ORDER",
+    "TF_PARTITION_PRUNE",
+    "TF_DISTRIBUTION_PRUNE",
+    "TF_CBO_TABLE_PRUNE_RULE",
+    "TF_LIMIT_TABLETS_PRUNE",
+    "TF_SPLIT_AGGREGATE",
+    "TF_SPLIT_TWO_PHASE_AGGREGATE",
+    "TF_SPLIT_MULTI_PHASE_AGGREGATE",
+    "TF_SPLIT_WINDOW_SKEW",
+    "TF_SPLIT_TOPN",
+    "TF_SPLIT_SCAN_OR",
+    "TF_PUSH_DOWN_JOIN_AGG",
+    "TF_PARTITION_PREDICATE_PRUNE",
+    "TF_SPLIT_LIMIT",
+    "TF_OFFSET_LIMIT_TO_TOPN",
+    "TF_MERGE_LIMIT_DIRECT",
+    "TF_MERGE_LIMIT_WITH_SORT",
+    "TF_MERGE_LIMIT_WITH_LIMIT",
+    "TF_ELIMINATE_LIMIT_ZERO",
+    "TF_PUSH_DOWN_LIMIT",
+    "TF_PUSH_DOWN_PROJECT_LIMIT",
+    "TF_PUSH_DOWN_LIMIT_CTE_ANCHOR",
+    "TF_PUSH_DOWN_LIMIT_UNION",
+    "TF_PUSH_DOWN_LIMIT_JOIN",
+    "TF_PUSH_DOWN_LIMIT_RANKING_WINDOW",
+    "TF_PUSH_DOWN_PREDICATE_CTE_ANCHOR",
+    "TF_PUSH_DOWN_PREDICATE_SCAN",
+    "TF_PUSH_DOWN_PREDICATE_AGG",
+    "TF_PUSH_DOWN_PREDICATE_WINDOW",
+    "TF_ELIMINATE_SORT_COLUMN_WITH_EQUALITY_PREDICATE",
+    "TF_PUSH_DOWN_TOPN_OUTER_JOIN",
+    "TF_PUSH_DOWN_TOPN_UNION",
+    "TF_PUSH_DOWN_TOPN_AGG",
+    "TF_PUSH_DOWN_PREDICATE_RANKING_WINDOW",
+    "TF_PUSH_DOWN_PREDICATE_JOIN",
+    "TF_PUSH_DOWN_JOIN_CLAUSE",
+    "TF_PUSH_DOWN_PREDICATE_PROJECT",
+    "TF_PUSH_DOWN_PREDICATE_UNION",
+    "TF_PUSH_DOWN_PREDICATE_EXCEPT",
+    "TF_PUSH_DOWN_PREDICATE_INTERSECT",
+    "TF_PUSH_DOWN_PREDICATE_VALUES",
+    "TF_PUSH_DOWN_PREDICATE_TABLE_FUNCTION",
+    "TF_PUSH_DOWN_PREDICATE_REPEAT",
+    "TF_PUSH_DOWN_AGG_TO_META_SCAN",
+    "TF_PUSH_DOWN_FLAT_JSON_TO_META_SCAN",
+    "TF_PUSH_DOWN_AGG_FUN_PREDICATE",
+    "TF_PULL_UP_PREDICATE_SCAN",
+    "TF_MERGE_PREDICATE_SCAN",
+    "TF_MERGE_TWO_FILTERS",
+    "TF_PUSH_DOWN_PREDICATE_CTE_CONSUME",
+    "TF_PUSH_DOWN_PREDICATE_TO_EXTERNAL_TABLE_SCAN",
+    "TF_PRUNE_TRUE_FILTER",
+    "TF_DEFER_PROJECT_AFTER_TOPN",
+    "TF_CAST_TO_EMPTY",
+    "TF_ADD_PROJECT_JOIN",
+    "TF_PRUNE_OLAP_SCAN_COLUMNS",
+    "TF_PRUNE_PROJECT_COLUMNS",
+    "TF_PRUNE_FILTER_COLUMNS",
+    "TF_PRUNE_AGG_COLUMNS",
+    "TF_PRUNE_TOPN_COLUMNS",
+    "TF_PRUNE_SORT_COLUMNS",
+    "TF_PRUNE_JOIN_COLUMNS",
+    "TF_PRUNE_ANALYTIC_COLUMNS",
+    "TF_PRUNE_UNION_COLUMNS",
+    "TF_PRUNE_EXCEPT_COLUMNS",
+    "TF_PRUNE_INTERSECT_COLUMNS",
+    "TF_PRUNE_REPEAT_COLUMNS",
+    "TF_PRUNE_VALUES_COLUMNS",
+    "TF_PRUNE_TABLE_FUNCTION_COLUMNS",
+    "TF_PRUNE_CTE_CONSUME_COLUMNS",
+    "TF_PRUNE_GROUP_BY_KEYS",
+    "TF_PRUNE_SUBFIELD",
+    "TF_PRUNE_UKFK_JOIN",
+    "TF_PRUNE_UKFK_GROUP_BY_KEYS",
+    "TF_SUBFILED_NOCOPY",
+    "TF_PARTITION_COLUMN_MINMAX",
+    "TF_SCALAR_OPERATORS_REUSE",
+    "TF_PRUNE_EMPTY_WINDOW",
+    "TF_PRUNE_PROJECT",
+    "TF_MERGE_TWO_PROJECT",
+    "TF_PRUNE_PROJECT_EMPTY",
+    "TF_PUSH_DOWN_APPLY",
+    "TF_APPLY_TO_JOIN",
+    "TF_QUANTIFIED_APPLY_TO_JOIN",
+    "TF_EXISTENTIAL_APPLY_TO_JOIN",
+    "TF_SCALAR_APPLY_TO_ANALYTIC",
+    "TF_EXTRACT_RANGE_PREDICATE_FROM_SCALAR_APPLY",
+    "TF_SCALAR_APPLY_NORMALIZED_COUNT",
+    "TF_SCALAR_APPLY_TO_JOIN",
+    "TF_QUANTIFIED_APPLY_TO_OUTER_JOIN",
+    "TF_EXISTENTIAL_APPLY_TO_OUTER_JOIN",
+    "TF_OUTER_JOIN_ELIMINATION",
+    "TF_MERGE_APPLY_WITH_TABLE_FUNCTION",
+    "TF_APPLY_EXCEPTION",
+    "TF_PUSH_DOWN_APPLY_PROJECT",
+    "TF_PUSH_DOWN_APPLY_FILTER",
+    "TF_PUSH_DOWN_APPLY_AGG",
+    "TF_PUSH_DOWN_PROJECT_TO_CTE_ANCHOR",
+    "TF_PUSH_DOWN_ASSERT_ONE_ROW_PROJECT",
+    "TF_MATERIALIZED_VIEW",
+    "TF_MERGE_TWO_AGG_RULE",
+    "TF_REWRITE_MULTI_DISTINCT",
+    "TF_REWRITE_MULTI_DISTINCT_BY_CTE",
+    "TF_REWRITE_BITMAP_COUNT_DISTINCT",
+    "TF_REWRITE_HLL_COUNT_DISTINCT",
+    "TF_REWRITE_DUPLICATE_AGGREGATE_FN",
+    "TF_REWRITE_GROUP_BY_COUNT_DISTINCT",
+    "TF_REMOVE_AGGREGATION_BY_AGG_TABLE",
+    "TF_REWRITE_GROUPING_SET",
+    "TF_PUSHDOWN_AGG_GROUPING_SET",
+    "TF_REWRITE_SIMPLE_AGG",
+    "TF_REWRITE_MIN_MAX_COUNT_AGG",
+    "TF_REWRITE_PARTITION_COLUMN_ONLY_AGG",
+    "TF_REWRITE_SUM_BY_ASSOCIATIVE_RULE",
+    "TF_REWRITE_COUNT_IF_RULE",
+    "TF_REWRITE_MINMAX_BY_MONOTONIC_FUNCTION",
+    "TF_ICEBERG_PARTITIONS_TABLE_REWRITE_RULE",
+    "TF_ICEBERG_EQUALITY_REWRITE_RULE",
+    "TF_REWRITE_UNNEST_BITMAP_RULE",
+    "TF_SPLIT_TOPN_AGGREGATE_RULE",
+    "TF_INTERSECT_REORDER",
+    "TF_INTERSECT_DISTINCT",
+    "TF_MERGE_PROJECT_WITH_CHILD",
+    "TF_JSON_PATH_REWRITE",
+    "TF_PUSH_DOWN_JOIN_ON_EXPRESSION_TO_CHILD_PROJECT",
+    "TF_PUSH_DOWN_ASOF_JOIN_TEMPORAL_EXPRESSION_TO_CHILD_PROJECT",
+    "TF_COLLECT_CTE_PRODUCE",
+    "TF_COLLECT_CTE_CONSUME",
+    "TF_PUSH_CTE_PRODUCE",
+    "TF_INLINE_CTE_CONSUME",
+    "TF_ELIMINATE_CONSTANT_CTE_CONSUME",
+    "TF_PRUNE_CTE_CONSUME_PLAN",
+    "TF_PRUNE_CTE_PRODUCE",
+    "TF_COMPUTE_CTE_COSTS",
+    "TF_FORCE_CTE_REUSE",
+    "TF_MV_TEXT_MATCH_REWRITE_RULE",
+    "TF_MV_ONLY_SCAN_RULE",
+    "TF_MV_ONLY_JOIN_RULE",
+    "TF_MV_AGGREGATE_SCAN_RULE",
+    "TF_MV_AGGREGATE_JOIN_RULE",
+    "TF_MV_CBO_SINGLE_TABLE_REWRITE_RULE",
+    "TF_MV_TRANSPARENT_REWRITE_RULE",
+    "TF_MV_AGGREGATE_JOIN_PUSH_DOWN_RULE",
+    "TF_MV_AGGREGATE_TIME_SERIES_SCAN_RULE",
+    "TF_MV_COMPENSATION_PRUNE_UNION",
+    "TF_GROUP_BY_COUNT_DISTINCT_DATA_SKEW_ELIMINATE_RULE",
+    "TF_PRUNE_EMPTY_UNION",
+    "TF_PRUNE_EMPTY_INTERSECT",
+    "TF_PRUNE_EMPTY_EXCEPT",
+    "TF_PRUNE_EMPTY_SCAN",
+    "TF_PRUNE_EMPTY_JOIN",
+    "TF_PRUNE_EMPTY_DIRECT",
+    "TF_DERIVE_RANGE_JOIN_PREDICATE",
+    "TF_SKEW_JOIN_OPTIMIZE_RULE",
+    "TF_CONVERT_TO_EQUAL_FOR_NULL_RULE",
+    "TF_ARRAY_DISTINCT_AFTER_AGG",
+    "TF_FINE_GRAINED_RANGE_PREDICATE",
+    "TF_FINE_GRAINED_RANGE_PREDICATE_WITH_PROJECTION",
+    "TF_MERGE_CONSTANT_UNION",
+    "TF_SCHEMA_TABLE_EVALUATE_RULE",
+    "TF_ELIMINATE_GROUP_BY_CONSTANT",
+    "TF_ELIMINATE_AGG",
+    "TF_ELIMINATE_AGG_FUNCTION",
+    "TF_ELIMINATE_JOIN_WITH_CONSTANT",
+    "TF_CTE_ADD_PROJECTION",
+    "TF_PREDICATE_PROPAGATE",
+    "TF_VECTOR_REWRITE_RULE",
+    "TF_HOIST_HEAVY_COST_UPON_TOPN",
+    "TF_OR_TO_UNION_ALL_JOIN",
+    "TF_INNER_TO_SEMI",
+    "TF_LARGE_IN_PREDICATE_TO_JOIN",
+    "IMP_OLAP_LSCAN_TO_PSCAN",
+    "IMP_HIVE_LSCAN_TO_PSCAN",
+    "IMP_FILE_LSCAN_TO_PSCAN",
+    "IMP_ICEBERG_LSCAN_TO_PSCAN",
+    "IMP_ICEBERG_EQUALITY_DELETE_LSCAN_TO_PSCAN",
+    "IMP_HUDI_LSCAN_TO_PSCAN",
+    "IMP_DELTALAKE_LSCAN_TO_PSCAN",
+    "IMP_PAIMON_LSCAN_TO_PSCAN",
+    "IMP_ODPS_LSCAN_TO_PSCAN",
+    "IMP_ICEBERG_METADATA_LSCAN_TO_PSCAN",
+    "IMP_KUDU_LSCAN_TO_PSCAN",
+    "IMP_SCHEMA_LSCAN_TO_PSCAN",
+    "IMP_MYSQL_LSCAN_TO_PSCAN",
+    "IMP_ES_LSCAN_TO_PSCAN",
+    "IMP_META_LSCAN_TO_PSCAN",
+    "IMP_JDBC_LSCAN_TO_PSCAN",
+    "IMP_EQ_JOIN_TO_HASH_JOIN",
+    "IMP_EQ_JOIN_TO_MERGE_JOIN",
+    "IMP_JOIN_TO_NESTLOOP_JOIN",
+    "IMP_UNION",
+    "IMP_EXCEPT",
+    "IMP_INTERSECT",
+    "IMP_HASH_AGGREGATE",
+    "IMP_PROJECT",
+    "IMP_SORT",
+    "IMP_TOPN",
+    "IMP_ASSERT_ONE_ROW",
+    "IMP_ANALYTIC",
+    "IMP_VALUES",
+    "IMP_RAW_VALUES",
+    "IMP_REPEAT",
+    "IMP_FILTER",
+    "IMP_TABLE_FUNCTION",
+    "IMP_TABLE_FUNCTION_TABLE_LSCAN_TO_PSCAN",
+    "IMP_LIMIT",
+    "IMP_CTE_CONSUME_REUSE",
+    "IMP_CTE_CONSUME_INLINE",
+    "IMP_CTE_ANCHOR",
+    "IMP_CTE_ANCHOR_TO_NO_CTE",
+    "IMP_CTE_PRODUCE",
+    "IMP_STREAM_AGG",
+    "IMP_STREAM_JOIN",
+    "IMP_BINLOG_SCAN",
+    "GP_MERGE_LIMIT",
+    "GP_PRUNE_COLUMNS",
+    "GP_PARTITION_PRUNE",
+    "GP_PUSH_DOWN_PREDICATE",
+    "GP_SUBQUERY_EXTRACT_CORRELATION_PREDICATE",
+    "GP_SUBQUERY_REWRITE_TO_WINDOW",
+    "GP_SUBQUERY_REWRITE_TO_JOIN",
+    "GP_PUSH_DOWN_SUBQUERY",
+    "GP_PRUNE_ASSERT_ROW",
+    "GP_MULTI_DISTINCT_REWRITE",
+    "GP_AGGREGATE_REWRITE",
+    "GP_PRUNE_PROJECT",
+    "GP_PRUNE_UKFK_JOIN",
+    "GP_COLLECT_CTE",
+    "GP_INLINE_CTE",
+    "GP_INTERSECT_REWRITE",
+    "GP_SINGLE_TABLE_MV_REWRITE",
+    "GP_MULTI_TABLE_MV_REWRITE",
+    "GP_ALL_MV_REWRITE",
+    "GP_PRUNE_EMPTY_OPERATOR",
+    "GP_SHORT_CIRCUIT_SET",
+    "GP_META_SCAN_REWRITE",
+    "GP_FINE_GRAINED_RANGE_PREDICATE",
+    "GP_ELIMINATE_OP_WITH_CONSTANT",
+    "GP_VECTOR_REWRITE"
+  ],
+  "classes": [
+    {
+      "className": "com.starrocks.sql.optimizer.rewrite.scalar.ArithmeticCommutativeRule",
+      "abstract": false,
+      "parents": [
+        "BottomUpScalarOperatorRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rewrite/scalar/ArithmeticCommutativeRule.java",
+      "sha256": "2c964f809a5a1fef4f4cb0ecb28d14000d0bd6f87ad7a34c487e2317c5717d7b",
+      "ruleTypes": [],
+      "family": "scalar",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rewrite.scalar.BaseScalarOperatorRewriteRule",
+      "abstract": false,
+      "parents": [
+        "ScalarOperatorVisitor",
+        "ScalarOperatorRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rewrite/scalar/BaseScalarOperatorRewriteRule.java",
+      "sha256": "597abb58c4fb9185c5eeee0e6c6cb82024d2173f181734dbb699b6e245d70101",
+      "ruleTypes": [],
+      "family": "scalar",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rewrite.scalar.BottomUpScalarOperatorRewriteRule",
+      "abstract": false,
+      "parents": [
+        "BaseScalarOperatorRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rewrite/scalar/BottomUpScalarOperatorRewriteRule.java",
+      "sha256": "6805e8f966acc65a94bb6da1d5d689c4fbc7fbd39c39dd34a5ffe6c84029edef",
+      "ruleTypes": [],
+      "family": "scalar",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rewrite.scalar.ConsolidateLikesRule",
+      "abstract": false,
+      "parents": [
+        "TopDownScalarOperatorRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rewrite/scalar/ConsolidateLikesRule.java",
+      "sha256": "0dae92d7721689cbc5c360057353838c7e169a337f9dde5e111dec7cce62e3e3",
+      "ruleTypes": [],
+      "family": "scalar",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rewrite.scalar.ExtractCommonPredicateRule",
+      "abstract": false,
+      "parents": [
+        "TopDownScalarOperatorRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rewrite/scalar/ExtractCommonPredicateRule.java",
+      "sha256": "47530d2b8641df1358861e7b109224298c221c95413721cffb118b7a4d6fff1b",
+      "ruleTypes": [],
+      "family": "scalar",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rewrite/scalar/ExtractCommonPredicateRuleTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rewrite.scalar.FoldConstantsRule",
+      "abstract": false,
+      "parents": [
+        "BottomUpScalarOperatorRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rewrite/scalar/FoldConstantsRule.java",
+      "sha256": "fef78a71f59aff9c73a7b5fec7165b40dab831dd6b4a075b122589b8ec06c823",
+      "ruleTypes": [],
+      "family": "scalar",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rewrite/scalar/FoldConstantsRuleTest.java",
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rewrite/scalar/ReduceCastRuleTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rewrite.scalar.ImplicitCastRule",
+      "abstract": false,
+      "parents": [
+        "TopDownScalarOperatorRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rewrite/scalar/ImplicitCastRule.java",
+      "sha256": "71206bb1c3d194bbca1c192ab3884fe13e9feb4c4bd50306f0841c147eddc354",
+      "ruleTypes": [],
+      "family": "scalar",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rewrite/ScalarOperatorRewriterTest.java",
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rewrite/scalar/ImplicitCastRuleTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rewrite.scalar.MvNormalizePredicateRule",
+      "abstract": false,
+      "parents": [
+        "NormalizePredicateRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rewrite/scalar/MvNormalizePredicateRule.java",
+      "sha256": "4b9e9bafa3d334f155a0e62638a449e7abd6f97550e7baaf546750f0ee421c61",
+      "ruleTypes": [],
+      "family": "scalar",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rewrite/ScalarOperatorRewriterTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rewrite.scalar.NormalizePredicateRule",
+      "abstract": false,
+      "parents": [
+        "BottomUpScalarOperatorRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rewrite/scalar/NormalizePredicateRule.java",
+      "sha256": "eb201fdee96bd6995d9ca06004faab1da0abfd4c196728118d56af62b020dc40",
+      "ruleTypes": [],
+      "family": "scalar",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rewrite/ScalarOperatorRewriterTest.java",
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rewrite/scalar/BetweenToCompoundRuleTest.java",
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rewrite/scalar/NormalizePredicateRuleTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rewrite.scalar.OnlyOnceScalarOperatorRewriteRule",
+      "abstract": false,
+      "parents": [
+        "BaseScalarOperatorRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rewrite/scalar/OnlyOnceScalarOperatorRewriteRule.java",
+      "sha256": "4fd516f4159c1b8c41fee4bcb05242e82f6e24754c35f4a56f1ee8347825147d",
+      "ruleTypes": [],
+      "family": "scalar",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rewrite.scalar.PruneTediousPredicateRule",
+      "abstract": false,
+      "parents": [
+        "OnlyOnceScalarOperatorRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rewrite/scalar/PruneTediousPredicateRule.java",
+      "sha256": "66087c1e03113be231be55d8113ae427e291ae272ceb6ca0366605e3a3a1176b",
+      "ruleTypes": [],
+      "family": "scalar",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rewrite.scalar.ReduceCastRule",
+      "abstract": false,
+      "parents": [
+        "TopDownScalarOperatorRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rewrite/scalar/ReduceCastRule.java",
+      "sha256": "64bfad381fb2c1cc7dcb46593be0b3db84e8424cd2445fd1b562e2104a9a1ce6",
+      "ruleTypes": [],
+      "family": "scalar",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rewrite/ScalarOperatorRewriterTest.java",
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rewrite/scalar/ReduceCastRuleTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rewrite.scalar.ReplaceScalarOperatorRule",
+      "abstract": false,
+      "parents": [
+        "TopDownScalarOperatorRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rewrite/scalar/ReplaceScalarOperatorRule.java",
+      "sha256": "5816a09c57fc9e2b3e93dc66e05f5acc35a112de59b735d0c449230fc0f7bad2",
+      "ruleTypes": [],
+      "family": "scalar",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rewrite.scalar.ReplaceSubqueryRewriteRule",
+      "abstract": false,
+      "parents": [
+        "TopDownScalarOperatorRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rewrite/scalar/ReplaceSubqueryRewriteRule.java",
+      "sha256": "ae6d0eddd7be74d57f2a171de28d1e5eb5f04431c0964e60e95ace084114bf44",
+      "ruleTypes": [],
+      "family": "scalar",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rewrite.scalar.SimplifiedCaseWhenRule",
+      "abstract": false,
+      "parents": [
+        "BottomUpScalarOperatorRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rewrite/scalar/SimplifiedCaseWhenRule.java",
+      "sha256": "bfd0f2da556fcf88180fd64fa493e1ce8f8a18bdf5d3af07509fcb9e2721193b",
+      "ruleTypes": [],
+      "family": "scalar",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rewrite.scalar.SimplifiedDateColumnPredicateRule",
+      "abstract": false,
+      "parents": [
+        "BottomUpScalarOperatorRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rewrite/scalar/SimplifiedDateColumnPredicateRule.java",
+      "sha256": "841125dcaf8b1797a2d8f36f34756b280996be95ed52ff7b0daa183496245a45",
+      "ruleTypes": [],
+      "family": "scalar",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rewrite/scalar/SimplifiedDateColumnPredicateRuleTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rewrite.scalar.SimplifiedPredicateRule",
+      "abstract": false,
+      "parents": [
+        "BottomUpScalarOperatorRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rewrite/scalar/SimplifiedPredicateRule.java",
+      "sha256": "766caa1d2d7be83730503536814d2acbc664a047e2b26dd486cfebfc3fb16959",
+      "ruleTypes": [],
+      "family": "scalar",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rewrite/ScalarOperatorRewriterTest.java",
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rewrite/scalar/SimplifiedCompoundRuleTest.java",
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rewrite/scalar/SimplifiedInPredicateRuleTest.java",
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rewrite/scalar/SimplifiedPredicateRuleTest.java",
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rewrite/scalar/NormalizePredicateRuleTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rewrite.scalar.SimplifiedScanColumnRule",
+      "abstract": false,
+      "parents": [
+        "BottomUpScalarOperatorRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rewrite/scalar/SimplifiedScanColumnRule.java",
+      "sha256": "4e07415014191942f33c5266e932d89a0d23fc673b13492657be08fa375ade79",
+      "ruleTypes": [],
+      "family": "scalar",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rewrite.scalar.TopDownScalarOperatorRewriteRule",
+      "abstract": false,
+      "parents": [
+        "BaseScalarOperatorRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rewrite/scalar/TopDownScalarOperatorRewriteRule.java",
+      "sha256": "c295f2dda991252bf107424c82394e38a05705476f577d7770fb40679c5c6d48",
+      "ruleTypes": [],
+      "family": "scalar",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.AssertOneRowImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/AssertOneRowImplementationRule.java",
+      "sha256": "583103e8a12a1de06016cfe87917ef17a74ccbffe117626575359c21fa19f149",
+      "ruleTypes": [
+        "IMP_ASSERT_ONE_ROW"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.CTEAnchorImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/CTEAnchorImplementationRule.java",
+      "sha256": "c915891b30b5ae144f6164ab44b90817e7867a684845a515ad92990c33ccf8ab",
+      "ruleTypes": [
+        "IMP_CTE_ANCHOR"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.CTEAnchorToNoCTEImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/CTEAnchorToNoCTEImplementationRule.java",
+      "sha256": "0aece3b35ed9ed92d5a4aba2d9a970c5e0fc742826707946bfb5afa42228d99e",
+      "ruleTypes": [
+        "IMP_CTE_ANCHOR_TO_NO_CTE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.CTEConsumeInlineImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/CTEConsumeInlineImplementationRule.java",
+      "sha256": "2cf9540620a8f1aad9eb8d817c5d27c9cc627064cbf84040b49424cc4fbf50e8",
+      "ruleTypes": [
+        "IMP_CTE_CONSUME_INLINE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.CTEConsumerReuseImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/CTEConsumerReuseImplementationRule.java",
+      "sha256": "8af0b46753dddaba724e4bf4bbc4c1289e034542568381710bee80e19d59625b",
+      "ruleTypes": [
+        "IMP_CTE_CONSUME_REUSE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.CTEProduceImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/CTEProduceImplementationRule.java",
+      "sha256": "d4ec3f7781586497352b8e675f44abdf29ad303ea6686c664ac449da25b94dd9",
+      "ruleTypes": [
+        "IMP_CTE_PRODUCE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.DeltaLakeScanImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/DeltaLakeScanImplementationRule.java",
+      "sha256": "c0df6608ec6d97e8f1649024e3ce039b36b83c7b50b5c3f659cdafbeeca3f6c3",
+      "ruleTypes": [
+        "IMP_DELTALAKE_LSCAN_TO_PSCAN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.EsScanImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/EsScanImplementationRule.java",
+      "sha256": "4f7f751acde6a4d082c733795a844fb716022b26b4c930be8f9610ebdcb4b648",
+      "ruleTypes": [
+        "IMP_ES_LSCAN_TO_PSCAN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.ExceptImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/ExceptImplementationRule.java",
+      "sha256": "0f955ed67b99f28dce8cdd8685bd7e47dc14830a9bc9d60b8a8cdceee71ed512",
+      "ruleTypes": [
+        "IMP_EXCEPT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.FileScanImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/FileScanImplementationRule.java",
+      "sha256": "bbddb09d7a1dbabb844496fdf87ef66f94237960d72b4b8260945b84bb5ba37e",
+      "ruleTypes": [
+        "IMP_FILE_LSCAN_TO_PSCAN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.FilterImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/FilterImplementationRule.java",
+      "sha256": "09314dad7d65d989ae607c3a7e6e8e9ae640dd0c5d0e65e715e2d1cf0c77d2a0",
+      "ruleTypes": [
+        "IMP_FILTER"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.HashAggImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/HashAggImplementationRule.java",
+      "sha256": "2c86e4b1172065dd188e7fb53069d5f087b112e48ce2e8e3a4e3e98e331fc227",
+      "ruleTypes": [
+        "IMP_HASH_AGGREGATE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.HashJoinImplementationRule",
+      "abstract": false,
+      "parents": [
+        "JoinImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/HashJoinImplementationRule.java",
+      "sha256": "f89a3a624c22ad8a166351c4ea3ff409f27c8a73ac415a36f885b454fff713eb",
+      "ruleTypes": [
+        "IMP_EQ_JOIN_TO_HASH_JOIN"
+      ],
+      "family": "relational",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rewrite/PredicateReorderRuleTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.HiveScanImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/HiveScanImplementationRule.java",
+      "sha256": "99cd7aa876a2b3c637971947a543865629f60c26d60ea7dfe9c239e0b2792c7a",
+      "ruleTypes": [
+        "IMP_HIVE_LSCAN_TO_PSCAN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.HudiScanImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/HudiScanImplementationRule.java",
+      "sha256": "a55d8b574e04e04597138d376752c7f4201a2e50b86ca211c9008340b984000b",
+      "ruleTypes": [
+        "IMP_HUDI_LSCAN_TO_PSCAN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.IcebergEqualityDeleteScanImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/IcebergEqualityDeleteScanImplementationRule.java",
+      "sha256": "278bee77301acd6941ee2844a0ec1a73f88de3ad2dc27de6d1637df0bd7831cd",
+      "ruleTypes": [
+        "IMP_ICEBERG_EQUALITY_DELETE_LSCAN_TO_PSCAN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.IcebergMetadataScanImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/IcebergMetadataScanImplementationRule.java",
+      "sha256": "91ee524bb5151696a98aa6b22a9bedec7a134cd01d4cf358896c89db9a5799b9",
+      "ruleTypes": [
+        "IMP_ICEBERG_METADATA_LSCAN_TO_PSCAN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.IcebergScanImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/IcebergScanImplementationRule.java",
+      "sha256": "9a27568c5fd9d46b6e2f12a7df70c13783daabb363dcda8f6bf8cc00609fa73c",
+      "ruleTypes": [
+        "IMP_ICEBERG_LSCAN_TO_PSCAN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.IntersectImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/IntersectImplementationRule.java",
+      "sha256": "525c87898e09f158d5c6ded2c9b385e4bf20d1fd69a9b895d268d21e52b27360",
+      "ruleTypes": [
+        "IMP_INTERSECT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.JDBCScanImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/JDBCScanImplementationRule.java",
+      "sha256": "9fd7a0d9e4cadf72c0b2e056f0d3e03cd75e8566227fce3100c14f2fbe824c75",
+      "ruleTypes": [
+        "IMP_JDBC_LSCAN_TO_PSCAN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.KuduScanImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/KuduScanImplementationRule.java",
+      "sha256": "cdd88b1c11fec3ddd4e4c1971cef0bcbca820ec9f8fdc7eb2d09a39df859adab",
+      "ruleTypes": [
+        "IMP_KUDU_LSCAN_TO_PSCAN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.LimitImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/LimitImplementationRule.java",
+      "sha256": "1c66157a149a273706a1fb4cb120f597765119ad5c539fc4f76e7b034a6aea1e",
+      "ruleTypes": [
+        "IMP_LIMIT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.MergeJoinImplementationRule",
+      "abstract": false,
+      "parents": [
+        "JoinImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/MergeJoinImplementationRule.java",
+      "sha256": "eb18f6dc06d61e63fda732353cd2e73782b5567550d986def22a59a99e462e52",
+      "ruleTypes": [
+        "IMP_EQ_JOIN_TO_MERGE_JOIN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.MetaScanImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/MetaScanImplementationRule.java",
+      "sha256": "470ee240fec64f6c7ad2c7b724a3d16fc4cc837400251f150d00f0f67e60dc1e",
+      "ruleTypes": [
+        "IMP_META_LSCAN_TO_PSCAN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.MysqlScanImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/MysqlScanImplementationRule.java",
+      "sha256": "56ee0dfe86654ec695af4df2e5b3452d6ec3ce6f83c85c1c805ce17c13ae386a",
+      "ruleTypes": [
+        "IMP_MYSQL_LSCAN_TO_PSCAN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.NestLoopJoinImplementationRule",
+      "abstract": false,
+      "parents": [
+        "JoinImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/NestLoopJoinImplementationRule.java",
+      "sha256": "dee13e6036c6473338796d156462ec5cd2cfa60f6016a6b0b388dcff4b48d9d3",
+      "ruleTypes": [
+        "IMP_JOIN_TO_NESTLOOP_JOIN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.OdpsScanImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/OdpsScanImplementationRule.java",
+      "sha256": "3c52fe0e59fe247beaa03a65074841c6659046c99df8c9e604b9ea5bae2d830e",
+      "ruleTypes": [
+        "IMP_ODPS_LSCAN_TO_PSCAN"
+      ],
+      "family": "relational",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/connector/odps/OdpsScanTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.OlapScanImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/OlapScanImplementationRule.java",
+      "sha256": "b8ecb3a22bf7935fa0e59d01cf1996c8685b77954af3c2ac14c1ecf1f25359ad",
+      "ruleTypes": [
+        "IMP_OLAP_LSCAN_TO_PSCAN"
+      ],
+      "family": "relational",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rewrite/PredicateReorderRuleTest.java",
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rule/implementation/OlapScanImplementationRuleTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.PaimonScanImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/PaimonScanImplementationRule.java",
+      "sha256": "b60f41e84e3c5335a8e1ab75ad81aa1426281849e57adf0c9ef095aa8fa986d8",
+      "ruleTypes": [
+        "IMP_PAIMON_LSCAN_TO_PSCAN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.ProjectImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/ProjectImplementationRule.java",
+      "sha256": "c542bd80e9604b378988c9a37e55902fbee1e5f005725f8969558e25addd2cdd",
+      "ruleTypes": [
+        "IMP_PROJECT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.RawValuesImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/RawValuesImplementationRule.java",
+      "sha256": "46b2fa4b13ec2c14001c5384c0e5c089714efa5c829ec9374b25e172efe2ec91",
+      "ruleTypes": [
+        "IMP_RAW_VALUES"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.RepeatImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/RepeatImplementationRule.java",
+      "sha256": "8a7632470c84e815289a7967927b2137fc605527db03e934bbaaf7f130173cf2",
+      "ruleTypes": [
+        "IMP_REPEAT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.SchemaScanImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/SchemaScanImplementationRule.java",
+      "sha256": "b59b89a865ddbf10f00e20e9265be22bf6c05fb4c2685a4af5199d55400d639e",
+      "ruleTypes": [
+        "IMP_SCHEMA_LSCAN_TO_PSCAN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.TableFunctionImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/TableFunctionImplementationRule.java",
+      "sha256": "8e5790072415a4511f383931f48d82c03cf554e4575d7f3444e97bd9aa49e524",
+      "ruleTypes": [
+        "IMP_TABLE_FUNCTION"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.TableFunctionTableScanImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/TableFunctionTableScanImplementationRule.java",
+      "sha256": "5e9cb2a8f4e09a0deacb904fc40b35e30e00830c87d67c7aa3b085576bb46d2a",
+      "ruleTypes": [
+        "IMP_TABLE_FUNCTION_TABLE_LSCAN_TO_PSCAN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.TopNImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/TopNImplementationRule.java",
+      "sha256": "29ec251025395bb330ed0e5d11ad89f3b7c465f2b2d6a78cc0429de2c0d99967",
+      "ruleTypes": [
+        "IMP_TOPN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.UnionImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/UnionImplementationRule.java",
+      "sha256": "e7312dbe07981224b71c05763c161c0d4928748c3e7ecf13f03b7652dbdbeef2",
+      "ruleTypes": [
+        "IMP_UNION"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.ValuesImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/ValuesImplementationRule.java",
+      "sha256": "8942dc8b5de94df9afbd3a18dd5c9c7d74adaae90f9c82c77b57394d9004ad54",
+      "ruleTypes": [
+        "IMP_VALUES"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.WindowImplementationRule",
+      "abstract": false,
+      "parents": [
+        "ImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/WindowImplementationRule.java",
+      "sha256": "12d613383722bc3576c7a32f577e2c87a1ab558b4cf46b267f3c8aec08419027",
+      "ruleTypes": [
+        "IMP_ANALYTIC"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.stream.StreamAggregateImplementationRule",
+      "abstract": false,
+      "parents": [
+        "StreamImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/stream/StreamAggregateImplementationRule.java",
+      "sha256": "768c9863003b27cec80618f17708696ae9c01f63cd97a9ec114719327f2cd16f",
+      "ruleTypes": [
+        "IMP_STREAM_AGG"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.stream.StreamJoinImplementationRule",
+      "abstract": false,
+      "parents": [
+        "StreamImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/stream/StreamJoinImplementationRule.java",
+      "sha256": "62986609e45cdf4591307b86d865e0eb499aaeec689be6495f86d49ca9fbf41f",
+      "ruleTypes": [
+        "IMP_STREAM_JOIN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.implementation.stream.StreamScanImplementationRule",
+      "abstract": false,
+      "parents": [
+        "StreamImplementationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/implementation/stream/StreamScanImplementationRule.java",
+      "sha256": "cc06c16c78c653e8c6c38079ba328f996411496c33d6b039772d34a57ed2b0c6",
+      "ruleTypes": [
+        "IMP_BINLOG_SCAN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.join.ReorderJoinRule",
+      "abstract": false,
+      "parents": [
+        "Rule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/join/ReorderJoinRule.java",
+      "sha256": "6a2355f42c50b3ffb45205736c67610218adfec02dbd2408cba7be4e2fc49b5b",
+      "ruleTypes": [
+        "TF_MULTI_JOIN_ORDER"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.mv.MaterializedViewRule",
+      "abstract": false,
+      "parents": [
+        "Rule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/mv/MaterializedViewRule.java",
+      "sha256": "8fda7dab6ada75ee86bd3e75ef1466af8e860e5b26fe934c795fbc121ccba3c9",
+      "ruleTypes": [
+        "TF_MATERIALIZED_VIEW"
+      ],
+      "family": "relational",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rule/mv/MaterializedViewRuleTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.ApplyExceptionRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/ApplyExceptionRule.java",
+      "sha256": "b169842fb5d9026fe4c9271eac8aae9507aefe8ab2324d51705658e4c98214fc",
+      "ruleTypes": [
+        "TF_APPLY_EXCEPTION"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.ArrayDistinctAfterAggRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/ArrayDistinctAfterAggRule.java",
+      "sha256": "c14371ae175292016bf8e189f27553e74c536da1effc619fa22863aca0cc520a",
+      "ruleTypes": [
+        "TF_ARRAY_DISTINCT_AFTER_AGG"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.CTEProduceAddProjectionRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/CTEProduceAddProjectionRule.java",
+      "sha256": "9165a47a3befba9ed0405fcf790461a87f0958a3effa6b59e076cd4993912147",
+      "ruleTypes": [
+        "TF_CTE_ADD_PROJECTION"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.CastToEmptyRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/CastToEmptyRule.java",
+      "sha256": "0fa8610a14447c7318a53cab87ed0b43a862718bc38f20a523b57a568e08c553",
+      "ruleTypes": [
+        "TF_CAST_TO_EMPTY"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.CollectCTEConsumeRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/CollectCTEConsumeRule.java",
+      "sha256": "244957301545ec40d483f13a05f46c4151cb4385caa949b448fcd452b4e25bfa",
+      "ruleTypes": [
+        "TF_COLLECT_CTE_CONSUME"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.CollectCTEProduceRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/CollectCTEProduceRule.java",
+      "sha256": "2d263a86420c1e1b78c08e29e2e3074f0d5bbab17233e13d57cce49cbdd7b954",
+      "ruleTypes": [
+        "TF_COLLECT_CTE_PRODUCE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.CombinationRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/CombinationRule.java",
+      "sha256": "f92ebb22e36a680b0da8e871919bdeabf9e9c0a9e95e1b742c092b075011842e",
+      "ruleTypes": [],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.ConvertToEqualForNullRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/ConvertToEqualForNullRule.java",
+      "sha256": "291a30a5994660bb479744395fd8106fd8ba90d03c1dfe21da3854ddd9b86693",
+      "ruleTypes": [
+        "TF_CONVERT_TO_EQUAL_FOR_NULL_RULE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.DeferProjectAfterTopNRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/DeferProjectAfterTopNRule.java",
+      "sha256": "96d90737535d45fa23c72f89202d27f66c686a04067609f6d3c93d6ee247f86a",
+      "ruleTypes": [
+        "TF_DEFER_PROJECT_AFTER_TOPN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.DeriveRangeJoinPredicateRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/DeriveRangeJoinPredicateRule.java",
+      "sha256": "f7632307802a1065fb5cbd3b05d1febd0fd7f4a606eac01be053ff1372019b2b",
+      "ruleTypes": [
+        "TF_DERIVE_RANGE_JOIN_PREDICATE"
+      ],
+      "family": "relational",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/plan/DistributedEnvPlanWithCostTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.DistinctAggregationOverWindowRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/DistinctAggregationOverWindowRule.java",
+      "sha256": "97e5a14a9fa77534c79bef9456f3ec2d2ccf0f03aea794aaabbebc01a53a7488",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.DistributionPruneRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/DistributionPruneRule.java",
+      "sha256": "779633c0e31c0a526aadb835dd3c661a17492beb6278537710ce4254598f4780",
+      "ruleTypes": [
+        "TF_DISTRIBUTION_PRUNE"
+      ],
+      "family": "relational",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rule/transformation/DistributionPrunerRuleTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.EliminateAggFunctionRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/EliminateAggFunctionRule.java",
+      "sha256": "e53b66ff0a0489e0f85f434fbdb1b8e6b5e3c4bf022a57289293ccca5df42040",
+      "ruleTypes": [
+        "TF_ELIMINATE_AGG_FUNCTION"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.EliminateAggRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/EliminateAggRule.java",
+      "sha256": "2a742f3a9da79d67c355c4d660bf0869ca222ad1fc2558f6397712d4b6e3952b",
+      "ruleTypes": [
+        "TF_ELIMINATE_AGG"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.EliminateConstantCTERule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/EliminateConstantCTERule.java",
+      "sha256": "45cc39365fd1fa544d29a6e21ece50adc7c884d8727808e738abe1ab885104b3",
+      "ruleTypes": [
+        "TF_ELIMINATE_CONSTANT_CTE_CONSUME"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.EliminateGroupByConstantRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/EliminateGroupByConstantRule.java",
+      "sha256": "deb1b057bc2f1f324685cb3aa411f7340172eecee4eced0e3a92ff42e159ba0f",
+      "ruleTypes": [
+        "TF_ELIMINATE_GROUP_BY_CONSTANT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.EliminateJoinWithConstantRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/EliminateJoinWithConstantRule.java",
+      "sha256": "89d787d6dfbd270c1437072fee6147b6c73026db53fe17ba980323e461627c9d",
+      "ruleTypes": [
+        "TF_ELIMINATE_JOIN_WITH_CONSTANT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.EliminateLimitZeroRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/EliminateLimitZeroRule.java",
+      "sha256": "59f1d204f8b04a3f8ad665b924d922c4273f45a1c97f13cfa10684661a8589ab",
+      "ruleTypes": [
+        "TF_ELIMINATE_LIMIT_ZERO"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.EliminateSortColumnWithEqualityPredicateRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/EliminateSortColumnWithEqualityPredicateRule.java",
+      "sha256": "f82d2b926ee883065a5174bfdf9ce6f38b7994ca15303537f73555a3e94be1c7",
+      "ruleTypes": [
+        "TF_ELIMINATE_SORT_COLUMN_WITH_EQUALITY_PREDICATE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.ExistentialApply2JoinRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/ExistentialApply2JoinRule.java",
+      "sha256": "d14e0dff193bce1f2b36ca9b88fd3b61813d34e8121831282eb79a6b98b6c4de",
+      "ruleTypes": [
+        "TF_EXISTENTIAL_APPLY_TO_JOIN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.ExistentialApply2OuterJoinRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/ExistentialApply2OuterJoinRule.java",
+      "sha256": "371c545171397eab4feba71880c51c8bc1409d50bda6b4ee2fe63e08ca4a0ff8",
+      "ruleTypes": [
+        "TF_EXISTENTIAL_APPLY_TO_OUTER_JOIN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.ExternalScanPartitionPruneRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/ExternalScanPartitionPruneRule.java",
+      "sha256": "9297477df230919f3257bbf6dfac4561c1572fd81f75fab9925e76a7f0f686ae",
+      "ruleTypes": [
+        "TF_PARTITION_PRUNE"
+      ],
+      "family": "relational",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/connector/paimon/PaimonMetadataTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.FineGrainedRangePredicateRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/FineGrainedRangePredicateRule.java",
+      "sha256": "433b0d2986c8201dfd039d52d9c055b2d8060835549164b3e50d8428369d97b6",
+      "ruleTypes": [
+        "TF_FINE_GRAINED_RANGE_PREDICATE"
+      ],
+      "family": "relational",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/plan/FineGrainedRangePredicateTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.ForceCTEReuseRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/ForceCTEReuseRule.java",
+      "sha256": "faffb1856723e2cae68657b86ede7caac099e91e325068435781020317ac96f5",
+      "ruleTypes": [
+        "TF_FORCE_CTE_REUSE"
+      ],
+      "family": "relational",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/plan/CTEPlanTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.GroupByCountDistinctDataSkewEliminateRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/GroupByCountDistinctDataSkewEliminateRule.java",
+      "sha256": "d5b61f346cb94a4ce78ff919d1295ef0a7fa36cad29a89ba64801eb17f11563d",
+      "ruleTypes": [
+        "TF_GROUP_BY_COUNT_DISTINCT_DATA_SKEW_ELIMINATE_RULE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.GroupByCountDistinctRewriteRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/GroupByCountDistinctRewriteRule.java",
+      "sha256": "1e467317b3d0a43e7478c7d4a5edb7c007a2ce2d673b9e9ab393d258181748dc",
+      "ruleTypes": [
+        "TF_REWRITE_GROUP_BY_COUNT_DISTINCT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.HoistHeavyCostExprsUponTopnRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/HoistHeavyCostExprsUponTopnRule.java",
+      "sha256": "304a5abd86ba0ecf11c3a2a4dbb227d1d534975ee0f7b5495932a591beb7e2bf",
+      "ruleTypes": [
+        "TF_HOIST_HEAVY_COST_UPON_TOPN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.IcebergEqualityDeleteRewriteRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/IcebergEqualityDeleteRewriteRule.java",
+      "sha256": "5ffc1ed81f0d0a5af03d5f14fb60b10760c26ba3feefd74a0e9d96fdd0e76525",
+      "ruleTypes": [
+        "TF_ICEBERG_EQUALITY_REWRITE_RULE"
+      ],
+      "family": "relational",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rule/transformation/IcebergEqualityDeleteRewriteRuleTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.IcebergPartitionsTableRewriteRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/IcebergPartitionsTableRewriteRule.java",
+      "sha256": "015c6b565b4e32def82d29fb1df6ecf6d77e1c9492bec09c70d7e6b3c7412316",
+      "ruleTypes": [
+        "TF_ICEBERG_PARTITIONS_TABLE_REWRITE_RULE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.InlineOneCTEConsumeRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/InlineOneCTEConsumeRule.java",
+      "sha256": "0e1c15cc895d2361f70c67d053a2b8dc9e28ca1fa6f68fa2e188860f1738957b",
+      "ruleTypes": [
+        "TF_INLINE_CTE_CONSUME"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.InnerToSemiRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/InnerToSemiRule.java",
+      "sha256": "364bbef0f4415bdaccfb998ee0e44c859c8871c4bce8f4f214851702703574ae",
+      "ruleTypes": [
+        "TF_INNER_TO_SEMI"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.IntersectAddDistinctRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/IntersectAddDistinctRule.java",
+      "sha256": "bdac757b0282fd142da8ad3453f1f9e3a9a82b436b88b84a67901242e7b487af",
+      "ruleTypes": [
+        "TF_INTERSECT_DISTINCT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.JoinAssociativityRule",
+      "abstract": false,
+      "parents": [
+        "JoinAssociateBaseRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/JoinAssociativityRule.java",
+      "sha256": "76d83c4c0158cca660e007755a28a26b295bfce4ec30f007afaf72256fac22c8",
+      "ruleTypes": [
+        "TF_JOIN_ASSOCIATIVITY_INNER",
+        "TF_JOIN_ASSOCIATIVITY_OUTER"
+      ],
+      "family": "relational",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/plan/JoinTest.java",
+        "fe/fe-core/src/test/java/com/starrocks/sql/plan/ReplayFromDumpTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.JoinCommutativityRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/JoinCommutativityRule.java",
+      "sha256": "ca08212543c604feba8b4e3860b92860b036174862254cce01b00466d6cf0be0",
+      "ruleTypes": [
+        "TF_JOIN_COMMUTATIVITY"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.JoinCommutativityWithoutInnerRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/JoinCommutativityWithoutInnerRule.java",
+      "sha256": "3985403be39411affe0e2a530d6fb7f0ac44d4968e494ed24250e22b8d3d069b",
+      "ruleTypes": [
+        "TF_JOIN_COMMUTATIVITY_WITHOUT_INNER"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.JoinLeftAsscomRule",
+      "abstract": false,
+      "parents": [
+        "JoinAssociateBaseRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/JoinLeftAsscomRule.java",
+      "sha256": "3da431a18515913c85070f23329bd783d030f9e033f45f46b1e7567d5acac3ab",
+      "ruleTypes": [
+        "TF_JOIN_LEFT_ASSCOM_INNER",
+        "TF_JOIN_LEFT_ASSCOM_OUTER"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.LargeInPredicateToJoinRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/LargeInPredicateToJoinRule.java",
+      "sha256": "0388788ed63b27cd745aec1608c02e14366cb310490846a6ab70fc02eefb1ef4",
+      "ruleTypes": [
+        "TF_LARGE_IN_PREDICATE_TO_JOIN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.LimitPruneTabletsRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/LimitPruneTabletsRule.java",
+      "sha256": "6097f64a2cb8c9fe66713d8a6a5342c080bd7b4ccf56aea1ab88a872ac51bc03",
+      "ruleTypes": [
+        "TF_LIMIT_TABLETS_PRUNE"
+      ],
+      "family": "relational",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/plan/LimitTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.MaterializedViewTransparentRewriteRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/MaterializedViewTransparentRewriteRule.java",
+      "sha256": "29941fc5ce0ea72d3769cc62c81bc0f9fa21a26aa869e0e0e8274c9b782124d3",
+      "ruleTypes": [
+        "TF_MV_TRANSPARENT_REWRITE_RULE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.MergeApplyWithTableFunction",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/MergeApplyWithTableFunction.java",
+      "sha256": "e21c2668ea53158a44ea19ae70b5d19b02dee19d149f61847b55f84fccc4cf2c",
+      "ruleTypes": [
+        "TF_MERGE_APPLY_WITH_TABLE_FUNCTION"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.MergeLimitDirectRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/MergeLimitDirectRule.java",
+      "sha256": "8f47f0270b62783745f961fc557320372487868dcb816cba649a2be119ff7833",
+      "ruleTypes": [
+        "TF_MERGE_LIMIT_DIRECT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.MergeLimitWithLimitRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/MergeLimitWithLimitRule.java",
+      "sha256": "4c6f20e6a7bbcd7d914ad8dffcd06d090dafb115d8619b5e211039c5f1d946da",
+      "ruleTypes": [
+        "TF_MERGE_LIMIT_WITH_LIMIT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.MergeLimitWithSortRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/MergeLimitWithSortRule.java",
+      "sha256": "02650b77421fbef7c778d130a5b03d6e1996d36941c9b090898a2643172ae28f",
+      "ruleTypes": [
+        "TF_MERGE_LIMIT_WITH_SORT"
+      ],
+      "family": "relational",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rule/transformation/MergeLimitWithSortRuleTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.MergeProjectWithChildRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/MergeProjectWithChildRule.java",
+      "sha256": "f3f7ceeb9a75fa05a3349def23f129261c986a8aa3a7b51c933a58863005fbd6",
+      "ruleTypes": [
+        "TF_MERGE_PROJECT_WITH_CHILD"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.MergeTwoAggRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/MergeTwoAggRule.java",
+      "sha256": "6c023b2763eb1c4d7fdc043204ac6574bfa11f8bf2b91c7d09a4945b5a29ae76",
+      "ruleTypes": [
+        "TF_MERGE_TWO_AGG_RULE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.MergeTwoFiltersRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/MergeTwoFiltersRule.java",
+      "sha256": "7485cceff169aa0ad25aeb259aa78fb38667e21c80fd67efc92e389e3e90afb3",
+      "ruleTypes": [
+        "TF_MERGE_TWO_FILTERS"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.MergeTwoProjectRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/MergeTwoProjectRule.java",
+      "sha256": "3ceb4417d3d0820b556e4c08095f2e6f3b2520d2ec24bcc098a4470c1ed5a892",
+      "ruleTypes": [
+        "TF_MERGE_TWO_PROJECT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.MinMaxOptOnScanRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/MinMaxOptOnScanRule.java",
+      "sha256": "eefd710a1ad8de177d22f1861481465691c4d09595f1e3000ac218f8e20a2fdf",
+      "ruleTypes": [
+        "TF_REWRITE_MIN_MAX_COUNT_AGG"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.OnPredicateMoveAroundRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/OnPredicateMoveAroundRule.java",
+      "sha256": "6f977d22f0665ad5dff8e88ca087fae057393bd275d53a2189d6344e0577798c",
+      "ruleTypes": [
+        "TF_PREDICATE_PROPAGATE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.OuterJoinEliminationRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/OuterJoinEliminationRule.java",
+      "sha256": "76f4542ad13f61c9cde295fe11163876e6666a5621e8ae41e10e2de28e2263f7",
+      "ruleTypes": [
+        "TF_OUTER_JOIN_ELIMINATION"
+      ],
+      "family": "relational",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rule/transformation/OuterJoinEliminationRuleTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PartitionColumnMinMaxRewriteRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PartitionColumnMinMaxRewriteRule.java",
+      "sha256": "208df2cb7ac3643d8275dd70ee5db3c359c6dd34f076d2bc92a903e45f2ac1e7",
+      "ruleTypes": [
+        "TF_PARTITION_COLUMN_MINMAX"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PartitionColumnValueOnlyOnScanRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PartitionColumnValueOnlyOnScanRule.java",
+      "sha256": "ab30aa517ef6d2fa1a3eb6afcc59befc41a8e0ba6752a491372d89f6b251721f",
+      "ruleTypes": [
+        "TF_REWRITE_PARTITION_COLUMN_ONLY_AGG"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PartitionPruneRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PartitionPruneRule.java",
+      "sha256": "fcb4303867eb5f9c3f73c0a9012b04203cef0e54d687a2a4350b3ccb70ad9289",
+      "ruleTypes": [
+        "TF_PARTITION_PRUNE"
+      ],
+      "family": "relational",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rule/transformation/PartitionPruneRuleTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneAggregateColumnsRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneAggregateColumnsRule.java",
+      "sha256": "e908f198cf84d0a205caf2682cadf0587d99f6bf1b63d1048123d057ac8be33c",
+      "ruleTypes": [
+        "TF_PRUNE_AGG_COLUMNS"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneCTEConsumeColumnsRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneCTEConsumeColumnsRule.java",
+      "sha256": "47cde9a806931ff322fdf644d656b8389479412b703fa403c30d5522be9b7bf8",
+      "ruleTypes": [
+        "TF_PRUNE_CTE_CONSUME_COLUMNS"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneCTEProduceRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneCTEProduceRule.java",
+      "sha256": "b06477065ed6a7f5caa03935c5fda54bf961335f8645a515f01a807478208390",
+      "ruleTypes": [
+        "TF_PRUNE_CTE_PRODUCE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneEmptyDirectRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneEmptyDirectRule.java",
+      "sha256": "0f90ec5271a05369deb4d72e035af6c81627ed90df05cca1efce041a9651fda8",
+      "ruleTypes": [
+        "TF_PRUNE_EMPTY_DIRECT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneEmptyExceptRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneEmptyExceptRule.java",
+      "sha256": "a1b39626f64a1fcf161e2861c2a9e97a539b8a00c8cabad5c1fc099f6fc6e413",
+      "ruleTypes": [
+        "TF_PRUNE_EMPTY_EXCEPT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneEmptyIntersectRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneEmptyIntersectRule.java",
+      "sha256": "b76ec550b13e4480dfdb9a852039513d40fd13ac56379778dc171722825731f3",
+      "ruleTypes": [
+        "TF_PRUNE_EMPTY_INTERSECT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneEmptyJoinRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneEmptyJoinRule.java",
+      "sha256": "056b4fb011f523a0291127837f1cf2d835e57644da92d15d951c7c0c2147aaf3",
+      "ruleTypes": [
+        "TF_PRUNE_EMPTY_JOIN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneEmptyScanRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneEmptyScanRule.java",
+      "sha256": "e7eb666e18d1d0881cfe98e353b32382c16ee1263e945c02a195c7647a0e1026",
+      "ruleTypes": [
+        "TF_PRUNE_EMPTY_SCAN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneEmptyUnionRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneEmptyUnionRule.java",
+      "sha256": "28f959fa93cea740dacbdd09391ddb7d0f2fc65f98ef4f9b5c1688763a89bb26",
+      "ruleTypes": [
+        "TF_PRUNE_EMPTY_UNION"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneEmptyWindowRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneEmptyWindowRule.java",
+      "sha256": "e7cf5e9c478e811f3a0cd72d4f0fb367b5f09c27e487000b143363ae226ceec3",
+      "ruleTypes": [
+        "TF_PRUNE_EMPTY_WINDOW"
+      ],
+      "family": "relational",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/plan/ReplayFromDumpTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneExceptColumnsRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneExceptColumnsRule.java",
+      "sha256": "486e0b4bb4fc2c6f399599507c0a36dbf0f87ef0cecd08f3e8f66b34714674e5",
+      "ruleTypes": [
+        "TF_PRUNE_EXCEPT_COLUMNS"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneFilterColumnsRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneFilterColumnsRule.java",
+      "sha256": "be97ae5893dc9c0f1e28bbdff0346ff9052df276dc9500345d1ef3fe3215907b",
+      "ruleTypes": [
+        "TF_PRUNE_FILTER_COLUMNS"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneGroupByKeysRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneGroupByKeysRule.java",
+      "sha256": "ea041c76f40204783054af4251dd25caa9d2f4260eeff58e638263954fba82ff",
+      "ruleTypes": [
+        "TF_PRUNE_GROUP_BY_KEYS"
+      ],
+      "family": "relational",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/plan/AggregateTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneHDFSScanColumnRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneHDFSScanColumnRule.java",
+      "sha256": "e48d1e9667a681fd83a5bd6a45174c85bb5db6edf5136fdf7a1c88849aabad17",
+      "ruleTypes": [
+        "TF_PRUNE_OLAP_SCAN_COLUMNS"
+      ],
+      "family": "relational",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rule/transformation/PruneHDFSScanColumnRuleTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneIntersectColumnsRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneIntersectColumnsRule.java",
+      "sha256": "1f3e902faf78dbbd4a1534c92a7b89dbe553bb96c3f35b62473c9622db32c4b9",
+      "ruleTypes": [
+        "TF_PRUNE_INTERSECT_COLUMNS"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneJoinColumnsRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneJoinColumnsRule.java",
+      "sha256": "c7dc5d0765a4b1912fd7819dee005f03ef10026a625a4be00e49f44189f5aa17",
+      "ruleTypes": [
+        "TF_PRUNE_JOIN_COLUMNS"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneProjectColumnsRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneProjectColumnsRule.java",
+      "sha256": "c9f1d0fb2b533242a430b89f01c4369bd645088b2a0ac96fe36c9d506490f3dd",
+      "ruleTypes": [
+        "TF_PRUNE_PROJECT_COLUMNS"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneProjectEmptyRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneProjectEmptyRule.java",
+      "sha256": "efc620d6d633b6cbc40f8bd1143e81fc62f3e5111d3cd299f061ae2c55fa2a69",
+      "ruleTypes": [
+        "TF_PRUNE_PROJECT_EMPTY"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneProjectRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneProjectRule.java",
+      "sha256": "489cdc9347dc161cea0d85e2d34e27f6a42cf21e1ae7d277d6a3dda6c9bdea2d",
+      "ruleTypes": [
+        "TF_PRUNE_PROJECT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneRepeatColumnsRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneRepeatColumnsRule.java",
+      "sha256": "78e79c7ead24ef396ee0e095f6704df9c309d184c7da9bd9429d219b0507a951",
+      "ruleTypes": [
+        "TF_PRUNE_REPEAT_COLUMNS"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneScanColumnRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneScanColumnRule.java",
+      "sha256": "990c61802662d6db0e4eedbb479ad5be46234696729fa65cdee10201ae9bc88e",
+      "ruleTypes": [
+        "TF_PRUNE_OLAP_SCAN_COLUMNS"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneTableFunctionColumnRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneTableFunctionColumnRule.java",
+      "sha256": "cd51eb40f762087919c62c13299dc1d79568cc3bded4e405f1346b3f69067023",
+      "ruleTypes": [
+        "TF_PRUNE_TABLE_FUNCTION_COLUMNS"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneTopNColumnsRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneTopNColumnsRule.java",
+      "sha256": "43ce27b159f5067e4a2246040f3beaf6e6d74d6d7db92bbb42e137284a751ed6",
+      "ruleTypes": [
+        "TF_PRUNE_TOPN_COLUMNS"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneTrueFilterRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneTrueFilterRule.java",
+      "sha256": "a6dc0aa3165f7a0b1c74b888ce7d5b430b3763805ffbbe1253c77ceb2350e892",
+      "ruleTypes": [
+        "TF_PRUNE_TRUE_FILTER"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneUKFKGroupByKeysRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneUKFKGroupByKeysRule.java",
+      "sha256": "02c90e8d46dfde5e9703851849c1a20a282b05e323a47d9c9ded57fdc9609929",
+      "ruleTypes": [
+        "TF_PRUNE_UKFK_GROUP_BY_KEYS"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneUKFKJoinRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneUKFKJoinRule.java",
+      "sha256": "212c080e0e189562676ede24f7b538eb33166e1ef492c03ddd1a29349f5c267d",
+      "ruleTypes": [
+        "TF_PRUNE_UKFK_JOIN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneUnionColumnsRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneUnionColumnsRule.java",
+      "sha256": "beb85477e343469a0df3c4a63e2675399bab5c9d01de97c7c004d49e75161be8",
+      "ruleTypes": [
+        "TF_PRUNE_UNION_COLUMNS"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneValuesColumnsRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneValuesColumnsRule.java",
+      "sha256": "91e0206fa6f85b95eab73629a941d506c3e841ce612b52d3558d428462608c14",
+      "ruleTypes": [
+        "TF_PRUNE_VALUES_COLUMNS"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PruneWindowColumnsRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PruneWindowColumnsRule.java",
+      "sha256": "5abc32e71352724578d6087cfaa15ba25395d80ec1fd5830547da77ba1b9ad23",
+      "ruleTypes": [
+        "TF_PRUNE_ANALYTIC_COLUMNS"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PullUpScanPredicateRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PullUpScanPredicateRule.java",
+      "sha256": "2a574ebd0364c67433438a9885b4e8af5ffb95456c8ffaf414cb33eaa4660bdf",
+      "ruleTypes": [
+        "TF_PULL_UP_PREDICATE_SCAN"
+      ],
+      "family": "relational",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/plan/ReproLambdaInReuseTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownAggFunPredicateRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownAggFunPredicateRule.java",
+      "sha256": "5b3551275ec3252ae075877cce8ba297c155ee278bf478a0f1e2cc8ac6b27462",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_AGG_FUN_PREDICATE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownAggToMetaScanRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownAggToMetaScanRule.java",
+      "sha256": "c14a9734b3c597a09d2462eeec847cc3cb4560c51b5fcc1c4cc32af78123cb14",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_AGG_TO_META_SCAN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownAggregateGroupingSetsRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownAggregateGroupingSetsRule.java",
+      "sha256": "43dbc38df8a192d9071c3742ee449147f866267d43791dcd09394670b4958411",
+      "ruleTypes": [
+        "TF_PUSHDOWN_AGG_GROUPING_SET"
+      ],
+      "family": "relational",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/plan/GroupingSetsTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownApplyAggFilterRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownApplyAggFilterRule.java",
+      "sha256": "765b500c2ac378073ea89e91cdc0e671bd1b62c69109957591bba4f68b4981d5",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_APPLY_AGG"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownApplyAggProjectFilterRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownApplyAggProjectFilterRule.java",
+      "sha256": "ff2f5692bbc675971c15d9f82a0286ae26acf941a265e08391d9bbda844350b8",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_APPLY_AGG"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownApplyFilterRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownApplyFilterRule.java",
+      "sha256": "729ed8279652c626c1cf3f41abbc5a3ba90f024cc1a707b7e939b89cd6cd993c",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_APPLY_FILTER"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownApplyLeftProjectRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownApplyLeftProjectRule.java",
+      "sha256": "881b73d6050d3b27cd6d1b575c9523419ace314dd1cb1adb17537909c9d09a13",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_APPLY"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownApplyLeftRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownApplyLeftRule.java",
+      "sha256": "9eb7b0bbba663192ec908681060860646d391bd447de80c566d98af20f825d27",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_APPLY"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownApplyProjectRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownApplyProjectRule.java",
+      "sha256": "f0c8c2809a29e7622062bf3535cfad7bd3d7629af3bf7808f0160941dd97238c",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_APPLY_PROJECT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownAsofJoinTemporalExpressionToChildProject",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownAsofJoinTemporalExpressionToChildProject.java",
+      "sha256": "6ea3dc22e07a1a21d3cac25deffb7eb5bfabb0fca7e7f2d8c8918e7b8e6b41ef",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_ASOF_JOIN_TEMPORAL_EXPRESSION_TO_CHILD_PROJECT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownFlatJsonMetaToMetaScanRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownFlatJsonMetaToMetaScanRule.java",
+      "sha256": "f0e3687e41a7912b78777de5264f921aa6d72c7a0d5db7386cabcab8b631eed5",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_AGG_TO_META_SCAN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownJoinAggRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownJoinAggRule.java",
+      "sha256": "973d1039e25413e111b23335fb454ff2f7b47bf5de674cff4fec1c7e4668ffef",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_JOIN_AGG"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownJoinOnClauseRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownJoinOnClauseRule.java",
+      "sha256": "1c95bfa232e125037bbf3355c51864fa4d63a491ffb91288fb91ecb28b7c3509",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_JOIN_CLAUSE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownJoinOnExpressionToChildProject",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownJoinOnExpressionToChildProject.java",
+      "sha256": "22f0ada29e049288971ae834818fba731d05fa1777ea25c9f9ae99dfe311e414",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_JOIN_ON_EXPRESSION_TO_CHILD_PROJECT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownLimitCTEAnchor",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownLimitCTEAnchor.java",
+      "sha256": "f0858e3898f5b684cc1ce4e3b881c831205738d8bf75ea360289ae1c841d80e9",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_LIMIT_CTE_ANCHOR"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownLimitDirectRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownLimitDirectRule.java",
+      "sha256": "9ed5ebe12a26f677c207def875d6b70451034fcd94f425c5fde3cb47e8ababfc",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_LIMIT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownLimitJoinRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownLimitJoinRule.java",
+      "sha256": "05890a7d53899f477a6a24b22ca5d06d2b85d109e76077ce88c4c7f631777ecb",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_LIMIT_JOIN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownLimitRankingWindowRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownLimitRankingWindowRule.java",
+      "sha256": "cb6f59fb94f00b9549db4c7583c84bd728d7844224a8186a09392fc512bc167b",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_LIMIT_RANKING_WINDOW"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownLimitUnionRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownLimitUnionRule.java",
+      "sha256": "e8f3f0f0c5e03a027805699dcc39302a133519e7b2df89d5c32d1599e98e9121",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_LIMIT_UNION"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownPredicateAggRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownPredicateAggRule.java",
+      "sha256": "0034bce7763699c4a84de4c383f6e32c2b5278ff62a34819d996f3f2579a510d",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_PREDICATE_AGG"
+      ],
+      "family": "relational",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rule/transformation/PushDownAggRuleTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownPredicateCTEAnchor",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownPredicateCTEAnchor.java",
+      "sha256": "7a32b3e8576e31b341a2046ad2a88606be7b9ec3676b35a707efaa13fe64eeb0",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_PREDICATE_CTE_ANCHOR"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownPredicateCTEConsumeRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownPredicateCTEConsumeRule.java",
+      "sha256": "6a2ed48009ee40cf916b782572b54040033d3534a02ffceed12859a4e1dded19",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_PREDICATE_CTE_CONSUME"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownPredicateExceptRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownPredicateExceptRule.java",
+      "sha256": "172468311f113ff0a1425345e5eb8238d1e81c1218b571b4ca47b00455129fbd",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_PREDICATE_EXCEPT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownPredicateIntersectRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownPredicateIntersectRule.java",
+      "sha256": "be8950b818d4aa685e1f89354c52fb5371e861b506109de00d4215adbadaec7c",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_PREDICATE_INTERSECT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownPredicateJoinRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownPredicateJoinRule.java",
+      "sha256": "19192c0334a8fd264e5029c061b525020eb732bd3530d78ed90ff106b66ba20b",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_PREDICATE_JOIN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownPredicateProjectRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownPredicateProjectRule.java",
+      "sha256": "16dec835ff65061eebb662e56576ce59c642a16d33ff821ce4061664113fa7f7",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_PREDICATE_PROJECT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownPredicateRankingWindowRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownPredicateRankingWindowRule.java",
+      "sha256": "005c30b61f75c863d1b64cd88ffffd8f38fbd222b48863e31180f41bd08a394e",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_PREDICATE_RANKING_WINDOW"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownPredicateRepeatRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownPredicateRepeatRule.java",
+      "sha256": "79b3c06828be5cba7ab34c4a0829b4a4ef4b677a10109f1aedf2fcb02fa3ba3e",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_PREDICATE_REPEAT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownPredicateScanRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownPredicateScanRule.java",
+      "sha256": "7d60c1be1d7368ddd8fd070f1d209ade0da3869ad44e76b64acb06de051475f9",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_PREDICATE_SCAN"
+      ],
+      "family": "relational",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rule/transformation/PushDownScanRuleTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownPredicateTableFunctionRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownPredicateTableFunctionRule.java",
+      "sha256": "7d13fcb61683f2fbc1709c83cdee8bbcf453cefd90f30fccd1df9d9a78ccb089",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_PREDICATE_TABLE_FUNCTION"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownPredicateToExternalTableScanRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownPredicateToExternalTableScanRule.java",
+      "sha256": "24b465f1fcfbfc563b05ebfb4fd4be89f432c41c68ca9fcf531260c63f886c8d",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_PREDICATE_TO_EXTERNAL_TABLE_SCAN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownPredicateUnionRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownPredicateUnionRule.java",
+      "sha256": "0c143614641f406e696a60078c3d19b29e44f02ff590e35f9a38c24c44a10713",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_PREDICATE_UNION"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownPredicateWindowRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownPredicateWindowRule.java",
+      "sha256": "ab92ae9a6bbe5f36329fb4781adb668f52e9382500aba75b793b8d2d8913c347",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_PREDICATE_WINDOW"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownProjectLimitRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownProjectLimitRule.java",
+      "sha256": "089ec6989b10a8ccdfe144446783a2b893e2bab233e5a3482b5c5e2535d948db",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_PROJECT_LIMIT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownProjectToCTEAnchorRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownProjectToCTEAnchorRule.java",
+      "sha256": "10deaa873b06b861e83487eae119f365ec65f9f3299f54437bc8f778e71cadcc",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_PROJECT_TO_CTE_ANCHOR"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownTopNBelowOuterJoinRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownTopNBelowOuterJoinRule.java",
+      "sha256": "a3951ade958ae8fb8acda172e723c7841eb7b6d69d9446fc7941ebbd850ee859",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_TOPN_OUTER_JOIN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownTopNBelowUnionRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownTopNBelowUnionRule.java",
+      "sha256": "5e649568a67a5fd63da05756324dc8b044e2d578a06a38b9621355583574a28e",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_TOPN_UNION"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushDownTopNToPreAggRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushDownTopNToPreAggRule.java",
+      "sha256": "7ebc51a7227a6a1ae897f0450b1d703ffaecda1dc7a10688882f38863c84854a",
+      "ruleTypes": [
+        "TF_PUSH_DOWN_TOPN_AGG"
+      ],
+      "family": "relational",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/planner/QueryCacheRuntimeFilterAndTimeZoneTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.PushLimitAndFilterToCTEProduceRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/PushLimitAndFilterToCTEProduceRule.java",
+      "sha256": "eb879c93d4294a459210443c550aab3e5778ba06158b2b557803fe9656916744",
+      "ruleTypes": [
+        "TF_PUSH_CTE_PRODUCE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.QuantifiedApply2JoinRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/QuantifiedApply2JoinRule.java",
+      "sha256": "061411a8fca74ec45a0a06c98580677faed4753d2ae78b655212cb9d2c6ef02b",
+      "ruleTypes": [
+        "TF_QUANTIFIED_APPLY_TO_JOIN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.QuantifiedApply2OuterJoinRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/QuantifiedApply2OuterJoinRule.java",
+      "sha256": "d2c8abc6cae2bd874f67b151fa933d3b6f0e492a2bdf832f10d2df55a4af1f3d",
+      "ruleTypes": [
+        "TF_QUANTIFIED_APPLY_TO_OUTER_JOIN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.RemoveAggregationFromAggTable",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/RemoveAggregationFromAggTable.java",
+      "sha256": "ae662a13f34db2d6954a5ee4286d8b86da4f8efa5f4fe4e12afc2a244b31fb25",
+      "ruleTypes": [
+        "TF_REMOVE_AGGREGATION_BY_AGG_TABLE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.ReorderIntersectRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/ReorderIntersectRule.java",
+      "sha256": "da3bf99e56a9a7819cd5fb0f155db46f14694d1ab756463541c789a5d403e94e",
+      "ruleTypes": [
+        "TF_INTERSECT_REORDER"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.RewriteBitmapCountDistinctRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/RewriteBitmapCountDistinctRule.java",
+      "sha256": "3b1b61c58ca94e6fb107a4911455449f485d00a9bf74a835d264fcfda82758df",
+      "ruleTypes": [
+        "TF_REWRITE_BITMAP_COUNT_DISTINCT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.RewriteCountIfFunction",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/RewriteCountIfFunction.java",
+      "sha256": "24dd59e5698009f5750a083bf11ce7e7552c5e6e5cdee72f4953897f4a50a3b4",
+      "ruleTypes": [
+        "TF_REWRITE_COUNT_IF_RULE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.RewriteDuplicateAggregateFnRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/RewriteDuplicateAggregateFnRule.java",
+      "sha256": "4231ae5ff2e7e51db26f632321b00ae29629cc336709bb3c5e09e88c5666c3eb",
+      "ruleTypes": [
+        "TF_REWRITE_DUPLICATE_AGGREGATE_FN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.RewriteGroupingSetsByCTERule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/RewriteGroupingSetsByCTERule.java",
+      "sha256": "7b716189fb2160ab3ddae1fe4c9f6f7859d63b39095e2d3cec697c632de61031",
+      "ruleTypes": [
+        "TF_REWRITE_GROUPING_SET"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.RewriteHllCountDistinctRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/RewriteHllCountDistinctRule.java",
+      "sha256": "48db90cf403d9ea91b0d0048e3b0c451509e4c18c02432181dfdbfa1c836b986",
+      "ruleTypes": [
+        "TF_REWRITE_HLL_COUNT_DISTINCT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.RewriteMinMaxByMonotonicFunctionRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/RewriteMinMaxByMonotonicFunctionRule.java",
+      "sha256": "21af4f43e0b2e2383861f1b9c58d42c2bb455aecc8d7fa46a090141d4eddc79f",
+      "ruleTypes": [
+        "TF_REWRITE_MINMAX_BY_MONOTONIC_FUNCTION"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.RewriteMultiDistinctRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/RewriteMultiDistinctRule.java",
+      "sha256": "f044eaae448703c0aef4cfb98329a9cb62fb1c1232164d1da97e0840e89a8ffb",
+      "ruleTypes": [
+        "TF_REWRITE_MULTI_DISTINCT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.RewriteSimpleAggToHDFSScanRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/RewriteSimpleAggToHDFSScanRule.java",
+      "sha256": "4c0b928e96effa20c1cc72f6839f435a5ae216043f07dcff30f0169f2740da35",
+      "ruleTypes": [
+        "TF_REWRITE_SIMPLE_AGG"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.RewriteSimpleAggToMetaScanRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/RewriteSimpleAggToMetaScanRule.java",
+      "sha256": "3ff826168e222659488bbe5da04080cd2fdd0fce3fd00a679430fdb327a66299",
+      "ruleTypes": [
+        "TF_REWRITE_SIMPLE_AGG"
+      ],
+      "family": "relational",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/plan/AggregateTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.RewriteSumByAssociativeRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/RewriteSumByAssociativeRule.java",
+      "sha256": "e1e6237e17cb4cc8e91654572196f4793c82139c45a63fc3b6303a499f3cf68b",
+      "ruleTypes": [
+        "TF_REWRITE_SUM_BY_ASSOCIATIVE_RULE"
+      ],
+      "family": "relational",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/plan/AggregateTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.RewriteToVectorPlanRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/RewriteToVectorPlanRule.java",
+      "sha256": "5f638a8178c99da83956f189e923ddc73774adbe5158d0433185d1d7070dcf2c",
+      "ruleTypes": [
+        "TF_VECTOR_REWRITE_RULE"
+      ],
+      "family": "relational",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/planner/VectorIndexTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.RewriteUnnestBitmapRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/RewriteUnnestBitmapRule.java",
+      "sha256": "0356ca492f68cb58cd651f503a839c58d08fccb8897740e9cdcf32dbbbc1b166",
+      "ruleTypes": [
+        "TF_REWRITE_UNNEST_BITMAP_RULE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.ScalarApply2AnalyticRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/ScalarApply2AnalyticRule.java",
+      "sha256": "3db73533eb0d94c62851c5eae1111fac46d908c9a50dca31a55a3d1252e61d31",
+      "ruleTypes": [
+        "TF_SCALAR_APPLY_TO_ANALYTIC"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.ScalarApply2JoinRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/ScalarApply2JoinRule.java",
+      "sha256": "d7e754920a60f34ef752141f3582f948ce6c50c062a227920bf839718dd8dc8d",
+      "ruleTypes": [
+        "TF_SCALAR_APPLY_TO_JOIN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.ScalarApplyNormalizeCountRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/ScalarApplyNormalizeCountRule.java",
+      "sha256": "b2b175ba735e57ff5df6f5510d44c5d7e1b0f2da8477398291b4161edaf11483",
+      "ruleTypes": [
+        "TF_SCALAR_APPLY_NORMALIZED_COUNT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.SchemaTableEvaluateRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/SchemaTableEvaluateRule.java",
+      "sha256": "f94af7e99b2561335c77e7d0137aea15ad75ebacbf6dac9774e4b2b7c374a4a0",
+      "ruleTypes": [
+        "TF_SCHEMA_TABLE_EVALUATE_RULE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.SemiReorderRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/SemiReorderRule.java",
+      "sha256": "df8d1ed32db2978fde3815e7880f88e1c5eca47f57c71e641b45b7e9ad01461b",
+      "ruleTypes": [
+        "TF_JOIN_SEMI_REORDER"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.SeparateProjectRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/SeparateProjectRule.java",
+      "sha256": "1e4d888fbd716935061ec0542c3a43020fe1db5075a1facd256f7ed7786607b7",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.SkewJoinOptimizeRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/SkewJoinOptimizeRule.java",
+      "sha256": "978fc37d386602f5c530278aad2db1636b1fd26980cfe34ad703384ef46cc43a",
+      "ruleTypes": [
+        "TF_SKEW_JOIN_OPTIMIZE_RULE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.SplitJoinORToUnionRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/SplitJoinORToUnionRule.java",
+      "sha256": "8b80d72b2cf8c06b3c47306e9aca99ad22e90b2be4279566cd43a83e35278f85",
+      "ruleTypes": [
+        "TF_OR_TO_UNION_ALL_JOIN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.SplitLimitRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/SplitLimitRule.java",
+      "sha256": "edec03102ca8c07423b58cb9ce31b56c464b647f7079a79f220526fe0539b7d0",
+      "ruleTypes": [
+        "TF_SPLIT_LIMIT"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.SplitMultiPhaseAggRule",
+      "abstract": false,
+      "parents": [
+        "SplitAggregateRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/SplitMultiPhaseAggRule.java",
+      "sha256": "21bda2ece8e349d51e0c2628b94ce2149af557edb0163feb1e98f86691d52e8e",
+      "ruleTypes": [
+        "TF_SPLIT_MULTI_PHASE_AGGREGATE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.SplitScanORToUnionRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/SplitScanORToUnionRule.java",
+      "sha256": "c84791285cd3696d99000b3d5b599081276ca74724c8613365b6907169544bda",
+      "ruleTypes": [
+        "TF_SPLIT_SCAN_OR"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.SplitTopNAggregateRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/SplitTopNAggregateRule.java",
+      "sha256": "55608fe749bcb84ab9257ad9b5d3e7658e2b3c1a775e8b7a00d21f709e15bbe1",
+      "ruleTypes": [
+        "TF_SPLIT_TOPN_AGGREGATE_RULE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.SplitTopNRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/SplitTopNRule.java",
+      "sha256": "b9b837df6dc7954698f2b9138d50487c77c8b64b5ac9e5e65bbb808695be4648",
+      "ruleTypes": [
+        "TF_SPLIT_TOPN"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.SplitTwoPhaseAggRule",
+      "abstract": false,
+      "parents": [
+        "SplitAggregateRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/SplitTwoPhaseAggRule.java",
+      "sha256": "176bbc936269fbc7ce65fb7fc3e93a91fe5a9287a7ae8e5e43644c97c3cb20a5",
+      "ruleTypes": [
+        "TF_SPLIT_TWO_PHASE_AGGREGATE"
+      ],
+      "family": "relational",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/OptimizerTaskTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.SplitWindowSkewToUnionRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/SplitWindowSkewToUnionRule.java",
+      "sha256": "3c980cfeb7895956f26c4f5ee0a656461350e23778c9d6b2c48bd55433e61744",
+      "ruleTypes": [
+        "TF_SPLIT_WINDOW_SKEW"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.UnionToValuesRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/UnionToValuesRule.java",
+      "sha256": "0edc5a0a3285c7aea4a157485bcf74806966d8db06e81fc899ce0f7f8a8263e0",
+      "ruleTypes": [
+        "TF_MERGE_CONSTANT_UNION"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.materialization.MVCompensationPruneUnionRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/materialization/MVCompensationPruneUnionRule.java",
+      "sha256": "583d4ba551df55eb2412819bb6cb75c8ce88de84b2d0a27b2a5cf165eac07a40",
+      "ruleTypes": [
+        "TF_MV_COMPENSATION_PRUNE_UNION"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.materialization.rule.AggregateJoinPushDownRule",
+      "abstract": false,
+      "parents": [
+        "BaseMaterializedViewRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/materialization/rule/AggregateJoinPushDownRule.java",
+      "sha256": "bcae5ee82eb226edb458959ab5a4310cf4fa9eec90d7368cbc0bdc7a2171e7e8",
+      "ruleTypes": [
+        "TF_MV_AGGREGATE_JOIN_PUSH_DOWN_RULE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.materialization.rule.AggregateJoinRule",
+      "abstract": false,
+      "parents": [
+        "BaseMaterializedViewRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/materialization/rule/AggregateJoinRule.java",
+      "sha256": "d80d6e5fa66e933c11f53b8a15b274ca9c2acdb75483185f6ea80115aa5603bc",
+      "ruleTypes": [
+        "TF_MV_AGGREGATE_JOIN_RULE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.materialization.rule.AggregateScanRule",
+      "abstract": false,
+      "parents": [
+        "BaseMaterializedViewRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/materialization/rule/AggregateScanRule.java",
+      "sha256": "d614adc4667fe0e882025acbb6d4db65af42bd48ae7463c87b10c18a0117504b",
+      "ruleTypes": [
+        "TF_MV_AGGREGATE_SCAN_RULE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.materialization.rule.AggregateTimeSeriesRule",
+      "abstract": false,
+      "parents": [
+        "BaseMaterializedViewRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/materialization/rule/AggregateTimeSeriesRule.java",
+      "sha256": "33f438f4a85a1652ae3d6555eb37ad53e8b2c853960c90fe03d943f27990c3a3",
+      "ruleTypes": [
+        "TF_MV_AGGREGATE_TIME_SERIES_SCAN_RULE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.materialization.rule.OnlyJoinRule",
+      "abstract": false,
+      "parents": [
+        "BaseMaterializedViewRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/materialization/rule/OnlyJoinRule.java",
+      "sha256": "83fc2b23c6e7277b61e891bcb3ca2d897badae1799c7346970ae63f7a14efd8e",
+      "ruleTypes": [
+        "TF_MV_ONLY_JOIN_RULE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.materialization.rule.OnlyScanRule",
+      "abstract": false,
+      "parents": [
+        "BaseMaterializedViewRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/materialization/rule/OnlyScanRule.java",
+      "sha256": "fe89c2199b163c643f7a51619bf4834512239992c69748c9ff8f21502741079c",
+      "ruleTypes": [
+        "TF_MV_ONLY_SCAN_RULE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.materialization.rule.TextMatchBasedRewriteRule",
+      "abstract": false,
+      "parents": [
+        "Rule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/materialization/rule/TextMatchBasedRewriteRule.java",
+      "sha256": "4f5cac016a4942a2b5303f64abf3721d6b84361cd31ec619fb1b9f0254ae1ff4",
+      "ruleTypes": [
+        "TF_MV_TEXT_MATCH_REWRITE_RULE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.pruner.CboTablePruneRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/pruner/CboTablePruneRule.java",
+      "sha256": "1364f5e29bfecc77d3ef7fb076fb1abb6a439a5cf92e625d2cc44be26dfa5ad3",
+      "ruleTypes": [
+        "TF_CBO_TABLE_PRUNE_RULE"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.pruner.ExtractRangePredicateFromScalarApplyRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/pruner/ExtractRangePredicateFromScalarApplyRule.java",
+      "sha256": "e4d39620692099aead12f5baf27974463a2018b0faa661e7c0729968b12deb47",
+      "ruleTypes": [
+        "TF_EXTRACT_RANGE_PREDICATE_FROM_SCALAR_APPLY"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.pruner.PrimaryKeyUpdateTableRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/pruner/PrimaryKeyUpdateTableRule.java",
+      "sha256": "b03b9460a801a78d143bf1dd66cfe310f435d3ea23f22c63f3823f738a2d84ae",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.pruner.RboTablePruneRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/pruner/RboTablePruneRule.java",
+      "sha256": "e0b1e8739704f5143303cacbd8191de285e7039a3a7cb2348c152a0088526d4d",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.transformation.pruner.UniquenessBasedTablePruneRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/transformation/pruner/UniquenessBasedTablePruneRule.java",
+      "sha256": "858aeed68b49847547344c81b53509df7f986e75220aeacdd520240aea96f611",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.AddDecodeNodeForDictStringRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/AddDecodeNodeForDictStringRule.java",
+      "sha256": "a7fcce1a4abb7db143364384156338fbd1b7274415ac8720e708ba1c1b6c5c50",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.AddIndexOnlyPredicateRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/AddIndexOnlyPredicateRule.java",
+      "sha256": "17cb6ffe94142cc8c81c5ef2ed6bea1673a0c3211f9b96731957068dd1e61976",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.ApplyMinMaxStatisticRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/ApplyMinMaxStatisticRule.java",
+      "sha256": "6a74d0459e0cf118c272f6e55f4491aa96ca8f598549e8c2761eedf0c8f3358c",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.ApplyTuningGuideRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/ApplyTuningGuideRule.java",
+      "sha256": "edc1c81a4b4037db9e89397a0dc057b0601c85b8105630c08d0706be1e0ff06a",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/OptExpressionImmutableInputsTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.CloneDuplicateColRefRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/CloneDuplicateColRefRule.java",
+      "sha256": "2262e09682125aa3ef2ea1d23c520cb048fd43c9d025e47b0c5c6bd6daad0bd9",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.DataCachePopulateRewriteRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/DataCachePopulateRewriteRule.java",
+      "sha256": "56404d533d6599ecfa3c613bcb1fd2deeb2a96bd32d6bed48e44de48cf48b313",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.EliminateOveruseColumnAccessPathRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/EliminateOveruseColumnAccessPathRule.java",
+      "sha256": "7da2d117381e462a7123a48808558b6fcc18e09a2bedb9ef70a96ec072d65bcd",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.ExchangeSortToMergeRule",
+      "abstract": false,
+      "parents": [
+        "OptExpressionVisitor",
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/ExchangeSortToMergeRule.java",
+      "sha256": "6031f3f5865ab5fd27b822faf67b560d29b8d12b2e7916c27bed59b63720e763",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.ExtractAggregateColumn",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/ExtractAggregateColumn.java",
+      "sha256": "0ee2c529865860986cf493a632426871dad283ccf029abdb7488f9fa5e94dc91",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.InlineCteProjectPruneRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/InlineCteProjectPruneRule.java",
+      "sha256": "1b68b5b7c783883e4d704fd2d3b0fba276818e678fb1dfc47b3af8fc10c18a8d",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.JoinLocalShuffleRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/JoinLocalShuffleRule.java",
+      "sha256": "348e32982a8d9f61b5dd4a91c64ca7129309210d1af5e2c0395a176b5e4849f2",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.JsonPathRewriteRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/JsonPathRewriteRule.java",
+      "sha256": "9e4c4210849bc8ae0a4a657b7b5870120ecd70a301f9d97a15c9e4441c68a49b",
+      "ruleTypes": [
+        "TF_JSON_PATH_REWRITE"
+      ],
+      "family": "relational",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/plan/JsonPathRewriteTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.MarkParentRequiredDistributionRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/MarkParentRequiredDistributionRule.java",
+      "sha256": "67f3a933982bfe70d6213e68be43ed2179a005387bde07efe05372b2e2f0651a",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.PhysicalDistributionAggOptRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/PhysicalDistributionAggOptRule.java",
+      "sha256": "6b9cecdefb1df42a9e7bdd96a9fc9571a6d284f3d64be12b243d6d566d1f8748",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.PreAggregateTurnOnRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/PreAggregateTurnOnRule.java",
+      "sha256": "6863f7c855abe1e1eed22c6c6c7e3fd0a9b602a9f760521ef189fb5d48af2a9e",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.PredicateReorderRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/PredicateReorderRule.java",
+      "sha256": "f00352ebe55376654a01bea605f88591c54ce4329b0d9d726b304e779d283b87",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/optimizer/rewrite/PredicateReorderRuleTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.PruneAggregateNodeRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/PruneAggregateNodeRule.java",
+      "sha256": "7fbcd200a27267ba2267919a06c24fed83aeadac7787aa35c10c913ccb74f753",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.PruneShuffleColumnRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/PruneShuffleColumnRule.java",
+      "sha256": "8ea4bc29d9f107e5fd6a01f007d8b76a9f7f989bbe8549ea09a2eb0fdc103819",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": [
+        "fe/fe-core/src/test/java/com/starrocks/sql/plan/PruneShuffleColumnRuleTest.java"
+      ]
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.PruneShuffleDistributionNodeRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/PruneShuffleDistributionNodeRule.java",
+      "sha256": "196cb044a8d369db5bf2b2611e4dbe8fab4c5797717bdb1fa9d1dfb9ca62269e",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.PruneSubfieldsForComplexType",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/PruneSubfieldsForComplexType.java",
+      "sha256": "ff36f0b93524fbd837aa49a2b228420e97a1395831ad06ee09fa36ea3be7ab2d",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.PushDownAggregateRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/PushDownAggregateRule.java",
+      "sha256": "90c8482a69a0d4359e187e2674a19f94fa2adf17fd4197c2c2a83eb0277388e6",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.PushDownDistinctAggregateRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/PushDownDistinctAggregateRule.java",
+      "sha256": "52acdb7df8a72b4c7dcc7a8ea16e9607852f3211bd1f2a4c23a2122e32b103c8",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.RemoveUselessScanOutputPropertyRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/RemoveUselessScanOutputPropertyRule.java",
+      "sha256": "d5ad55128ff1af509574f4d0d8258a27f48693a5b37899028e8551244c932a61",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.SemiJoinDeduplicateRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/SemiJoinDeduplicateRule.java",
+      "sha256": "060469c263b5b27d770a82a3499373f99b6a1efeeed31d2124cf3eed5cfc67eb",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.SimplifyCaseWhenPredicateRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/SimplifyCaseWhenPredicateRule.java",
+      "sha256": "d1527e2da4bd834b2430faefa7981c07b6c1b74269952b8faecc6b010acba89c",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.SkewShuffleJoinEliminationRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/SkewShuffleJoinEliminationRule.java",
+      "sha256": "cfce98e8bc4cd19dd3d1139dc10b74fd324c11a284436ee43f30a6c3de6e6ddc",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.SubfieldExprNoCopyRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/SubfieldExprNoCopyRule.java",
+      "sha256": "629cad75235f522e797f7e9fcbca6abb4122e60d00e79ebb7429b7177f4c7d23",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.WidenProjectionNullableRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/WidenProjectionNullableRule.java",
+      "sha256": "0e7faefb80554643c775241b296b9f46f0bfd29c8692d55a1d95f56da9ab3825",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.exprreuse.ScalarOperatorsReuseRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/exprreuse/ScalarOperatorsReuseRule.java",
+      "sha256": "eb36c019a26229aa98f929d2a1cd1c0a92a909268924a6fec99e81c6f0c83a0e",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.lowcardinality.LowCardinalityRewriteRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/lowcardinality/LowCardinalityRewriteRule.java",
+      "sha256": "1104f7ca0789dc986a9fc6f7378a9ec4b54b9b4e9c9fd8b7e33cbbb5cbd59f4b",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.prunesubfield.PruneSubfieldRule",
+      "abstract": false,
+      "parents": [
+        "TransformationRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/prunesubfield/PruneSubfieldRule.java",
+      "sha256": "8d472a1f8091d429c76892ac0e9e28692744cd341e90ea31663a9986ccbbefac",
+      "ruleTypes": [
+        "TF_PRUNE_SUBFIELD"
+      ],
+      "family": "relational",
+      "tests": []
+    },
+    {
+      "className": "com.starrocks.sql.optimizer.rule.tree.prunesubfield.PushDownSubfieldRule",
+      "abstract": false,
+      "parents": [
+        "TreeRewriteRule"
+      ],
+      "path": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/tree/prunesubfield/PushDownSubfieldRule.java",
+      "sha256": "125e9dc8109f7a2dd2b0739d4fa17f8a6e8623f819b6255c8bfe5075ac938ba7",
+      "ruleTypes": [],
+      "family": "tree",
+      "tests": []
+    }
+  ],
+  "ruleTypeSource": "fe/fe-core/src/main/java/com/starrocks/sql/optimizer/rule/RuleType.java",
+  "ruleTypeSha256": "05402de181f907024d7a543a9af963a1fe758bfec298bb62b4d4c1cf4f986b99"
+}

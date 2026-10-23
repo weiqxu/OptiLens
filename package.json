@@ -9,7 +9,8 @@
     "test:browser": "node tests/browser.cjs",
     "test:forwarding": "node tests/forwarding.cjs",
     "test:rules": "node tests/rules.cjs",
-    "test:plan-lab": "node tests/plan-lab.cjs"
+    "test:plan-lab": "node tests/plan-lab.cjs",
+    "test:starrocks": "node tests/starrocks.cjs"
   },
   "devDependencies": { "@playwright/test": "1.51.1" }
 }

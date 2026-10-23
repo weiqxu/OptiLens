@@ -22,7 +22,7 @@ const path=require('node:path');
     await expect(page.locator('#status')).toContainText('SQL must contain 1-10000 characters');
     await page.selectOption('#examples','join');
     await expect(page.locator('#database')).toHaveValue('calcite');
-    assert.equal(await page.locator('#database option').count(),1);
+    assert.equal(await page.locator('#database option').count(),2);
     assert.ok(await page.locator('#rule-options input').count()>200);
     await expect(page.locator('#rule-count')).toContainText('Selected 5');
     await page.fill('#rule-search','PROJECT_REDUCE_EXPRESSIONS');

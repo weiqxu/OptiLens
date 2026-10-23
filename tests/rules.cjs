@@ -13,7 +13,7 @@ const path=require('node:path');
     await page.goto(base+'/rules');
     await expect(page.locator('html')).toHaveAttribute('lang','en');
     await completed();
-    assert.equal(await page.locator('#explorer-database option').count(),1);
+    assert.equal(await page.locator('#explorer-database option').count(),2);
     assert.ok(await page.locator('.rule-item').count()>200);
     assert.equal(await page.locator('#detail-id').textContent(),'CoreRules.PROJECT_REDUCE_EXPRESSIONS');
     assert.match(await page.locator('#example-raw-after').textContent(),/200/);

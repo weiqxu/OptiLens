@@ -33,7 +33,7 @@ public final class Jobs implements AutoCloseable {
     String id=UUID.randomUUID().toString();
     Job job=new Job(id,"queued",false,Instant.now().toString(),null,null);
     Path input=directory.resolve(id+".input.json");Json.MAPPER.writeValue(input.toFile(),request);save(job);
-    try{executor.execute(()->execute(job,input));}
+    try{executor.execute(()->execute(job,input,request));}
     catch(RejectedExecutionException e){jobs.remove(id);Files.deleteIfExists(input);Files.deleteIfExists(directory.resolve(id+".json"));throw e;}
     return job;
   }
@@ -50,9 +50,7 @@ public final class Jobs implements AutoCloseable {
       Path input=Files.createTempFile(directory,"validation-",".input.json"),output=input.resolveSibling(input.getFileName()+".output.json");Process process=null;
       try{
         Json.MAPPER.writeValue(input.toFile(),request);
-        String java=Path.of(System.getProperty("java.home"),"bin","java").toString();
-        String cp=System.getProperty("surefire.test.class.path",System.getProperty("java.class.path"));
-        process=new ProcessBuilder(java,"-Xmx384m","-Xss1m","-cp",cp,Worker.class.getName(),input.toString(),output.toString(),"validate")
+        process=new ProcessBuilder(Engines.workerCommand(request,input,output,true))
             .redirectOutput(ProcessBuilder.Redirect.DISCARD).redirectError(ProcessBuilder.Redirect.DISCARD).start();
         if(!process.waitFor(timeoutSeconds,TimeUnit.SECONDS))throw new TimeoutException("Plan validation exceeded the worker time limit");
         if(process.exitValue()!=0 || !Files.exists(output) || Files.size(output)>8_000_000)throw new IllegalArgumentException("Plan validation worker failed or exceeded the output limit");
@@ -73,13 +71,11 @@ public final class Jobs implements AutoCloseable {
     return jobs.values().stream().sorted(Comparator.comparing(Job::submittedAt).reversed()).limit(30)
       .map(j->Map.<String,Object>of("id",j.id(),"status",j.status(),"imported",j.imported(),"submittedAt",j.submittedAt())).toList();
   }
-  private void execute(Job original,Path input){
+  private void execute(Job original,Path input,Request request){
     Process process=null;Path output=directory.resolve(original.id()+".worker.json");
     try{
       save(new Job(original.id(),"running",false,original.submittedAt(),null,null));
-      String java=Path.of(System.getProperty("java.home"),"bin","java").toString();
-      String cp=System.getProperty("surefire.test.class.path",System.getProperty("java.class.path"));
-      process=new ProcessBuilder(java,"-Xmx384m","-Xss1m","-cp",cp,Worker.class.getName(),input.toString(),output.toString())
+      process=new ProcessBuilder(Engines.workerCommand(request,input,output,false))
           .redirectOutput(ProcessBuilder.Redirect.DISCARD).redirectError(ProcessBuilder.Redirect.DISCARD).start();
       if(!process.waitFor(timeoutSeconds,TimeUnit.SECONDS))throw new TimeoutException("Optimization exceeded "+timeoutSeconds+" seconds; the worker has been terminated");
       if(process.exitValue()!=0 || !Files.exists(output))throw new IllegalStateException("The optimization worker exited unexpectedly; memory or query complexity limits may have been exceeded");
