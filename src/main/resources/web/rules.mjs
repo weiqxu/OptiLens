@@ -1,8 +1,10 @@
+import {mountAssistant,highlightNode} from './assistant.mjs';
 import {diffPlans,drawPlan,layoutPlan} from './graph.mjs';
 const $=id=>document.getElementById(id);
 const text=(id,value)=>{$(id).textContent=value;};
 const counted=(n,label)=>`${n} ${label}${n===1?'':'s'}`;
 let catalog,rules=[],examples=new Map(),coverage=new Map(),selected=null,job=null,revision=0,startTimer;
+let assistantSelectedResult=null;
 const runs=new Map(),zoom={before:1,after:1};
 async function api(path,options={}){
   const response=await fetch(path,{...options,headers:{'Content-Type':'application/json',...options.headers}});
@@ -98,7 +100,7 @@ function renderPlans(fit=false){
   text('example-scope',value==='stage'?`Complete plans immediately before and after ${selected.id}. ${job.result.stages.length-1} preparation stages precede the target; their transformations are excluded from this comparison. Local events are available in the View menu.`:'Local expressions from one rule invocation. This event does not represent the entire query plan or prove final candidate selection.');
   const diff=diffPlans(pair.before,pair.after);
   if(fit)for(const side of ['before','after'])zoom[side]=Math.min(1,Math.max(.65,($('example-'+side).clientWidth-16)/layoutPlan(pair[side]).width));
-  const inspect=(node,mark,side)=>{text('example-node-content',JSON.stringify({side,difference:mark||'No marked difference',...node},null,2));$('example-node').open=true;};
+  assistantSelectedResult=null;const inspect=(node,mark,side)=>{assistantSelectedResult={kind:'result',side,nodeId:node.id};text('example-node-content',JSON.stringify({side,difference:mark||'No marked difference',...node},null,2));$('example-node').open=true;};
   drawPlan($('example-before'),pair.before,diff.left,'before',inspect,zoom.before);
   drawPlan($('example-after'),pair.after,diff.right,'after',inspect,zoom.after);
   text('difference-summary',`${diff.left.size} before / ${diff.right.size} after nodes marked`);
@@ -138,3 +140,22 @@ async function loadEngine(database,requested){
   choose(initial);
 }
 try{const params=new URL(location.href).searchParams;await loadEngine(params.get('database')||'calcite',params.get('rule'));}catch(error){text('catalog-status','Unable to load the rule explorer: '+error.message);$('catalog-status').className='status error';}
+
+if(catalog)await mountAssistant({
+ page:'rules',
+ context(){return {page:'rules',database:catalog.database,engineVersion:catalog.engineVersion,
+  input:examples.get(selected?.id)?.input||null,ruleId:selected?.id,stamp:{revision,ruleId:selected?.id},
+  selectedNode:assistantSelectedResult,validationMessage:$('example-status').textContent,
+  runId:job?.id||null,stage:job?job.result.stages.findIndex(s=>s.id===selected.id):-1,event:job&&$('example-view').value!=='stage'?Number($('example-view').value):-1};},
+ async apply(){throw Error('Open the suggestion in a Lab to apply it.');},
+ async focus(ref){
+  const record=await api('/api/runs/'+encodeURIComponent(ref.runId));const ruleId=record.result.stages[ref.stage]?.id;
+  if(!ruleId)throw Error('Rule stage is no longer available.');
+  if(catalog.database!==ref.database)await loadEngine(ref.database,ruleId);
+  const rule=rules.find(r=>r.id===ruleId);if(!rule)throw Error('This rule is not in the current catalog.');
+  choose(rule);clearTimeout(startTimer);++revision;job=record;
+  const stage=targetStage();$('example-result').hidden=false;$('example-section').hidden=false;
+  $('example-view').replaceChildren(new Option('Complete plan · stage boundary','stage'),...stage.events.map((e,i)=>new Option('Local event '+(i+1),String(i))));
+  $('example-view').value=ref.event<0?'stage':String(ref.event);renderPlans();highlightNode($('example-'+ref.side),ref.nodeId);
+ }
+});

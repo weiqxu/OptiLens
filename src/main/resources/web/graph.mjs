@@ -61,7 +61,7 @@ export function drawPlan(container,plan,marks,side,onSelect,zoom=1){
   for(const n of plan.nodes){const p=positions.get(n.id);for(const id of n.inputs){const q=positions.get(id);svg.append(make('path',{d:`M ${p.x+115} ${p.y+100} V ${p.y+120} H ${q.x+115} V ${q.y}`,class:'graph-edge'}));}}
   for(const n of plan.nodes){
     const p=positions.get(n.id),mark=marks.get(n.id);
-    const g=make('g',{transform:`translate(${p.x},${p.y})`,class:'plan-node'+(mark?(side==='before'?' old':' new'):''),role:'button',tabindex:'0','aria-label':`${n.type}, node ${n.id}${mark?', '+mark.label:''}`});
+    const g=make('g',{transform:`translate(${p.x},${p.y})`,class:'plan-node'+(mark?(side==='before'?' old':' new'):''),'data-node':n.id,role:'button',tabindex:'0','aria-label':`${n.type}, node ${n.id}${mark?', '+mark.label:''}`});
     g.append(make('rect',{width:230,height:100,rx:7}));
     g.append(make('text',{x:12,y:19,class:'node-badge'},`#${n.id}  ${mark?.label||'No marked difference'}`));
     g.append(make('text',{x:12,y:40,class:'node-title'},n.type.length>26?n.type.slice(0,25)+'…':n.type));

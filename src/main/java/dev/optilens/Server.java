@@ -11,14 +11,19 @@ import static dev.optilens.Model.*;
 public final class Server implements AutoCloseable {
   private final HttpServer http;
   private final Jobs jobs;
+  private final Assistant assistant;
   private final ExecutorService requests=Executors.newFixedThreadPool(8);
-  private static final Map<String,String> ASSETS=Map.ofEntries(Map.entry("/plan-lab","plan-lab.html"),Map.entry("/plan-lab.mjs","plan-lab.mjs"),Map.entry("/plan-editor.mjs","plan-editor.mjs"),Map.entry("/plan-lab.css","plan-lab.css"),Map.entry("/","index.html"),Map.entry("/index.html","index.html"),Map.entry("/app.mjs","app.mjs"),Map.entry("/graph.mjs","graph.mjs"),Map.entry("/styles.css","styles.css"),Map.entry("/rules","rules.html"),Map.entry("/rules.html","rules.html"),Map.entry("/rules.mjs","rules.mjs"),Map.entry("/rules.css","rules.css"));
+  private static final Map<String,String> ASSETS=Map.ofEntries(Map.entry("/assistant.mjs","assistant.mjs"),Map.entry("/assistant.css","assistant.css"),Map.entry("/plan-lab","plan-lab.html"),Map.entry("/plan-lab.mjs","plan-lab.mjs"),Map.entry("/plan-editor.mjs","plan-editor.mjs"),Map.entry("/plan-lab.css","plan-lab.css"),Map.entry("/","index.html"),Map.entry("/index.html","index.html"),Map.entry("/app.mjs","app.mjs"),Map.entry("/graph.mjs","graph.mjs"),Map.entry("/styles.css","styles.css"),Map.entry("/rules","rules.html"),Map.entry("/rules.html","rules.html"),Map.entry("/rules.mjs","rules.mjs"),Map.entry("/rules.css","rules.css"));
   public Server(int port,Path data) throws Exception {
-    jobs=new Jobs(data);http=HttpServer.create(new InetSocketAddress("127.0.0.1",port),32);
+    this(port,data,AssistantModel.Config.environment());
+  }
+  Server(int port,Path data,AssistantModel.Config config) throws Exception {
+    jobs=new Jobs(data);assistant=new Assistant(jobs,config);http=HttpServer.create(new InetSocketAddress("127.0.0.1",port),32);
     http.createContext("/",this::handle);http.setExecutor(requests);http.start();
   }
   public int port(){return http.getAddress().getPort();}
   private void handle(HttpExchange x){
+    boolean streaming=false;
     try{
       String host=x.getRequestHeaders().getFirst("Host");
       // Browser previews can expose a different loopback port and may rewrite Host.
@@ -31,6 +36,11 @@ public final class Server implements AutoCloseable {
           String type=x.getRequestHeaders().getFirst("Content-Type");
           if(type==null||!type.toLowerCase(Locale.ROOT).startsWith("application/json")){reply(x,415,Map.of("error","Use Content-Type: application/json"));return;}
         }
+        if(path.equals("/api/assistant/status")&&method.equals("GET")){reply(x,200,assistant.status());return;}
+        if(path.equals("/api/assistant/chat")&&method.equals("POST")){assistant.start(x,Json.MAPPER.readTree(body(x,250_000)));streaming=true;return;}
+        if(path.equals("/api/assistant/cancel")&&method.equals("POST")){assistant.cancel(Json.MAPPER.readTree(body(x,1000)).path("requestId").asText());reply(x,200,Map.of("status","stopped"));return;}
+        if(path.equals("/api/assistant/proposals/validate")&&method.equals("POST")){var result=assistant.validateProposal(Json.MAPPER.readTree(body(x,110_000)));reply(x,result.path("valid").asBoolean()?200:422,result);return;}
+        if(path.startsWith("/api/assistant/sources/")&&method.equals("GET")){reply(x,200,AssistantSources.instance().get(path.substring("/api/assistant/sources/".length())));return;}
         if(path.equals("/api/plan-capabilities") && method.equals("GET")){reply(x,200,Engines.planCapabilities(database(x)));return;}
         if(path.equals("/api/plans/validate") && method.equals("POST")){var result=jobs.validatePlan(Json.MAPPER.readValue(body(x,100_000),Request.class));reply(x,result.valid()?200:422,result);return;}
         if(path.equals("/api/starrocks/verification") && method.equals("GET")){reply(x,200,StarRocks.verification());return;}
@@ -59,10 +69,10 @@ public final class Server implements AutoCloseable {
         String type=asset.endsWith(".css")?"text/css":asset.endsWith(".mjs")?"text/javascript":"text/html";
         send(x,200,type+"; charset=utf-8",input.readAllBytes());
       }
-    }catch(RejectedExecutionException e){safeError(x,429,"The optimization queue is full. Try again later.");}
+    }catch(RejectedExecutionException e){safeError(x,429,"The service is at its concurrency limit. Try again later.");}
     catch(IllegalArgumentException | com.fasterxml.jackson.core.JsonProcessingException e){safeError(x,400,Worker.error(e));}
     catch(Exception e){System.err.println("Request failed: "+e.getClass().getSimpleName());safeError(x,500,"Request processing failed. Check local storage and service logs.");}
-    finally{x.close();}
+    finally{if(!streaming)x.close();}
   }
   private String database(HttpExchange exchange) {
     String database="calcite",query=exchange.getRequestURI().getRawQuery();
@@ -86,5 +96,5 @@ public final class Server implements AutoCloseable {
     System.out.println("OptiLens 0.1.0 — http://127.0.0.1:"+server.port());
     System.out.println("Local run records: "+data.toAbsolutePath());
   }
-  @Override public void close(){http.stop(1);jobs.close();requests.shutdownNow();}
+  @Override public void close(){assistant.close();http.stop(1);jobs.close();requests.shutdownNow();}
 }
