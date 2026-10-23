@@ -10,7 +10,7 @@ public final class Input {
   public static final Set<String> TYPES = Set.of("INTEGER", "BIGINT", "DOUBLE", "DECIMAL", "VARCHAR", "BOOLEAN", "DATE", "TIMESTAMP");
   public static void validate(Request r) {
     require(r != null, "Missing request");
-    require("calcite".equals(r.database()), "Only Calcite is currently supported");
+    Engines.validateDatabase(r.database());
     require(Set.of("sql","plan").contains(r.inputMode()), "Input mode must be sql or plan");
     if (r.inputMode().equals("plan")) {
       require(r.sql()==null || r.sql().isBlank(), "Plan input must not also contain SQL");
@@ -37,7 +37,7 @@ public final class Input {
     if (r.options() != null && r.options().matchLimit() != null)
       require(r.options().matchLimit() >= 1 && r.options().matchLimit() <= 100, "Match limit must be between 1 and 100");
     var seen = new HashSet<String>();
-    for (String id : r.rules()) { require(id != null && seen.add(id), "Rule IDs must not be null or duplicated"); Rules.get(id); }
+    for (String id : r.rules()) { require(id != null && seen.add(id), "Rule IDs must not be null or duplicated"); Engines.validateRule(r.database(),id); }
   }
   private static void identifier(String s) {
     require(s != null && s.matches("[a-zA-Z_][a-zA-Z0-9_]{0,63}"), "Names must be ASCII identifiers of at most 64 letters, digits, or underscores, starting with a letter or underscore");

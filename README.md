@@ -2,7 +2,7 @@
 
 See every step of SQL optimization.
 
-OptiLens is a locally hosted web research tool. Supply SQL or build a logical operator tree with table schemas, collect real optimization events from Apache Calcite, and explore complete plan snapshots and individual rule transformations in your browser.
+OptiLens is a locally hosted web research tool. Supply SQL or build a logical operator tree with table schemas, collect real optimization events from Apache Calcite or StarRocks, and explore complete plan snapshots and individual rule transformations in your browser.
 
 ## Project language
 
@@ -14,8 +14,8 @@ The documentation, interface, built-in examples, rule catalog descriptions, and 
 
 Implemented features:
 
-- Database selection (currently Calcite only), a searchable rule catalog with category filters, and selection of individual rules or common rule groups.
-- A dedicated rule explorer with a database selector, searchable rule list, and 135 verified rule examples (126 SQL and nine hand-built plans) with live before/after plans and explicit preparation stages where needed.
+- Database selection (Calcite 1.39.0 and optional StarRocks 4.0.14), a searchable rule catalog with category filters, and selection of individual rules or common rule groups.
+- A dedicated rule explorer with a database selector, searchable rule list, and 135 verified Calcite rule examples (126 SQL and nine hand-built plans) and 88 verified native StarRocks examples with live before/after plans and explicit preparation stages where needed.
 - Editable SQL and declarative table schemas.
 - Plan Lab: drag-and-connect logical operators, structured expression editing, JSON interchange, undo/redo, and isolated validation.
 - Whole-tree or selected-subtree rule programs, with lossless supported results available as the next editable input.
@@ -26,7 +26,7 @@ Implemented features:
 - Asynchronous jobs, local record storage, history, and JSON export and import.
 - Isolated worker processes with time and memory limits, input validation, and error reporting.
 
-OptiLens is not a complete database and does not execute user queries. The first release has no real table data or statistics and makes no claims about performance gains. Automated source analysis, additional database integrations, and equivalent-candidate search graphs remain future work.
+OptiLens is not a complete database and does not execute user queries. The first release has no real table data or statistics and makes no claims about performance gains. Additional database integrations and equivalent-candidate search graphs remain future work. StarRocks includes a pinned source inventory and an explicit per-rule verification report.
 
 ## Getting started
 
@@ -52,9 +52,9 @@ Browser access through another local forwarding port is supported, such as `http
 
 ## Rule explorer
 
-Open [http://127.0.0.1:8080/rules](http://127.0.0.1:8080/rules), or use **Rule explorer** from the query lab. Choose a database (currently Calcite), then select a rule from the left-hand list. Search by rule name or implementation, filter by category, or show only rules with verified examples.
+Open [http://127.0.0.1:8080/rules](http://127.0.0.1:8080/rules), or use **Rule explorer** from the query lab. Choose a database, then select a rule from the left-hand list. Search by rule name or implementation, filter by category, or show only rules with verified examples.
 
-The explorer lists 222 individual catalog entries; common multi-rule groups remain in the query lab. For 135 rules, selecting an entry submits a real example: 126 use SQL and nine use a directly constructed logical plan. Some programs first apply preparation rules to construct a Calc, Window, MultiJoin, semijoin, or empty input. The selected target rule is always the final stage, and the explorer compares only that stage, not the preparation results. The preparation program and conversion settings are visible below the SQL. The right panel shows the SQL or plan document, table schema, explanation, and complete before/after plans. Use the View menu for local rule events, select graph nodes for details, inspect raw plans, or download the run. Each example is checked against Calcite 1.39.0 to ensure its named target produces an event and an observable expression change; no diagram is a simulated transformation.
+The Calcite explorer lists 222 individual catalog entries; common multi-rule groups remain in the query lab. For 135 rules, selecting an entry submits a real example: 126 use SQL and nine use a directly constructed logical plan. Some programs first apply preparation rules to construct a Calc, Window, MultiJoin, semijoin, or empty input. The selected target rule is always the final stage, and the explorer compares only that stage, not the preparation results. The preparation program and conversion settings are visible below the SQL. The right panel shows the SQL or plan document, table schema, explanation, and complete before/after plans. Use the View menu for local rule events, select graph nodes for details, inspect raw plans, or download the run. Each example is checked against Calcite 1.39.0 to ensure its named target produces an event and an observable expression change; no diagram is a simulated transformation.
 
 Completed and pending examples are reused within the current page session. **Run again** creates a new run. Example runs are stored in normal history and count toward the existing job and record limits. Switching rules never assigns a late result to the newly selected rule.
 
@@ -68,17 +68,25 @@ The canvas supports subtree copying, input reordering, auto layout, zoom, undo/r
 
 **Use result as input** copies a supported complete result into a new experiment and clears rules and scope. Unsupported operators or metadata remain visible as read-only results with an explanation. Plan construction uses logical factories and Rex expressions directly, so redundant Projects, constant-true Filters, single-input Unions, and zero-output Aggregates are available for rule experiments.
 
-Supported operators include TableScan, Values, Filter, Project, six Join types, Aggregate, Sort, Union/Intersect/Minus, Calc, Exchange, SortExchange, and inner MultiJoin. The inspector provides field references, typed literals, operator calls, CAST, and CASE. Type conversions must be explicit. See [Plan Lab design and input format](plan/plan-lab.md) for operator attributes, expression examples, API responses, and limits.
+Calcite operators include TableScan, Values, Filter, Project, six Join types, Aggregate, Sort, Union/Intersect/Minus, Calc, Exchange, SortExchange, and inner MultiJoin. The inspector provides field references, typed literals, operator calls, CAST, and CASE. Type conversions must be explicit. See [Plan Lab design and input format](plan/plan-lab.md) for operator attributes, expression examples, API responses, and limits.
+
+## StarRocks
+
+The optional adapter uses the real StarRocks **4.0.14** FE, pinned to commit `7c18dd9dded1587dad24d912dcf8e777daf919f7`. It supports native SQL and manual plans in a separate worker process, without starting storage nodes or executing queries. Database selection updates rules, examples, and Plan Lab capabilities.
+
+All 262 inventoried concrete implementations have an audit status. **88 have verified transformation examples**; the remaining entries explicitly report no observed change, no match, or required setup. The catalog also retains 20 unmapped enum entries. This is not a claim that every StarRocks rule has a passing transformation example. Changed native results currently remain read-only.
+
+See [StarRocks setup, scope, limitations, and reproducible verification](plan/starrocks.md). The Rule explorer links to the complete report, including per-variant checks and native errors.
 
 ## Reading the results
 
 1. **Initial to final:** the initial logical plan after SQL conversion or direct plan construction and the final output of the selected rule program.
-2. **Rule stage:** the complete plan before and after a rule group; a group may contain several Calcite rules.
+2. **Rule stage:** the complete plan before and after a rule group; a group may contain several native rules.
 3. **Local event:** the expression matched by a single rule invocation and the expression it produced, rather than the entire query plan.
 4. **Node details:** attributes, output fields, input nodes, and the basis for difference matching.
-5. **Raw records:** Calcite output, invocation identifiers, matched nodes, and recorded attempts.
+5. **Raw records:** Native optimizer output, invocation identifiers, matched nodes, and recorded attempts.
 
-Rules and groups run in selection order. Loaded examples and imported records preserve their recorded program order. This is a controlled experiment, not Calcite's default optimization pipeline. The before/after callbacks for a rule production are counted only once. Snapshots store independent values instead of references to mutable plan objects.
+Rules and groups run in selection order. Loaded examples and imported records preserve their recorded program order. This is a controlled experiment, not the engine's complete default optimization pipeline. The before/after callbacks for a rule production are counted only once. Snapshots store independent values instead of references to mutable plan objects.
 
 Difference matching first uses node identifiers within the same run, then attempts unique attribute or operator/table-origin matching. Structural inference is labeled in node details, and ambiguous matches are not forced. A node appearing only before or after a transformation means no correspondence was established; it does not necessarily prove deletion or insertion.
 
@@ -123,7 +131,7 @@ Supported types are `INTEGER`, `BIGINT`, `DOUBLE`, `DECIMAL`, `VARCHAR`, `BOOLEA
 | `GET /api/runs/{id}/download` | Export the result as JSON |
 | `POST /api/import` | Import a result and create a new local record ID |
 
-POST requests use `Content-Type: application/json`. The only supported `database` value is currently `calcite`; older requests that omit it default to Calcite. `rules` is an ordered list of runnable catalog entry IDs, such as `CoreRules.PROJECT_REDUCE_EXPRESSIONS`. Legacy group IDs remain supported: `reduce`, `filter-join`, `filter-project`, `project-join`, and `project-cleanup`. An empty list produces only the initial plan.
+POST requests use `Content-Type: application/json`. Supported `database` values are `calcite` and `starrocks`; older requests that omit it default to Calcite. StarRocks execution requires its optional pinned runtime. `rules` is an ordered list of runnable catalog entry IDs, such as `CoreRules.PROJECT_REDUCE_EXPRESSIONS`. Legacy group IDs remain supported: `reduce`, `filter-join`, `filter-project`, `project-join`, and `project-cleanup`. An empty list produces only the initial plan.
 
 Use `inputMode: "plan"`, `plan: {planVersion: 1, rootId, nodes, layout?}`, and optional `scopeNodeId` for hand-built plans. Omitted `inputMode` means SQL. Both modes share `schema`, `database`, `rules`, and match limits; a request cannot contain both SQL and a plan.
 
@@ -181,7 +189,9 @@ src/main/java/dev/optilens/
   Server.java        Local HTTP API and static assets
   Jobs.java          Job queue, persistence, and worker lifecycle
   Worker.java        Isolated Calcite optimization entry point
-  Optimizer.java     Shared SQL/plan optimization, scopes, and event collection
+  Engines.java       Engine-specific catalogs, capabilities, and worker routing
+  StarRocks.java      Pinned native catalog, runtime checks, and verification evidence
+  Optimizer.java     Calcite SQL/plan optimization, scopes, and event collection
   Plans.java         Typed direct logical-plan construction and capabilities
   PlanExport.java    Lossless editable export of live relational results
   PlanExamples.java Verified hand-built examples for additional rules
@@ -195,6 +205,7 @@ src/main/resources/web/  Web interface without external CDN dependencies
 src/test/java/           Backend tests
 tests/                   Graph difference and browser tests
 plan/                    Design and implementation records
+adapters/starrocks/      Native FE worker, reproducible inventory, fixtures, and audit
 ```
 
 The frontend uses native JavaScript modules and SVG, and the backend uses JDK HTTP Server. The first release therefore requires no additional frontend build system or service framework. Optional npm dependencies are used only for browser tests.

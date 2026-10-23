@@ -31,11 +31,12 @@ public final class Server implements AutoCloseable {
           String type=x.getRequestHeaders().getFirst("Content-Type");
           if(type==null||!type.toLowerCase(Locale.ROOT).startsWith("application/json")){reply(x,415,Map.of("error","Use Content-Type: application/json"));return;}
         }
-        if(path.equals("/api/plan-capabilities") && method.equals("GET")){reply(x,200,Plans.capabilities());return;}
+        if(path.equals("/api/plan-capabilities") && method.equals("GET")){reply(x,200,Engines.planCapabilities(database(x)));return;}
         if(path.equals("/api/plans/validate") && method.equals("POST")){var result=jobs.validatePlan(Json.MAPPER.readValue(body(x,100_000),Request.class));reply(x,result.valid()?200:422,result);return;}
+        if(path.equals("/api/starrocks/verification") && method.equals("GET")){reply(x,200,StarRocks.verification());return;}
         if(path.equals("/api/health") && method.equals("GET")){reply(x,200,Map.of("status","ok","version","0.1.0"));return;}
-        if(path.equals("/api/rule-examples") && method.equals("GET")){reply(x,200,Map.of("database","calcite","engineVersion","1.39.0","examples",RuleExamples.all(),"coverage",RuleExamples.coverage()));return;}
-        if(path.equals("/api/catalog") && method.equals("GET")){reply(x,200,Map.of("rules",Rules.cards(),"examples",Input.examples(),"engineVersion","1.39.0","databases",List.of(Map.of("id","calcite","title","Apache Calcite","version","1.39.0")),"scope",Rules.SCOPE,"maxSelected",Rules.MAX_SELECTED));return;}
+        if(path.equals("/api/rule-examples") && method.equals("GET")){reply(x,200,Engines.examples(database(x)));return;}
+        if(path.equals("/api/catalog") && method.equals("GET")){reply(x,200,Engines.catalog(database(x)));return;}
         if(path.equals("/api/runs")){
           if(method.equals("GET")){reply(x,200,jobs.list());return;}
           if(method.equals("POST")){reply(x,202,jobs.submit(Json.MAPPER.readValue(body(x,100_000),Request.class)));return;}
@@ -62,6 +63,11 @@ public final class Server implements AutoCloseable {
     catch(IllegalArgumentException | com.fasterxml.jackson.core.JsonProcessingException e){safeError(x,400,Worker.error(e));}
     catch(Exception e){System.err.println("Request failed: "+e.getClass().getSimpleName());safeError(x,500,"Request processing failed. Check local storage and service logs.");}
     finally{x.close();}
+  }
+  private String database(HttpExchange exchange) {
+    String database="calcite",query=exchange.getRequestURI().getRawQuery();
+    if(query!=null)for(String part:query.split("&")){String[] pair=part.split("=",2);if(pair[0].equals("database")){Input.require(pair.length==2,"Missing database selector");database=java.net.URLDecoder.decode(pair[1],java.nio.charset.StandardCharsets.UTF_8);}}
+    Engines.validateDatabase(database);return database;
   }
   private byte[] body(HttpExchange x,int limit) throws Exception {
     byte[] b=x.getRequestBody().readNBytes(limit+1);Input.require(b.length<=limit,"Request body exceeds the size limit");return b;

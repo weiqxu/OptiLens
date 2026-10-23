@@ -37,13 +37,13 @@ function clearResult(){
 }
 function choose(rule){
   clearTimeout(startTimer);const token=++revision;selected=rule;clearResult();renderList();
-  const url=new URL(location.href);url.searchParams.set('rule',rule.id);history.replaceState(null,'',url);
+  const url=new URL(location.href);url.searchParams.set('rule',rule.id);url.searchParams.set('database',catalog.database);history.replaceState(null,'',url);
   $('detail-empty').hidden=true;$('detail-content').hidden=false;
   text('detail-category',rule.category);text('detail-title',displayName(rule));text('detail-id',rule.id);
-  text('detail-availability',rule.runnable?'Available in Query lab':'Requires setup');
+  text('detail-availability',rule.runnable?(examples.has(rule.id)?'Verified native example':(coverage.get(rule.id)?.status||'Available to experiment')):'Requires setup');
   text('detail-description',rule.description);text('detail-conditions',rule.conditions);
   $('detail-source').href=rule.source;
-  $('open-lab').textContent='Try in Query lab →';$('open-lab').hidden=!rule.runnable;$('open-lab').href=`/?rule=${encodeURIComponent(rule.id)}`;
+  $('open-lab').textContent='Try in Query lab →';$('open-lab').hidden=!rule.runnable;$('open-lab').href=`/?database=${catalog.database}&rule=${encodeURIComponent(rule.id)}`;
   const example=examples.get(rule.id);
   $('example-section').hidden=!example;$('no-example').hidden=Boolean(example);
   if(!example){
@@ -51,7 +51,7 @@ function choose(rule){
     text('no-example-note',coverage.get(rule.id)?.reason || (rule.runnable?'This rule is in the catalog, but a reproducible example has not been added. Try it with your own SQL in Query lab. No transformation is implied.':rule.unavailableReason+'. A runnable example is not available in this environment.'));
     return;
   }
-  const manual=example.input.inputMode==='plan';$('open-lab').href=`/${manual?'plan-lab':''}?rule=${encodeURIComponent(rule.id)}`;$('open-lab').textContent=manual?'Try in Plan lab →':'Try in Query lab →';$('example-sql').setAttribute('aria-label',manual?'Manual plan JSON':'Example SQL');
+  const manual=example.input.inputMode==='plan';$('open-lab').href=`/${manual?'plan-lab':''}?database=${catalog.database}&rule=${encodeURIComponent(rule.id)}`;$('open-lab').textContent=manual?'Try in Plan lab →':'Try in Query lab →';$('example-sql').setAttribute('aria-label',manual?'Manual plan JSON':'Example SQL');
   text('example-title',example.title);text('example-note',example.note);text('example-sql',manual?JSON.stringify(example.input.plan,null,2):example.input.sql);text('example-schema',JSON.stringify(example.input.schema,null,2));
   $('example-program').replaceChildren(...example.input.rules.map(id=>{const li=document.createElement('li');li.textContent=(id===example.id?'Target: ':'Preparation: ')+id;return li;}));
   const options=example.input.options;
@@ -73,7 +73,7 @@ async function execute(example){
 }
 async function showExample(example,token){
   if(token!==revision)return;
-  setStatus('Running this rule in Calcite…');
+  setStatus(`Running this rule in ${catalog.database}…`);
   let pending=runs.get(example.id);
   if(!pending){pending=execute(example);runs.set(example.id,pending);}
   try{
@@ -82,7 +82,7 @@ async function showExample(example,token){
     $('example-view').replaceChildren(new Option('Complete plan · stage boundary','stage'),...stage.events.map((event,index)=>new Option(`Local event ${index+1} · ${event.rule}`,String(index))));
     $('download-example').href=`/api/runs/${job.id}/download`;
     $('example-result').hidden=false;
-    setStatus(stage.events.length?`Completed · ${counted(stage.events.length,'transformation')} · ${counted(stage.attempts.length,'attempt')} · Calcite ${job.result.engineVersion}`:'Completed without a recorded transformation. Inspect the plans and attempts; no rewrite is claimed.');
+    setStatus(stage.events.length?`Completed · ${counted(stage.events.length,'transformation')} · ${counted(stage.attempts.length,'attempt')} · ${job.result.engine} ${job.result.engineVersion}`:'Completed without a recorded transformation. Inspect the plans and attempts; no rewrite is claimed.');
     $('example-limitations').replaceChildren(...job.result.limitations.map(value=>{const li=document.createElement('li');li.textContent=value;return li;}));
     renderPlans(true);
   }catch(error){
@@ -106,14 +106,19 @@ function renderPlans(fit=false){
   $('example-node').open=false;text('example-node-content','Select an operator to inspect its expressions and attributes.');
 }
 $('explorer-search').addEventListener('input',renderList);$('explorer-category').addEventListener('change',renderList);$('examples-only').addEventListener('change',renderList);
-$('explorer-database').addEventListener('change',()=>{ $('explorer-search').value='';$('explorer-category').value='';$('examples-only').checked=false;choose(rules.find(r=>examples.has(r.id))); });
+$('explorer-database').addEventListener('change',()=>loadEngine($('explorer-database').value).catch(error=>text('catalog-status',error.message)));
 $('example-view').addEventListener('change',()=>renderPlans(true));
 $('rerun-example').addEventListener('click',()=>{const example=examples.get(selected.id);runs.delete(example.id);clearResult();$('rerun-example').disabled=true;showExample(example,++revision);});
 document.querySelectorAll('[data-zoom]').forEach(button=>button.addEventListener('click',()=>{const [side,delta]=button.dataset.zoom.split(':');zoom[side]=Number(delta)===0?1:Math.min(1.6,Math.max(.65,zoom[side]+Number(delta)*.15));renderPlans();}));
-try{
-  const [loaded,library]=await Promise.all([api('/api/catalog'),api('/api/rule-examples')]);catalog=loaded;
+async function loadEngine(database,requested){
+ document.querySelectorAll('.page-nav a').forEach(link=>{const url=new URL(link.href);url.searchParams.set('database',database);link.href=url.pathname+url.search;});
+
+  const token=++revision;clearTimeout(startTimer);clearResult();text('catalog-status','Loading the engine catalog…');
+  const [loaded,library]=await Promise.all([api('/api/catalog?database='+database),api('/api/rule-examples?database='+database)]);if(token!==revision)return;catalog=loaded;
+  $('explorer-list').replaceChildren();$('explorer-search').value='';$('examples-only').checked=false;
   rules=catalog.rules.filter(rule=>rule.category!=='Common rule groups');examples=new Map(library.examples.map(example=>[example.id,example]));coverage=new Map(library.coverage.map(item=>[item.id,item]));
   $('explorer-database').replaceChildren(...catalog.databases.map(database=>new Option(`${database.title} · ${database.version}`,database.id)));
+  $('explorer-database').value=database;
   $('explorer-category').replaceChildren(new Option('All categories',''),...Array.from(new Set(rules.map(rule=>rule.category)),category=>new Option(category,category)));
   text('catalog-total',rules.length);text('catalog-scope',catalog.scope);
   for(const rule of rules){
@@ -125,9 +130,11 @@ try{
     button.append(title,id,tag);button.addEventListener('click',()=>choose(rule));$('explorer-list').append(button);
   }
   for(const id of ['explorer-database','explorer-search','explorer-category','examples-only'])$(id).disabled=false;
-  const requested=new URL(location.href).searchParams.get('rule');
-  const initial=rules.find(rule=>rule.id===requested)||rules.find(rule=>rule.id==='CoreRules.PROJECT_REDUCE_EXPRESSIONS');
+  const initial=rules.find(rule=>rule.id===requested)||rules.find(rule=>rule.id==='CoreRules.PROJECT_REDUCE_EXPRESSIONS')||rules.find(rule=>examples.has(rule.id))||rules[0];
   text('catalog-status',`${rules.length} catalog rules · ${examples.size} verified examples / ${rules.filter(rule=>rule.runnable).length} runnable rules · Select a rule to explore. Examples run locally and appear in Query lab history.`);
   if(requested&&!rules.some(rule=>rule.id===requested))text('catalog-status','The requested rule was not found. Showing the constant projection example.');
+  if(!catalog.runtime.available)text('catalog-status',catalog.runtime.message);
+  $('verification-link').hidden=database!=='starrocks';
   choose(initial);
-}catch(error){text('catalog-status','Unable to load the rule explorer: '+error.message);$('catalog-status').className='status error';}
+}
+try{const params=new URL(location.href).searchParams;await loadEngine(params.get('database')||'calcite',params.get('rule'));}catch(error){text('catalog-status','Unable to load the rule explorer: '+error.message);$('catalog-status').className='status error';}

@@ -12,10 +12,11 @@ async function api(path,options={}){
 function button(label,handler,className=''){const b=document.createElement('button');b.type='button';b.textContent=label;b.className=className;b.addEventListener('click',handler);return b;}
 function setBusy(value){busy=value;$('run').disabled=value||!catalog;$('import-button').disabled=value;$('history').disabled=value;for(const id of ['sql','schema','examples','database','rule-search','rule-category','rule-recommended','rule-clear','match-limit','expand-subqueries'])$(id).disabled=value;for(const input of $('rule-options').querySelectorAll('input'))input.disabled=value||input.dataset.runnable!=='true';}
 function loadExample(example){
+  if(example.input.inputMode==='plan'){location.href='/plan-lab?database='+example.input.database+'&rule='+encodeURIComponent(example.id);return;}
   $('sql').value=example.input.sql;$('schema').value=JSON.stringify(example.input.schema,null,2);text('example-note',example.note);
   selectRules(example.input);
 }
-function applyRequest(input){$('sql').value=input.sql;$('schema').value=JSON.stringify(input.schema,null,2);selectRules(input);$('examples').value='';text('example-note','Loaded the SQL and schema from this record. Run again to collect new local evidence.');}
+async function applyRequest(input){if(catalog.database!==(input.database||'calcite'))await loadEngine(input.database||'calcite');$('sql').value=input.sql;$('schema').value=JSON.stringify(input.schema,null,2);selectRules(input);$('examples').value='';text('example-note','Loaded the SQL and schema from this record. Run again to collect new local evidence.');}
 function selectRules(input){
   ruleOrder=[...input.rules];
   $('match-limit').value=input.options?.matchLimit??100;
@@ -82,15 +83,15 @@ function renderSelection(){
   let before=run.initial,after=run.finalPlan,title='Initial and final plans',description='Compare the overall result of this controlled optimization program. Stages can interact, so the overall difference cannot be attributed to one rule.',conditions='',source='',attempts=[],scope='Complete plan · Overview';
   if(selection.kind!=='overview'){
     const stage=run.stages[selection.i];({before,after,description,conditions,source,attempts}=stage);title=stage.title;scope='Complete plan · Stage boundary';
-    if(selection.kind==='event'){const e=stage.events[selection.j];({before,after}=e);title=e.rule;scope='Local expression · Rule event';description=`Rule invocation #${e.callId} produced an equivalent expression. This snapshot is not a complete query plan; final candidate selection was not collected.`;}
+    if(selection.kind==='event'){const e=stage.events[selection.j];({before,after}=e);title=e.rule;scope='Local expression · Rule event';description=`Rule invocation #${e.callId} produced a changed expression. This snapshot is not a complete query plan; final candidate selection was not collected.`;}
     else if(!stage.events.length)description+=' No expression production events were recorded in this stage. Specific rejection reasons were not collected.';
   }
   text('scope',scope);text('selection-title',title);text('description',description);text('conditions',conditions);
   text('before-title',selection.kind==='overview'?'Initial plan (after SQL conversion)':'Before');text('after-title',selection.kind==='overview'?'Final logical plan':'After');
-  text('provenance',current.imported?'Imported record · Provenance not verified by re-execution':'Real local Calcite run · Stage order follows the selected rule program');
+  text('provenance',current.imported?'Imported record · Provenance not verified by re-execution':`Real local ${run.engine} run · Stage order follows the selected rule program`);
   const link=$('source');link.hidden=!source;
   // Imported records cannot inject arbitrary link schemes or external destinations.
-  if(source?.startsWith('https://github.com/apache/calcite/blob/'))link.href=source;else{link.removeAttribute('href');link.hidden=true;}
+  if((source?.startsWith('https://github.com/apache/calcite/blob/')||source?.startsWith('https://github.com/StarRocks/starrocks/blob/')))link.href=source;else{link.removeAttribute('href');link.hidden=true;}
   const diff=diffPlans(before,after);
   text('change-title',diff.left.size||diff.right.size?`Changed nodes: before ${diff.left.size} · after ${diff.right.size}`:'No structural or attribute differences observed');
   const inspect=(node,mark,side)=>{text('node-label',`${side==='before'?'Before':'After'} · ${node.type} #${node.id}`);text('node-content',JSON.stringify({difference:mark??'No marked difference',...node},null,2));$('node-details').open=true;};
@@ -104,7 +105,7 @@ async function poll(id,token){
   for(;;){if(token!==epoch)return;const job=await api(`/api/runs/${id}`);if(token!==epoch)return;
     if(job.status==='succeeded'){setBusy(false);showJob(job);await refreshHistory();return;}
     if(job.status==='failed')throw new Error(job.error||'Optimization failed');
-    status(job.status==='queued'?'Submitted. Waiting for an optimization worker…':'Calcite is parsing and optimizing. The first run may take a few seconds…');
+    status(job.status==='queued'?'Submitted. Waiting for an optimization worker…':`${catalog.database} is parsing and optimizing. The first run may take a few seconds…`);
     await new Promise(r=>setTimeout(r,500));
   }
 }
@@ -124,28 +125,35 @@ $('sql').addEventListener('input',inputChanged);$('schema').addEventListener('in
 });
 $('rule-search').addEventListener('input',updateRules);
 $('rule-category').addEventListener('change',updateRules);
-$('rule-recommended').addEventListener('click',()=>{selectRules(catalog.examples[0].input);inputChanged();});
+$('rule-recommended').addEventListener('click',()=>{selectRules(catalog.examples.find(e=>e.input.inputMode!=='plan')?.input||{database:catalog.database,rules:[]});inputChanged();});
 $('rule-clear').addEventListener('click',()=>{selectRules({database:$('database').value,rules:[]});inputChanged();});
-$('database').addEventListener('change',()=>{renderRules();selectRules(catalog.examples[0].input);inputChanged();});
+$('database').addEventListener('change',async()=>{setBusy(true);try{await loadEngine($('database').value);status(catalog.runtime.message);}catch(error){status(error.message,true);}finally{setBusy(false);}});
 $('examples').addEventListener('change',e=>{const ex=catalog.examples.find(x=>x.id===e.target.value);if(ex)loadExample(ex);inputChanged();});
-$('history').addEventListener('change',async e=>{if(!e.target.value)return;const id=e.target.value;const token=++epoch;setBusy(true);try{const job=await api(`/api/runs/${id}`);if(job.status==='succeeded'){setBusy(false);if(job.result.input.inputMode==='plan'){location.href='/plan-lab?run='+job.id;return;}applyRequest(job.result.input);showJob(job);}else if(job.status==='failed'){setBusy(false);status(job.error,true);}else await poll(id,token);}catch(error){setBusy(false);status(error.message,true);}});
+$('history').addEventListener('change',async e=>{if(!e.target.value)return;const id=e.target.value;const token=++epoch;setBusy(true);try{const job=await api(`/api/runs/${id}`);if(job.status==='succeeded'){setBusy(false);if(job.result.input.inputMode==='plan'){location.href='/plan-lab?run='+job.id;return;}await applyRequest(job.result.input);showJob(job);}else if(job.status==='failed'){setBusy(false);status(job.error,true);}else await poll(id,token);}catch(error){setBusy(false);status(error.message,true);}});
 $('import-button').addEventListener('click',()=>$('import-file').click());
-$('import-file').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;setBusy(true);++epoch;status('Validating imported record…');try{if(file.size>8_000_000)throw new Error('Record exceeds the 8 MB limit');const job=await api('/api/import',{method:'POST',body:await file.text()});setBusy(false);if(job.result.input.inputMode==='plan'){location.href='/plan-lab?run='+job.id;return;}applyRequest(job.result.input);showJob(job);await refreshHistory();}catch(error){setBusy(false);status(error.message,true);}finally{e.target.value='';}});
+$('import-file').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;setBusy(true);++epoch;status('Validating imported record…');try{if(file.size>8_000_000)throw new Error('Record exceeds the 8 MB limit');const job=await api('/api/import',{method:'POST',body:await file.text()});setBusy(false);if(job.result.input.inputMode==='plan'){location.href='/plan-lab?run='+job.id;return;}await applyRequest(job.result.input);showJob(job);await refreshHistory();}catch(error){setBusy(false);status(error.message,true);}finally{e.target.value='';}});
 document.querySelectorAll('[data-zoom]').forEach(b=>b.addEventListener('click',()=>{const [side,delta]=b.dataset.zoom.split(':');zoom[side]=Number(delta)===0?1:Math.min(1.6,Math.max(.65,zoom[side]+Number(delta)*.15));renderSelection();}));
-try{
-  catalog=await api('/api/catalog');
-  $('examples').replaceChildren(...catalog.examples.map(e=>new Option(e.title,e.id)));
-  $('database').replaceChildren(...catalog.databases.map(d=>new Option(`${d.title} · ${d.version}`,d.id)));
+async function loadEngine(database){
+ document.querySelectorAll('.page-nav a').forEach(link=>{const url=new URL(link.href);url.searchParams.set('database',database);link.href=url.pathname+url.search;});
+
+  catalog=await api('/api/catalog?database='+database);
+  const sqlExamples=catalog.examples.filter(e=>e.input.inputMode!=='plan');
+  $('examples').replaceChildren(new Option('Select an example',''),...sqlExamples.map(e=>new Option(e.title,e.id)));
+  $('database').replaceChildren(...catalog.databases.map(d=>new Option(`${d.title} · ${d.version}`,d.id)));$('database').value=database;
   renderRules();
-  loadExample(catalog.examples[0]);
+  if(sqlExamples.length)loadExample(sqlExamples[0]);else {if(!$('schema').value)$('schema').value=JSON.stringify(catalog.examples[0]?.input.schema||[{name:'customers',columns:[{name:'id',type:'INTEGER'}]}],null,2);selectRules({database,rules:[]});if(!$('sql').value)$('sql').value='SELECT 1 + 2 AS total';text('example-note','Choose a native rule and enter a query. Hand-built examples are available in Plan lab.');}
+  $('expand-subqueries').closest('p').hidden=database!=='calcite';
+}
+try{
+  await loadEngine(new URL(location.href).searchParams.get('database')||'calcite');
   const requestedRule=new URL(location.href).searchParams.get('rule');
   if(requestedRule){
     const rule=catalog.rules.find(r=>r.id===requestedRule&&r.runnable);
     if(!rule)throw new Error('The requested rule is unknown or unavailable.');
-    const examples=await api('/api/rule-examples');
+    const examples=await api('/api/rule-examples?database='+catalog.database);
     const example=examples.examples.find(e=>e.id===requestedRule);
-    if(example?.input.inputMode==='plan'){location.href='/plan-lab?rule='+encodeURIComponent(requestedRule);throw new Error('Opening this hand-built example in Plan lab…');}
-    loadExample(example||{input:{...catalog.examples[0].input,rules:[requestedRule]},note:'Only the selected rule is enabled. Edit the SQL to match its pattern; this query is not a verified example for that rule.'});
+    if(example?.input.inputMode==='plan'){location.href='/plan-lab?database='+catalog.database+'&rule='+encodeURIComponent(requestedRule);throw new Error('Opening this hand-built example in Plan lab…');}
+    loadExample(example||{input:{...(catalog.examples.find(e=>e.input.inputMode!=='plan')?.input||{database:catalog.database,sql:$('sql').value,schema:JSON.parse($('schema').value)}),rules:[requestedRule]},note:'Only the selected rule is enabled. Edit the SQL to match its pattern; this query is not a verified example for that rule.'});
     $('examples').value='';
   }
   setBusy(false);status('Ready · Select an example or enter a query');await refreshHistory();
