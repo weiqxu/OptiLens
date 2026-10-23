@@ -20,7 +20,9 @@ class ServerTest {
     try(var server=new Server(0,directory)) {
       var catalog=Json.MAPPER.readTree(request(server,"GET","/api/catalog?database=starrocks",null).body());
       assertEquals("starrocks",catalog.path("database").asText());assertEquals(StarRocks.VERSION,catalog.path("engineVersion").asText());
-      assertEquals(StarRocks.rules().size(),catalog.path("rules").size());assertEquals(2,catalog.path("databases").size());
+      assertEquals(StarRocks.rules().size(),catalog.path("rules").size());assertEquals(3,catalog.path("databases").size());
+      var trafodion=Json.MAPPER.readTree(request(server,"GET","/api/catalog?database=trafodion",null).body());
+      assertEquals(66,trafodion.path("rules").size());assertFalse(trafodion.path("runtime").path("available").asBoolean());
       var capabilities=Json.MAPPER.readTree(request(server,"GET","/api/plan-capabilities?database=starrocks",null).body());
       assertFalse(capabilities.path("operators").has("Calc"));
       assertEquals(200,request(server,"GET","/api/starrocks/verification",null).statusCode());
