@@ -8,7 +8,7 @@ See the [first-release implementation record](v0.1-implementation.md) for actual
 
 ## Project language
 
-**English is required throughout the project.** Documentation, plans, user interface text, error messages, logs, code identifiers and comments, test descriptions, example explanations, commit messages, and pull request descriptions must use English. Apply the [project language policy](../README.md#project-language) to all new contributions and updates.
+**English is required throughout the project.** Documentation, plans, user interface text, error messages, logs, code identifiers and comments, test descriptions, example explanations, commit messages, and pull request descriptions must use English. Apply the [project language policy](contributing.md#project-language) to all new contributions and updates.
 
 Language migration status:
 
