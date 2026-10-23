@@ -1,7 +1,9 @@
+import {mountAssistant,highlightNode} from './assistant.mjs';
 import {drawPlan,diffPlans} from './graph.mjs';
 import {copy,scalar,ref,defaults,freshId,remapPlan,connect,cloneSubtree,structuralErrors,autoLayout,History,subtree,validateEditorShape} from './plan-editor.mjs';
 const $=id=>document.getElementById(id),el=(tag,text)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
 let capabilities,catalog,library,history,selected=null,zoom=1,editorMode='canvas',revision=0,job=null,busy=false,validatedFields={},pendingPort=null;
+let assistantSelectedResult=null;
 const state=()=>history.value;
 function status(message,error=false){$('lab-status').textContent=message;$('lab-status').className='status'+(error?' error':'');}
 async function api(url,options={}){const r=await fetch(url,{...options,headers:{'Content-Type':'application/json',...options.headers}});const data=await r.json();if(!r.ok){const error=Error(data.error||data.errors?.map(e=>`${e.nodeId||'Plan'} · ${e.path}: ${e.message}`).join('\n')||`Request failed (${r.status})`);error.issues=data.errors;throw error;}return data;}
@@ -98,8 +100,8 @@ function renderCanvas(){
  for(const n of p.nodes){const pos=p.layout?.[n.id]||{x:40,y:40};const g=svg('g',{transform:`translate(${pos.x},${pos.y})`,class:'edit-node'+(selected===n.id?' selected':''),'data-node':n.id,tabindex:0,role:'button','aria-label':n.op+' '+n.id});g.append(svg('rect',{width:210,height:95,rx:8}),svg('text',{x:12,y:25,class:'node-name'},n.op),svg('text',{x:12,y:46},n.id+(p.rootId===n.id?' · ROOT':'')),svg('text',{x:12,y:67},n.op==='TableScan'?n.attributes.table:`${nameFields(n.id).length} output fields`));
   const output=svg('circle',{cx:105,cy:0,r:7,class:'edit-port'+(pendingPort===n.id?' pending':''),'data-output':n.id,tabindex:0,role:'button','aria-label':'Output of '+n.id});g.append(output);
   n.inputs.forEach((_,i)=>{g.append(svg('circle',{cx:(i+1)*210/(n.inputs.length+1),cy:95,r:7,class:'edit-port in-port','data-parent':n.id,'data-slot':i,tabindex:0,role:'button','aria-label':`Input ${i} of ${n.id}`}),svg('text',{x:(i+1)*210/(n.inputs.length+1),y:85,'text-anchor':'middle',class:'port-label'},n.op==='Join'?(i===0?'Left':'Right'):String(i)));});
-  g.onkeydown=e=>{if(e.target!==g)return;if(e.key==='Enter'||e.key===' '){e.preventDefault();selected=n.id;renderCanvas();renderInspector();}if(e.key==='Delete'){selected=n.id;deleteNode();}};
-  g.onpointerdown=e=>{if(e.target.closest('.edit-port'))return;selected=n.id;renderInspector();const start={x:e.clientX,y:e.clientY},old=copy(pos);let moved=false;
+  g.onkeydown=e=>{if(e.target!==g)return;if(e.key==='Enter'||e.key===' '){e.preventDefault();assistantSelectedResult=null;selected=n.id;renderCanvas();renderInspector();}if(e.key==='Delete'){selected=n.id;deleteNode();}};
+  g.onpointerdown=e=>{if(e.target.closest('.edit-port'))return;assistantSelectedResult=null;selected=n.id;renderInspector();const start={x:e.clientX,y:e.clientY},old=copy(pos);let moved=false;
    const move=ev=>{const dx=(ev.clientX-start.x)/zoom,dy=(ev.clientY-start.y)/zoom;if(Math.abs(dx)+Math.abs(dy)>3)moved=true;g.setAttribute('transform',`translate(${Math.max(0,old.x+dx)},${Math.max(0,old.y+dy)})`);};
    const up=ev=>{window.removeEventListener('pointermove',move);window.removeEventListener('pointerup',up);if(moved)commit(s=>{s.plan.layout??={};s.plan.layout[n.id]={x:Math.max(0,old.x+(ev.clientX-start.x)/zoom),y:Math.max(0,old.y+(ev.clientY-start.y)/zoom)};});else renderCanvas();};window.addEventListener('pointermove',move);window.addEventListener('pointerup',up);};
   canvas.append(g);
@@ -151,7 +153,7 @@ function showResult(result){job=result;$('lab-result').hidden=false;$('lab-downl
 function updateViews(){const stage=job.result.stages[Number($('lab-stage').value)];$('lab-view').replaceChildren(new Option('Complete plans','full'));if(stage?.scopeBeforeRootId)$('lab-view').add(new Option('Selected subtree','scope'));if(stage)stage.events.forEach((e,i)=>$('lab-view').add(new Option(`Event ${i+1} · ${e.rule}`,'event:'+i)));renderResult();}
 function renderResult(){if(!job)return;const run=job.result,stage=run.stages[Number($('lab-stage').value)],view=$('lab-view').value;let before=stage?.before||run.initial,after=stage?.after||run.finalPlan,scope='Complete plan comparison.';
  if(view==='scope'){before=subtree(before,stage.scopeBeforeRootId);after=subtree(after,stage.scopeAfterRootId);scope='Only the selected optimization subtree.';}else if(view.startsWith('event:')){const event=stage.events[Number(view.split(':')[1])];before=event.before;after=event.after;scope='Local expressions from one rule invocation.';}
- $('lab-result-scope').textContent=scope;const diff=diffPlans(before,after);const inspect=(node,mark,side)=>{$('lab-result-node').textContent=JSON.stringify({side,difference:mark,...node},null,2);};drawPlan($('lab-before'),before,diff.left,'before',inspect,.8);drawPlan($('lab-after'),after,diff.right,'after',inspect,.8);$('lab-raw').textContent=before.raw+'\n\n'+after.raw+'\n\n'+JSON.stringify(stage?.attempts||[],null,2);}
+ $('lab-result-scope').textContent=scope;const diff=diffPlans(before,after);assistantSelectedResult=null;const inspect=(node,mark,side)=>{assistantSelectedResult={kind:'result',side,nodeId:node.id};$('lab-result-node').textContent=JSON.stringify({side,difference:mark,...node},null,2);};drawPlan($('lab-before'),before,diff.left,'before',inspect,.8);drawPlan($('lab-after'),after,diff.right,'after',inspect,.8);$('lab-raw').textContent=before.raw+'\n\n'+after.raw+'\n\n'+JSON.stringify(stage?.attempts||[],null,2);}
 $('lab-root').onclick=()=>act(()=>commit(s=>s.plan.rootId=selected));$('lab-copy').onclick=()=>act(()=>{let id;commit(s=>id=cloneSubtree(s.plan,selected));selected=id;renderInspector();renderCanvas();});$('lab-delete').onclick=()=>act(deleteNode);
 $('lab-undo').onclick=()=>{history.undo();revision++;validatedFields={};$('lab-preview-panel').hidden=true;render();};$('lab-redo').onclick=()=>{history.redo();revision++;validatedFields={};$('lab-preview-panel').hidden=true;render();};$('lab-layout').onclick=()=>commit(s=>autoLayout(s.plan));
 $('lab-zoom-in').onclick=()=>{zoom=Math.min(2,zoom+.15);renderCanvas();};$('lab-zoom-out').onclick=()=>{zoom=Math.max(.4,zoom-.15);renderCanvas();};
@@ -186,3 +188,22 @@ try{await loadEngine(new URL(location.href).searchParams.get('database')||'calci
  const runId=new URL(location.href).searchParams.get('run');if(runId){const result=await api('/api/runs/'+encodeURIComponent(runId));if(result.status==='succeeded'){showResult(result);if(result.result.input.inputMode==='plan'){await ensureEngine(result.result.input.database);history=new History(loadRequest(result.result.input));selected=state().plan.rootId;}}}
  render();await refreshHistory();status('Ready · Build a plan, validate it, and choose a rule program.');
 }catch(e){status('Unable to load Plan Lab: '+e.message,true);for(const id of ['lab-run','lab-validate'])$(id).disabled=true;}
+
+if(catalog&&history)await mountAssistant({
+ page:'plan-lab',
+ context(){
+  const sameEngine=job?.result.input.database===catalog.database;
+  const stage=sameEngine&&$('lab-stage').value!=='overview'?Number($('lab-stage').value):-1;
+  const view=$('lab-view').value;
+  return {page:'plan-lab',database:catalog.database,engineVersion:catalog.engineVersion,input:copy(state()),
+   stamp:{revision,json:$('lab-mode').value==='json'?$('lab-json').value:null,schema:$('lab-schema').value},
+   selectedNode:assistantSelectedResult||{kind:'draft',nodeId:selected},validationMessage:$('lab-status').textContent,
+   runId:sameEngine?job.id:null,stage,event:stage>=0&&view.startsWith('event:')?Number(view.split(':')[1]):-1};
+ },
+ async apply(input){if(busy)throw Error('Wait for the current operation to finish.');await ensureEngine(input.database);replace(loadRequest(input));$('lab-mode').value='canvas';editorMode='canvas';$('lab-json-panel').hidden=true;$('lab-canvas').hidden=false;status('Assistant suggestion applied. Run to collect optimizer evidence.');},
+ async focus(ref){
+  if(ref.kind==='draft'){selected=ref.nodeId;$('lab-mode').value='canvas';editorMode='canvas';$('lab-json-panel').hidden=true;$('lab-canvas').hidden=false;renderCanvas();renderInspector();highlightNode($('lab-canvas'),ref.nodeId);return;}
+  if(job?.id!==ref.runId){const record=await api('/api/runs/'+encodeURIComponent(ref.runId));showResult(record);}
+  $('lab-stage').value=ref.stage<0?'overview':String(ref.stage);updateViews();$('lab-view').value=ref.event<0?'full':'event:'+ref.event;renderResult();highlightNode($('lab-'+ref.side),ref.nodeId);
+ }
+});

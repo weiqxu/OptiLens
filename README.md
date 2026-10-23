@@ -6,7 +6,7 @@ OptiLens is a locally hosted web research tool. Supply SQL or build a logical op
 
 ## Project language
 
-**English is the required language throughout this project.** Use English for documentation and plans, user interface text, error messages, logs, code identifiers and comments, test descriptions and example explanations, commit messages, and pull request descriptions. All new contributions and updates must follow this convention.
+**English is the required language throughout this project.** Use English for documentation and plans, user interface text, error messages, logs, code identifiers and comments, test descriptions and example explanations, commit messages, and pull request descriptions. All new contributions and updates must follow this convention. Assistant replies are an explicit exception: they follow the language of the user’s question; generated code and rule identifiers remain English.
 
 The documentation, interface, built-in examples, rule catalog descriptions, and application-generated messages use English. Historical and imported records retain their original content and language, and user-supplied SQL and data are not translated.
 
@@ -17,6 +17,7 @@ Implemented features:
 - Database selection (Calcite 1.39.0 and optional StarRocks 4.0.14), a searchable rule catalog with category filters, and selection of individual rules or common rule groups.
 - A dedicated rule explorer with a database selector, searchable rule list, and 135 verified Calcite rule examples (126 SQL and nine hand-built plans) and 88 verified native StarRocks examples with live before/after plans and explicit preparation stages where needed.
 - Editable SQL and declarative table schemas.
+- A shared Assistant panel with optional streaming model integration, pinned rule-source citations, graph references, and validated candidate previews.
 - Plan Lab: drag-and-connect logical operators, structured expression editing, JSON interchange, undo/redo, and isolated validation.
 - Whole-tree or selected-subtree rule programs, with lossless supported results available as the next editable input.
 - Real rule attempts and expression production events from Calcite 1.39.0 / HepPlanner.
@@ -49,6 +50,14 @@ OPTILENS_PORT=8081 OPTILENS_DATA_DIR=./data/runs java -jar target/optilens.jar
 The service listens only on `127.0.0.1` and is intended for local research. Records are stored in `data/runs/` by default, which Git ignores. Stop the service before backing up this directory. On restart, the service restores records and marks interrupted jobs as failed.
 
 Browser access through another local forwarding port is supported, such as `http://localhost:49894`. Address validation accepts valid ports on `localhost`, `127.0.0.1`, and `[::1]`; the browser port does not have to match the backend port. Non-local addresses are still rejected.
+
+## Assistant
+
+Use **Assistant** in Query Lab, Plan Lab or Rule Explorer to ask about the current input, selected rule or actual optimization event. Responses stream into the panel; node references locate the corresponding graph snapshot, and source references show pinned files and line numbers. Review and validate suggested inputs before applying them, then run the optimizer to obtain real evidence.
+
+Configure `OPTILENS_ASSISTANT_ENDPOINT` (the complete Chat Completions URL), `OPTILENS_ASSISTANT_MODEL`, and optionally `OPTILENS_ASSISTANT_API_KEY` in the server environment. Set `OPTILENS_ASSISTANT_TOOLS=false` for an explicit text-only gateway. Without configuration, the optimizer works normally and the panel explains setup. Keys never enter the browser; conversation history stays in the current tab. The configured model receives the context shown when you send a question.
+
+See [Assistant configuration, source provenance and acceptance checks](plan/assistant.md) for the complete protocol and limits. Model analysis and suggestions do not themselves establish optimizer behavior or performance gains.
 
 ## Rule explorer
 
