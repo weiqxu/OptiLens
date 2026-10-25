@@ -1,3 +1,4 @@
+import {databaseOptions} from './database-options.mjs';
 import {mountAssistant,highlightNode} from './assistant.mjs';
 import {drawPlan,diffPlans} from './graph.mjs';
 import {copy,scalar,ref,defaults,freshId,remapPlan,connect,cloneSubtree,structuralErrors,autoLayout,History,subtree,validateEditorShape} from './plan-editor.mjs';
@@ -124,7 +125,7 @@ function render(){
  if(!history)return;if(!state().plan.nodes.some(n=>n.id===selected))selected=state().plan.rootId;renderCanvas();renderInspector();renderProgram();$('lab-schema').value=JSON.stringify(state().schema,null,2);if($('lab-mode').value!=='json')$('lab-json').value=JSON.stringify(state(),null,2);
  $('lab-undo').disabled=!history.past.length;$('lab-redo').disabled=!history.future.length;
  const errors=structuralErrors(state().plan,capabilities.operators);$('lab-structure').textContent=errors.length?errors.join(' '):`${state().plan.nodes.length} connected nodes. Validate to check expressions and types.`;
- $('lab-database').disabled=busy;$('lab-run').disabled=busy||errors.length>0;$('lab-validate').disabled=busy||errors.length>0;
+ $('lab-database').disabled=busy;$('lab-run').disabled=busy||errors.length>0||!catalog.runtime.available;$('lab-validate').disabled=busy||errors.length>0||!catalog.runtime.available;
 }
 function loadRequest(request){if(request.inputMode!=='plan')throw Error('This is a SQL input. Open it in Query lab; SQL-to-canvas conversion is not supported.');const next=copy(request);if(next.sql!=null&&(typeof next.sql!=='string'||next.sql.trim()))throw Error('Plan input must not also contain SQL.');if(next.database!=null&&next.database!==catalog.database)throw Error('Select the matching database before applying this JSON draft.');if(JSON.stringify(next).length>100000)throw Error('Plan request exceeds the 100 KB input limit.');if(!next.plan||next.plan.planVersion!==1||!Array.isArray(next.plan.nodes))throw Error('Unsupported plan document.');
  if(next.plan.nodes.length>250)throw Error('Plan exceeds 250 nodes.');for(const n of next.plan.nodes){if(!n||typeof n.id!=='string'||!(n.op in capabilities.operators)||!Array.isArray(n.inputs)||!n.attributes||typeof n.attributes!=='object')throw Error('Malformed node in plan document.');}
@@ -177,7 +178,7 @@ async function loadEngine(database){
 
  const loaded=await Promise.all([api('/api/plan-capabilities?database='+database),api('/api/catalog?database='+database),api('/api/rule-examples?database='+database)]);
  [capabilities,catalog,library]=loaded;
- $('lab-database').replaceChildren(...catalog.databases.map(d=>new Option(`${d.title} · ${d.version}`,d.id)));$('lab-database').value=database;$('lab-database').disabled=false;
+ $('lab-database').replaceChildren(...databaseOptions(catalog.databases));$('lab-database').value=database;$('lab-database').disabled=false;
  $('lab-palette').replaceChildren();
  for(const op of Object.keys(capabilities.operators).sort()){const b=button(op,()=>addNode(op));b.draggable=true;b.dataset.operator=op;b.ondragstart=e=>e.dataTransfer.setData('text/optilens-operator',op);$('lab-palette').append(b);}
  $('lab-example').replaceChildren(new Option('Fold a constant projection',''),...library.examples.filter(e=>e.input.inputMode==='plan').map(e=>new Option(e.title,e.id)));$('lab-example').disabled=false;
@@ -186,7 +187,7 @@ $('lab-database').onchange=async()=>{if(busy)return;const database=$('lab-databa
 try{await loadEngine(new URL(location.href).searchParams.get('database')||'calcite');history=new History(starter());selected=state().plan.rootId;
  const requested=new URL(location.href).searchParams.get('rule');if(requested){const example=library.examples.find(e=>e.id===requested&&e.input.inputMode==='plan');if(example){history=new History(loadRequest(example.input));selected=state().plan.rootId;$('lab-example').value=example.id;}else if(catalog.rules.some(r=>r.id===requested&&r.runnable))history.value.rules=[requested];}
  const runId=new URL(location.href).searchParams.get('run');if(runId){const result=await api('/api/runs/'+encodeURIComponent(runId));if(result.status==='succeeded'){showResult(result);if(result.result.input.inputMode==='plan'){await ensureEngine(result.result.input.database);history=new History(loadRequest(result.result.input));selected=state().plan.rootId;}}}
- render();await refreshHistory();status('Ready · Build a plan, validate it, and choose a rule program.');
+ render();await refreshHistory();status(catalog.runtime.available?'Ready · Build a plan, validate it, and choose a rule program.':catalog.runtime.message);
 }catch(e){status('Unable to load Plan Lab: '+e.message,true);for(const id of ['lab-run','lab-validate'])$(id).disabled=true;}
 
 if(catalog&&history)await mountAssistant({

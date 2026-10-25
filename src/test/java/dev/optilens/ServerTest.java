@@ -21,6 +21,12 @@ class ServerTest {
       var catalog=Json.MAPPER.readTree(request(server,"GET","/api/catalog?database=starrocks",null).body());
       assertEquals("starrocks",catalog.path("database").asText());assertEquals(StarRocks.VERSION,catalog.path("engineVersion").asText());
       assertEquals(StarRocks.rules().size(),catalog.path("rules").size());assertEquals(3,catalog.path("databases").size());
+      assertEquals(200,request(server,"GET","/database-options.mjs",null).statusCode());
+      var databases=catalog.path("databases");
+      assertTrue(databases.get(0).path("available").asBoolean());
+      assertEquals(StarRocks.runtime().get("available"), databases.get(1).path("available").asBoolean());
+      assertFalse(databases.get(2).path("available").asBoolean());
+      assertFalse(databases.get(1).path("message").asText().isBlank());
       var trafodion=Json.MAPPER.readTree(request(server,"GET","/api/catalog?database=trafodion",null).body());
       assertEquals(66,trafodion.path("rules").size());assertFalse(trafodion.path("runtime").path("available").asBoolean());
       var capabilities=Json.MAPPER.readTree(request(server,"GET","/api/plan-capabilities?database=starrocks",null).body());

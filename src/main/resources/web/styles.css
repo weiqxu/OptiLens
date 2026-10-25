@@ -4,3 +4,6 @@
 .record-actions{flex-wrap:wrap}
 
 .evidence li,#rule-program li{overflow-wrap:anywhere}#match-limit{width:5rem}
+
+/* Keep unavailable runtimes visible while preventing native select interaction. */
+select option:disabled{color:var(--muted);background:var(--bg)}

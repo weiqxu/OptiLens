@@ -54,10 +54,15 @@ public final class Engines {
     }
     command.addAll(List.of("-cp",cp,worker,input.toString(),output.toString()));if(validation)command.add("validate");return command;
   }
-  private static List<Map<String,String>> databases() {
-    return List.of(Map.of("id","calcite","title","Apache Calcite","version","1.39.0"),
-        Map.of("id","starrocks","title","StarRocks","version",StarRocks.VERSION),
-        Map.of("id","trafodion","title","Trafodion Lite","version",Trafodion.VERSION));
+  private static List<Map<String,Object>> databases() {
+    return List.of(database("calcite", "Apache Calcite", "1.39.0",
+            Map.of("available", true, "message", "Bundled Calcite runtime")),
+        database("starrocks", "StarRocks", StarRocks.VERSION, StarRocks.runtime()),
+        database("trafodion", "Trafodion Lite", Trafodion.VERSION, Trafodion.runtime()));
+  }
+  private static Map<String,Object> database(String id, String title, String version, Map<String,Object> runtime) {
+    return Map.of("id", id, "title", title, "version", version,
+        "available", Boolean.TRUE.equals(runtime.get("available")), "message", runtime.get("message"));
   }
   private Engines() {}
 }

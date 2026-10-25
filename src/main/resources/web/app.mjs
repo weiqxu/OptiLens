@@ -1,3 +1,4 @@
+import {databaseOptions} from './database-options.mjs';
 import {mountAssistant,highlightNode} from './assistant.mjs';
 import {diffPlans,drawPlan} from './graph.mjs';
 const $=id=>document.getElementById(id);
@@ -12,7 +13,7 @@ async function api(path,options={}){
   const data=await response.json();if(!response.ok)throw new Error(data.error||`Request failed (${response.status})`);return data;
 }
 function button(label,handler,className=''){const b=document.createElement('button');b.type='button';b.textContent=label;b.className=className;b.addEventListener('click',handler);return b;}
-function setBusy(value){busy=value;$('run').disabled=value||!catalog;$('import-button').disabled=value;$('history').disabled=value;for(const id of ['sql','schema','examples','database','rule-search','rule-category','rule-recommended','rule-clear','match-limit','expand-subqueries'])$(id).disabled=value;for(const input of $('rule-options').querySelectorAll('input'))input.disabled=value||input.dataset.runnable!=='true';}
+function setBusy(value){busy=value;$('run').disabled=value||!catalog||!catalog.runtime.available;$('import-button').disabled=value;$('history').disabled=value;for(const id of ['sql','schema','examples','database','rule-search','rule-category','rule-recommended','rule-clear','match-limit','expand-subqueries'])$(id).disabled=value;for(const input of $('rule-options').querySelectorAll('input'))input.disabled=value||input.dataset.runnable!=='true';}
 function loadExample(example){assistantRevision++;
   if(example.input.inputMode==='plan'){location.href='/plan-lab?database='+example.input.database+'&rule='+encodeURIComponent(example.id);return;}
   $('sql').value=example.input.sql;$('schema').value=JSON.stringify(example.input.schema,null,2);text('example-note',example.note);
@@ -141,7 +142,7 @@ async function loadEngine(database){
   catalog=await api('/api/catalog?database='+database);
   const sqlExamples=catalog.examples.filter(e=>e.input.inputMode!=='plan');
   $('examples').replaceChildren(new Option('Select an example',''),...sqlExamples.map(e=>new Option(e.title,e.id)));
-  $('database').replaceChildren(...catalog.databases.map(d=>new Option(`${d.title} · ${d.version}`,d.id)));$('database').value=database;
+  $('database').replaceChildren(...databaseOptions(catalog.databases));$('database').value=database;
   renderRules();
   if(sqlExamples.length)loadExample(sqlExamples[0]);else {if(!$('schema').value)$('schema').value=JSON.stringify(catalog.examples[0]?.input.schema||[{name:'customers',columns:[{name:'id',type:'INTEGER'}]}],null,2);selectRules({database,rules:[]});if(!$('sql').value)$('sql').value='SELECT 1 + 2 AS total';text('example-note','Choose a native rule and enter a query. Hand-built examples are available in Plan lab.');}
   $('expand-subqueries').closest('p').hidden=database!=='calcite';
@@ -158,7 +159,7 @@ try{
     loadExample(example||{input:{...(catalog.examples.find(e=>e.input.inputMode!=='plan')?.input||{database:catalog.database,sql:$('sql').value,schema:JSON.parse($('schema').value)}),rules:[requestedRule]},note:'Only the selected rule is enabled. Edit the SQL to match its pattern; this query is not a verified example for that rule.'});
     $('examples').value='';
   }
-  setBusy(false);status('Ready · Select an example or enter a query');await refreshHistory();
+  setBusy(false);status(catalog.runtime.available?'Ready · Select an example or enter a query':catalog.runtime.message);await refreshHistory();
 }catch(error){status('Unable to load the service: '+error.message,true);}
 
 if(catalog)await mountAssistant({

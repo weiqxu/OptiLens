@@ -5,13 +5,14 @@
   "license": "Apache-2.0",
   "description": "Optional browser and graph checks; the application itself is served by Java.",
   "scripts": {
-    "test": "node --test tests/graph.test.mjs tests/plan-editor.test.mjs tests/assistant.test.mjs",
+    "test": "node --test tests/graph.test.mjs tests/plan-editor.test.mjs tests/assistant.test.mjs tests/database-options.test.mjs",
     "test:browser": "node tests/browser.cjs",
     "test:forwarding": "node tests/forwarding.cjs",
     "test:rules": "node tests/rules.cjs",
     "test:plan-lab": "node tests/plan-lab.cjs",
     "test:starrocks": "node tests/starrocks.cjs",
-    "test:assistant": "node tests/assistant.cjs"
+    "test:assistant": "node tests/assistant.cjs",
+    "test:database-options": "node tests/database-options.cjs"
   },
   "devDependencies": {
     "@playwright/test": "1.51.1"
