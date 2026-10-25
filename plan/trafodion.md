@@ -1,67 +1,168 @@
-# OptiLens native optimizer integration
+# Trafodion Lite integration and usage
 
-## Baseline and branches
+## Current support
 
-Native baseline: `ecbf9e035d1c7fd5bd36caf73c27840b2dc6c478`.
-Native branch: `codex/optimizer-inspection`.
-OptiLens branch: `codex/trafodion-integration`.
-All new project documentation and UI text use English.
+OptiLens and Trafodion-Lite both contain integration foundations. They do not
+yet provide an end-to-end Trafodion optimization experiment.
 
-## Implemented foundation
+| Capability | Status |
+| --- | --- |
+| Fixed-source inventory of 66 native rules | Implemented |
+| OptiLens engine/catalog routing and Assistant version/rule context | Implemented |
+| Runtime availability in all three database selectors | Implemented; unavailable engines are grey, labelled Not installed, and disabled |
+| Optional native compiler, candidate, task and solution callbacks | Implemented in Trafodion-Lite |
+| Standalone Lite SQLCI and local SQL server | Existing native runtime; requires its own successful build |
+| OptiLens native optimizer worker and structured plan export | Pending |
+| Manual plan construction, single-rule candidates and deterministic replay | Pending |
+| Editable native results, experiment endpoint and format-v3 history | Pending |
 
-- Statement-local, optional inspection sink in `OptGlobals`.
-- Synchronous preparation-phase, before-substitution, generated-candidate,
-  Memo-result, task, and accepted-solution callbacks.
-- Task metadata copied before self-destruction; candidate callbacks precede
-  Memo insertion, which may delete duplicate input objects.
-- Callback exceptions disable the sink instead of escaping into optimization.
-- A bounded event budget marks truncation without stopping optimization.
-- Source inventory exporter checks registration counts and duplicates, records
-  commit and file digests, and identifies 30 transformation, 34 implementation,
-  and 2 enforcer rules. No runtime verification is claimed.
+The bundled inventory is pinned to source commit
+`ecbf9e035d1c7fd5bd36caf73c27840b2dc6c478`. It contains 30 transformation,
+34 implementation and two enforcer rules, with source paths, line numbers and
+hashes. Rule registration is not evidence that a rule has been triggered.
+The earlier integration branches were `codex/optimizer-inspection` in the native
+repository and `codex/trafodion-integration` here; the foundation changes are
+integrated into their respective local master branches.
 
-Run `bash scripts/test-optimizer-inspection.sh` for dependency-independent checks.
-Export with `python3 scripts/export-optimizer-catalog.py --output catalog.json`.
+## Inspect support in OptiLens
 
-## Remaining implementation (required for delivery)
+Build and start OptiLens from its repository:
 
-1. Native worker executable and compile-only context/error-recovery entry.
-2. In-memory schema provider and structured snapshots with lifetime-safe IDs.
-3. Complete manual-plan construction: every existing OptiLens operator,
-   expression and parameter, including collection multiplicity, pagination,
-   aggregate filters, distribution requirements and empty/zero-column inputs.
-4. Rule-consideration and recursive Memo/group lifecycle events.
-5. Single-rule candidate enumeration, context preparation, subtree compatibility
-   and deterministic replay of user-selected alternatives.
-6. OptiLens experiment endpoint, format-v3 history, candidate UI, editable result
-   export and fixed-version assistant source integration.
-7. Native behavioral parity, input semantics and two-engine regression tests.
+```bash
+cd "$HOME/src/OptiLens"
+mvn package
+java -jar target/optilens.jar
+```
 
-The source inventory and observer interfaces are not an operational optimizer
-adapter. The OptiLens catalog must report the native runtime unavailable until
-worker implementation and native verification are complete.
+Inspect the read-only catalog and declared input contract:
 
-## Current environment validation
+```bash
+curl -fsS 'http://127.0.0.1:8080/api/catalog?database=trafodion'
+curl -fsS 'http://127.0.0.1:8080/api/plan-capabilities?database=trafodion'
+```
 
-The independent C++ sink and source inventory checks pass. Full `make lite`
-stops at the RocksDB development-header prerequisite. MPI and log4cxx headers
-are also absent. No native compilation or optimizer behavioral parity is yet
-verified. Use the existing `scripts/install-lite-deps.sh` on a build host with
-package installation privileges before the full build.
+`runtime.available` is false and the capability response has
+`implementationStatus: pending`. The normal database selector therefore disables
+Trafodion. A direct Rule Explorer URL can inspect the source catalog, but cannot
+run an example. Query Lab and Plan Lab also block execution for this runtime.
+The advertised operator schema describes the intended input contract, not a
+completed native plan builder. Requests never fall back to Calcite or StarRocks.
 
-## OptiLens foundation
+## Integration method
 
-The database catalog includes Trafodion and its 66 source-pinned rules.
-Runtime execution is explicitly unavailable; requests never fall back to Calcite
-or StarRocks. Assistant context uses the correct engine version and rule inventory.
-The manual input capability schema describes the required target contract;
-`implementationStatus: pending` and `runtime.available: false` are authoritative.
-No native worker, step endpoint, format-v3 history or candidate UI is delivered yet.
+The intended execution boundary is a separate native C++ optimizer process,
+called by the Java backend with bounded JSON request/result files. This keeps
+compiler state, memory limits, failures and dependencies outside the web server.
+SQL will stop after native optimization; manual inputs must construct native
+operators and typed expressions directly, without converting a whole plan to SQL.
 
-Java tests require Maven dependencies. The default configured internal Maven
-repository is unavailable in this environment and its artifacts are not cached.
+The current native patch installs no observer during normal compilation.
+Compiler-side consumers subclass `OptimizerInspection`, create it with a callback
+budget, and attach it to a live statement's
+`getOptGlobals()->inspection`. Available callbacks cover existing compiler phase
+boundaries, inputs before `nextSubstitute()`, generated candidates before Memo
+insertion, immediate Memo results, tasks and accepted context solutions.
 
-The new Trafodion Java unit tests pass using temporary Maven Central settings
-with the environment proxy. The initial full regression found one expected
-catalog-count assertion (two engines versus three), now updated with a
-Trafodion HTTP catalog check. Native compilation remains blocked as above.
+Observers must copy native data synchronously, respect statement lifetimes and
+compiler error recovery, and avoid calling APIs that change matching or logical
+properties. Callback failure disables collection; truncation does not stop the
+optimizer. These hooks are not yet a JSON snapshot exporter, complete Memo trace,
+or proof that a candidate was selected in the final root plan.
+
+The native repository's
+[inspection guide](https://github.com/weiqxu/Trafodion-Lite/blob/master/plan/optilens-integration.md)
+describes the API and remaining work.
+
+## Build and use standalone Trafodion Lite
+
+This is a separate SQL runtime. It executes SQL and persists data; it is useful
+for checking the native compiler/runtime while the OptiLens worker is unfinished.
+
+Install dependencies and build:
+
+```bash
+cd "$HOME/src/Trafodion-Lite"
+bash scripts/install-lite-deps.sh --dry-run
+bash scripts/install-lite-deps.sh -y
+OMPI_CXX=/usr/bin/g++ make lite
+```
+
+The installer needs package-installation privileges. It installs development
+libraries including RocksDB, MPI, log4cxx, Thrift and Protobuf.
+
+Configure each terminal that will run a native tool:
+
+```bash
+cd "$HOME/src/Trafodion-Lite"
+export TRAF_HOME="$PWD/core/sqf"
+export TRAF_LITE=1
+export TRAF_LITE_STORE_DIR="$HOME/.local/share/trafodion-lite"
+mkdir -p "$TRAF_LITE_STORE_DIR"
+export SQL_LIBS="$PWD/core/sql/lib/linux/64bit/debug"
+export SQF_LIBS="$PWD/core/sqf/export/lib64d"
+export LD_LIBRARY_PATH="$SQL_LIBS:$SQF_LIBS${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+"$SQL_LIBS/sqlci"
+```
+
+At the SQLCI prompt, try:
+
+```sql
+SELECT 1 FROM (VALUES(1)) AS t(x);
+CREATE TABLE optilens_demo (id INT, label VARCHAR(20));
+INSERT INTO optilens_demo VALUES (1, 'one'), (2, 'two');
+SELECT * FROM optilens_demo WHERE id > 1;
+exit;
+```
+
+Alternatively start the local server:
+
+```bash
+"$SQL_LIBS/trafodion-lite-server" --listen 127.0.0.1 --port 23400
+```
+
+In a second terminal with the same environment:
+
+```bash
+"$SQL_LIBS/trafodion-lite-client" --host 127.0.0.1 --port 23400
+```
+
+This uses the repository's reduced Trafodion Type 4 protocol. Starting this
+server does not activate OptiLens: no automatic server connection or Trafodion
+runtime-home setting is implemented. See the native
+[build and usage guide](https://github.com/weiqxu/Trafodion-Lite/blob/master/plan/trafodion-lite-usage.md).
+
+## Verify the implemented foundation
+
+In Trafodion-Lite:
+
+```bash
+bash scripts/test-optimizer-inspection.sh
+python3 scripts/export-optimizer-catalog.py --output /tmp/trafodion-catalog.json
+```
+
+These checks validate observer isolation, callback budgets and the source
+inventory without requiring a complete native build. Exporting a new catalog
+does not automatically replace OptiLens's bundled, fixed-version inventory.
+A catalog update must review the source commit, hashes and adapter compatibility.
+
+In OptiLens:
+
+```bash
+mvn -Dtest=ServerTest,TrafodionTests test
+npm test
+# With a running test instance and Playwright installed:
+npm run test:database-options
+```
+
+The targeted backend tests and three-page availability checks have passed.
+A complete native compiler build and SQLCI/server smoke run with the inspection
+patch remain unverified; no native optimizer behavioral parity is claimed.
+
+## Remaining execution work
+
+Complete the compile-only worker and its error handling, an in-memory catalog,
+structured snapshots with stable identities, the complete manual input builder,
+single-rule candidate enumeration, subtree compatibility, deterministic replay,
+editable-result export, candidate UI, historical records and pinned native
+Assistant source excerpts. Test all promised input semantics and native trace
+parity before marking the runtime available.
