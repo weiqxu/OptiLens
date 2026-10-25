@@ -13,7 +13,7 @@ public final class Server implements AutoCloseable {
   private final Jobs jobs;
   private final Assistant assistant;
   private final ExecutorService requests=Executors.newFixedThreadPool(8);
-  private static final Map<String,String> ASSETS=Map.ofEntries(Map.entry("/assistant.mjs","assistant.mjs"),Map.entry("/assistant.css","assistant.css"),Map.entry("/plan-lab","plan-lab.html"),Map.entry("/plan-lab.mjs","plan-lab.mjs"),Map.entry("/plan-editor.mjs","plan-editor.mjs"),Map.entry("/plan-lab.css","plan-lab.css"),Map.entry("/","index.html"),Map.entry("/index.html","index.html"),Map.entry("/app.mjs","app.mjs"),Map.entry("/graph.mjs","graph.mjs"),Map.entry("/styles.css","styles.css"),Map.entry("/rules","rules.html"),Map.entry("/rules.html","rules.html"),Map.entry("/rules.mjs","rules.mjs"),Map.entry("/rules.css","rules.css"));
+  private static final Map<String,String> ASSETS=Map.ofEntries(Map.entry("/database-options.mjs","database-options.mjs"),Map.entry("/assistant.mjs","assistant.mjs"),Map.entry("/assistant.css","assistant.css"),Map.entry("/plan-lab","plan-lab.html"),Map.entry("/plan-lab.mjs","plan-lab.mjs"),Map.entry("/plan-editor.mjs","plan-editor.mjs"),Map.entry("/plan-lab.css","plan-lab.css"),Map.entry("/","index.html"),Map.entry("/index.html","index.html"),Map.entry("/app.mjs","app.mjs"),Map.entry("/graph.mjs","graph.mjs"),Map.entry("/styles.css","styles.css"),Map.entry("/rules","rules.html"),Map.entry("/rules.html","rules.html"),Map.entry("/rules.mjs","rules.mjs"),Map.entry("/rules.css","rules.css"));
   public Server(int port,Path data) throws Exception {
     this(port,data,AssistantModel.Config.environment());
   }

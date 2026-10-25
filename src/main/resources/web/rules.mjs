@@ -1,3 +1,4 @@
+import {databaseOptions} from './database-options.mjs';
 import {mountAssistant,highlightNode} from './assistant.mjs';
 import {diffPlans,drawPlan,layoutPlan} from './graph.mjs';
 const $=id=>document.getElementById(id);
@@ -58,7 +59,9 @@ function choose(rule){
   $('example-program').replaceChildren(...example.input.rules.map(id=>{const li=document.createElement('li');li.textContent=(id===example.id?'Target: ':'Preparation: ')+id;return li;}));
   const options=example.input.options;
   text('example-settings',`Match limit per stage: ${options?.matchLimit??100}. Input: ${manual?'hand-built logical plan; SQL conversion is bypassed':`SQL; subquery expansion ${options?.expandSubqueries===false?'disabled, preserving subqueries for the target rule':'enabled'}`}. Planner time zone: UTC. A bounded demonstration does not imply a fixed point or a globally optimal plan.`);
-  $('rerun-example').disabled=true;setStatus('Preparing the example…');
+  $('rerun-example').disabled=true;
+  if(!catalog.runtime.available){setStatus(catalog.runtime.message);return;}
+  setStatus('Preparing the example…');
   startTimer=setTimeout(()=>showExample(example,token),200);
 }
 function setStatus(message,error=false){text('example-status',message);$('example-status').className='status'+(error?' error':'');}
@@ -119,7 +122,7 @@ async function loadEngine(database,requested){
   const [loaded,library]=await Promise.all([api('/api/catalog?database='+database),api('/api/rule-examples?database='+database)]);if(token!==revision)return;catalog=loaded;
   $('explorer-list').replaceChildren();$('explorer-search').value='';$('examples-only').checked=false;
   rules=catalog.rules.filter(rule=>rule.category!=='Common rule groups');examples=new Map(library.examples.map(example=>[example.id,example]));coverage=new Map(library.coverage.map(item=>[item.id,item]));
-  $('explorer-database').replaceChildren(...catalog.databases.map(database=>new Option(`${database.title} · ${database.version}`,database.id)));
+  $('explorer-database').replaceChildren(...databaseOptions(catalog.databases));
   $('explorer-database').value=database;
   $('explorer-category').replaceChildren(new Option('All categories',''),...Array.from(new Set(rules.map(rule=>rule.category)),category=>new Option(category,category)));
   text('catalog-total',rules.length);text('catalog-scope',catalog.scope);

@@ -1,0 +1,875 @@
+{
+  "database": "trafodion",
+  "protocolVersion": 1,
+  "version": "lite-ecbf9e035d1c",
+  "commit": "ecbf9e035d1c7fd5bd36caf73c27840b2dc6c478",
+  "sources": {
+    "core/sql/optimizer/ImplRule.cpp": "9a81e997990774e2b7eed83a3ce59d225b95d5ae06672d5e23386c3646381b76",
+    "core/sql/optimizer/TransRule.cpp": "87611c5aa4dea991ddb435e22a6e7a23a9e266588e48d6824572b8beddebb534"
+  },
+  "rules": [
+    {
+      "id": "Trafodion.FileScanRule",
+      "title": "File Scan implementation rule",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "FileScanRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:77",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.HbaseScanRule",
+      "title": "Hbase Scan implementation rule",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "HbaseScanRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:89",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.HashJoinRule",
+      "title": "Hash join implementation rule",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "HashJoinRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:97",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.MergeJoinRule",
+      "title": "Merge join implementation rule",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "MergeJoinRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:118",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.NestedJoinRule",
+      "title": "Nested join implementation rule",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "NestedJoinRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:144",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.NestedJoinFlowRule",
+      "title": "Nested join flow implementation rule",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "NestedJoinFlowRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:166",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.HashGroupByRule",
+      "title": "Impl: Groupby with a hash table",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "HashGroupByRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:189",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.SortGroupByRule",
+      "title": "Impl: Groupby of sorted table",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "SortGroupByRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:208",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.AggregateRule",
+      "title": "Impl: Aggregate with no grouping columns",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "AggregateRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:228",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.PhysShortCutGroupByRule",
+      "title": "Implement ShortCutGroupBy by a PhysicalShortCutGroupBy ",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "PhysShortCutGroupByRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:247",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.UnionRule",
+      "title": "Implementation rule for Union nodes",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "UnionRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:267",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.HbaseDeleteRule",
+      "title": "Hbase Delete Implementation rule",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "HbaseDeleteRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:287",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.HbaseUpdateRule",
+      "title": "Hbase Update Implementation rule",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "HbaseUpdateRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:304",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.HiveInsertRule",
+      "title": "Implementation rule for hive Insert",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "HiveInsertRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:320",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.HbaseInsertRule",
+      "title": "Implementation rule for hbase Insert",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "HbaseInsertRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:339",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.HbaseDeleteCursorRule",
+      "title": "Hbase Delete using cursor",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "HbaseDeleteCursorRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:358",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.HbaseUpdateCursorRule",
+      "title": "Hbase Update using cursor",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "HbaseUpdateCursorRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:374",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.PhysicalMapValueIdsRule",
+      "title": "Implement MapValueIds by a PhysicalMapValueIds",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "PhysicalMapValueIdsRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:389",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.PhysicalRelRootRule",
+      "title": "Implement RelRoot by a PhysicalRelRoot",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "PhysicalRelRootRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:402",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.PhysicalTupleRule",
+      "title": "Implement Tuple by a PhysicalTuple",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "PhysicalTupleRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:420",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.PhysicalTupleListRule",
+      "title": "Implement TupleList by a PhysicalTupleList",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "PhysicalTupleListRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:427",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.SortEnforcerRule",
+      "title": "Enforcer rule to sort a result",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "SortEnforcerRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:434",
+      "category": "enforcer",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.ExchangeEnforcerRule",
+      "title": "Enforce partitioning or plan location",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "ExchangeEnforcerRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:448",
+      "category": "enforcer",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.PhysicalExplainRule",
+      "title": "Implement ExplainFunc by a PhysicalExplain",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "PhysicalExplainRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:459",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.PhysicalHiveMDRule",
+      "title": "Implement HiveMDaccessFunc by a PhysicalExplain",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "PhysicalHiveMDRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:468",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.PhysicalTransposeRule",
+      "title": "Implement Transpose by a PhysicalTranspose",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "PhysicalTransposeRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:477",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.PhysicalPackRule",
+      "title": "Implement Pack by a PhysicalPack",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "PhysicalPackRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:492",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.PhysicalUnPackRowsRule",
+      "title": "Implement UnPackRows by a PhysUnPackRows",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "PhysicalUnPackRowsRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:507",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.PhysCompoundStmtRule",
+      "title": "CompoundStmt Operator to PhysCompoundStmt operator",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "PhysCompoundStmtRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:526",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.PhysicalSequenceRule",
+      "title": "Implement RelSequence by a PhysSequence",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "PhysicalSequenceRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:546",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.PhysicalSampleRule",
+      "title": "Implement RelSample by a PhysSample",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "PhysicalSampleRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:561",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.PhysicalSPProxyFuncRule",
+      "title": "Implement SPProxyFunc by a PhysicalSPProxyFunc",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "PhysicalSPProxyFuncRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:579",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.PhysicalExtractSourceRule",
+      "title": "Implement ExtractSource by a PhysicalExtractSource",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "PhysicalExtractSourceRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:589",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.PhysicalIsolatedScalarUDFRule",
+      "title": "Implement IsolatedScalarUDF by a PhysicalIsolatedScalarUDF",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "PhysicalIsolatedScalarUDFRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:599",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.PhysicalTMUDFRule",
+      "title": "Implement a Table Mapping Function",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "PhysicalTMUDFRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:608",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.PhysicalFastExtractRule",
+      "title": "Implement a Fast Extract",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "PhysicalFastExtractRule"
+      ],
+      "source": "core/sql/optimizer/ImplRule.cpp:617",
+      "category": "implementation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.MJStarJoinIRule",
+      "title": "MultiJoin StarJoin I Rule",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "MJStarJoinIRule"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:76",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.MJStarJoinIIRule",
+      "title": "MultiJoin StarJoin II Rule",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "MJStarJoinIIRule"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:89",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.MVQRRule",
+      "title": "MVQR Rewrite Rule",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "MVQRRule"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:102",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.MVQRScanRule",
+      "title": "MVQR Scan Rewrite Rule",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "MVQRScanRule"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:114",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.MJExpandRule",
+      "title": "MultiJoin Expand Rule",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "MJExpandRule"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:124",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.MJEnumRule",
+      "title": "MultiJoin Enumeration Rule",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "MJEnumRule"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:136",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.JoinCommutativityRule",
+      "title": "Join commutativity",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "JoinCommutativityRule"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:148",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.JoinLeftShiftRule",
+      "title": "Left shift rule for inner joins",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "JoinLeftShiftRule"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:173",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.IndexJoinRule1",
+      "title": "Transform a scan into index joins (pass 1)",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "IndexJoinRule1"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:214",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.IndexJoinRule2",
+      "title": "Transform a scan into index joins (pass 2)",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "IndexJoinRule2"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:233",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.OrOptimizationRule",
+      "title": "Transform scan to union for OR optimization",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "OrOptimizationRule"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:251",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.RoutineJoinToTSJRule",
+      "title": "RoutineJoin to TSJ Rule",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "RoutineJoinToTSJRule"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:274",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.JoinToTSJRule",
+      "title": "Transform Join to TSJ",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "JoinToTSJRule"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:304",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.TSJFlowRule",
+      "title": "Transform GenericUpdate to TSJFlow expression",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "TSJFlowRule"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:336",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.TSJUDRRule",
+      "title": "Transform CALL nodes to TSJUDR expression",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "TSJUDRRule"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:366",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.TSJRule",
+      "title": "Transform GenericUpdate to TSJ expression",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "TSJRule"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:394",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.FilterRule0",
+      "title": "Transform Filter on a leaf",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "FilterRule0"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:422",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.FilterRule1",
+      "title": "Transform Filter on a unary op",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "FilterRule1"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:444",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.FilterRule2",
+      "title": "Transform Filter on a binary op",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "FilterRule2"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:470",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.GroupByEliminationRule",
+      "title": "Eliminate unnecessary groupbys",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "GroupByEliminationRule"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:500",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.GroupByMVQRRule",
+      "title": "MVQR GroupBy Rewrite Rule",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "GroupByMVQRRule"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:516",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.GroupBySplitRule",
+      "title": "Split a groupby",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "GroupBySplitRule"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:536",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.AggrDistinctEliminationRule",
+      "title": "Eliminate aggregate distinct rule",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "AggrDistinctEliminationRule"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:564",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.GroupByTernarySplitRule",
+      "title": "Split a partial groupby that is a leaf",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "GroupByTernarySplitRule"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:591",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.GroupByOnJoinRule",
+      "title": "Push groupby down past a join",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "GroupByOnJoinRule"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:619",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.PartialGroupByOnTSJRule",
+      "title": "Push partial groupby down past a tsj",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "PartialGroupByOnTSJRule"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:652",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.ShortCutGroupByRule",
+      "title": "Transform anytrue subquery groupby or min/max aggr to shortcut groupby",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "ShortCutGroupByRule"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:685",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.CommonSubExprRule",
+      "title": "Eliminate any CommonSubExpr nodes left from the normalizer - for now",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "CommonSubExprRule"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:705",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.SampleScanRule",
+      "title": "Transform RelSample above a Scan",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "SampleScanRule"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:717",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    },
+    {
+      "id": "Trafodion.JoinToBushyTreeRule",
+      "title": "Join to bush tree",
+      "description": "Native registered rule; runtime verification pending.",
+      "conditions": "See the pinned native implementation for prerequisites.",
+      "implementations": [
+        "JoinToBushyTreeRule"
+      ],
+      "source": "core/sql/optimizer/TransRule.cpp:733",
+      "category": "transformation",
+      "runnable": false,
+      "unavailableReason": "Native optimizer worker is not built or verified."
+    }
+  ],
+  "verification": {
+    "status": "not-verified",
+    "registered": 66,
+    "verified": 0
+  }
+}

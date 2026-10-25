@@ -17,7 +17,7 @@ final class AssistantContext {
     database=context.path("database").asText();Engines.validateDatabase(database);
     page=context.path("page").asText();Input.require(Set.of("plan-lab","query-lab","rules").contains(page),"Unknown assistant page");
     version=context.path("version").asText();Input.require(version.matches("[0-9a-f]{64}"),"Missing context version");
-    data.put("page",page);data.put("database",database);data.put("engineVersion",database.equals("calcite")?"1.39.0":StarRocks.VERSION);
+    data.put("page",page);data.put("database",database);data.put("engineVersion",database.equals("calcite")?"1.39.0":database.equals("trafodion")?Trafodion.VERSION:StarRocks.VERSION);
     data.put("contextVersion",version);
     JsonNode draft=context.path("input");
     Input.require(draft.toString().length()<=100_000,"Draft exceeds the input limit");
@@ -33,7 +33,7 @@ final class AssistantContext {
       var record=jobs.get(selectedRun);int stageIndex=context.path("stage").asInt(-1);
       if(record!=null&&record.result()!=null&&record.result().input().database().equals(database)&&stageIndex>=0&&stageIndex<record.result().stages().size())ruleIds.add(record.result().stages().get(stageIndex).id());
     }
-    var cards=database.equals("calcite")?Rules.cards():StarRocks.rules();
+    var cards=database.equals("calcite")?Rules.cards():database.equals("trafodion")?Trafodion.rules():StarRocks.rules();
     var relevant=cards.stream().filter(c->ruleIds.contains(c.id())).toList();
     relevant.forEach(c->paths.add(c.source()));data.set("rules",Json.MAPPER.valueToTree(relevant));
     data.set("ruleSourceMappings",Json.MAPPER.valueToTree(relevant.stream().map(r->AssistantSources.instance().mapping(database,r)).toList()));
