@@ -20,9 +20,58 @@ The bundled inventory is pinned to source commit
 `ecbf9e035d1c7fd5bd36caf73c27840b2dc6c478`. It contains 30 transformation,
 34 implementation and two enforcer rules, with source paths, line numbers and
 hashes. Rule registration is not evidence that a rule has been triggered.
-The earlier integration branches were `codex/optimizer-inspection` in the native
-repository and `codex/trafodion-integration` here; the foundation changes are
-integrated into their respective local master branches.
+
+## Repositories and installation branches
+
+Use these repositories and branches for the installation steps below:
+
+| Repository | Branch | Purpose |
+| --- | --- | --- |
+| `weiqxu/OptiLens` | `master` | Web UI, rule catalog, runtime availability and integration documentation |
+| `weiqxu/Trafodion-Lite` | `codex/trafodion-optimizer-research` | Native inspection hooks, inventory exporter, usage guides and optimizer research documents |
+
+The required Trafodion-Lite branch includes both the inspection code and the
+research documents. Its reference revision for this guide is
+`f1bb021be`; record `git rev-parse HEAD` after checkout when reproducing an
+experiment. This checkout revision is distinct from the older source baseline
+used by OptiLens's bundled rule inventory.
+
+The earlier `codex/optimizer-inspection` branch contains the initial native
+foundation only. Although that foundation was merged into local native
+`master`, do not assume another checkout's `origin/master` contains it. Use the
+explicit research branch above for this installation. No branch currently
+completes the OptiLens native optimizer worker.
+
+For a new checkout:
+
+```bash
+mkdir -p "$HOME/src"
+git clone --branch master https://github.com/weiqxu/OptiLens.git "$HOME/src/OptiLens"
+git clone --branch codex/trafodion-optimizer-research --single-branch \
+  https://github.com/weiqxu/Trafodion-Lite.git "$HOME/src/Trafodion-Lite"
+```
+
+For an existing Trafodion-Lite checkout, preserve or commit local edits before
+switching branches, then fetch and update the required branch:
+
+```bash
+cd "$HOME/src/Trafodion-Lite"
+git fetch origin
+git switch codex/trafodion-optimizer-research
+git pull --ff-only origin codex/trafodion-optimizer-research
+git branch --show-current
+git rev-parse HEAD
+```
+
+The expected branch name is `codex/trafodion-optimizer-research`. An existing
+single-branch clone that does not fetch this branch can first create its remote
+tracking reference explicitly:
+
+```bash
+git fetch origin \
+  refs/heads/codex/trafodion-optimizer-research:refs/remotes/origin/codex/trafodion-optimizer-research
+git switch codex/trafodion-optimizer-research
+```
 
 ## Inspect support in OptiLens
 
@@ -70,7 +119,7 @@ optimizer. These hooks are not yet a JSON snapshot exporter, complete Memo trace
 or proof that a candidate was selected in the final root plan.
 
 The native repository's
-[inspection guide](https://github.com/weiqxu/Trafodion-Lite/blob/master/plan/optilens-integration.md)
+[inspection guide](https://github.com/weiqxu/Trafodion-Lite/blob/codex/trafodion-optimizer-research/plan/optilens-integration.md)
 describes the API and remaining work.
 
 ## Build and use standalone Trafodion Lite
@@ -78,10 +127,12 @@ describes the API and remaining work.
 This is a separate SQL runtime. It executes SQL and persists data; it is useful
 for checking the native compiler/runtime while the OptiLens worker is unfinished.
 
-Install dependencies and build:
+After checking out `codex/trafodion-optimizer-research` as described above,
+install dependencies and build:
 
 ```bash
 cd "$HOME/src/Trafodion-Lite"
+git branch --show-current
 bash scripts/install-lite-deps.sh --dry-run
 bash scripts/install-lite-deps.sh -y
 OMPI_CXX=/usr/bin/g++ make lite
@@ -129,7 +180,7 @@ In a second terminal with the same environment:
 This uses the repository's reduced Trafodion Type 4 protocol. Starting this
 server does not activate OptiLens: no automatic server connection or Trafodion
 runtime-home setting is implemented. See the native
-[build and usage guide](https://github.com/weiqxu/Trafodion-Lite/blob/master/plan/trafodion-lite-usage.md).
+[build and usage guide](https://github.com/weiqxu/Trafodion-Lite/blob/codex/trafodion-optimizer-research/plan/trafodion-lite-usage.md).
 
 ## Verify the implemented foundation
 
