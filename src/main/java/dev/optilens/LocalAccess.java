@@ -5,9 +5,9 @@ import java.util.regex.Pattern;
 
 /** Literal loopback authorities; never resolve a client-supplied hostname through DNS. */
 final class LocalAccess {
-  private static final Pattern AUTHORITY = Pattern.compile(
-      "(?:localhost|127\\.0\\.0\\.1|\\[::1\\])(?::([0-9]{1,5}))?",
-      Pattern.CASE_INSENSITIVE);
+  private static final Pattern AUTHORITY =
+      Pattern.compile(
+          "(?:localhost|127\\.0\\.0\\.1|\\[::1\\])(?::([0-9]{1,5}))?", Pattern.CASE_INSENSITIVE);
 
   static boolean allowsHost(String authority) {
     if (authority == null) return false;

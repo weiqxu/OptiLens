@@ -12,9 +12,13 @@
     "test:plan-lab": "node tests/plan-lab.cjs",
     "test:starrocks": "node tests/starrocks.cjs",
     "test:assistant": "node tests/assistant.cjs",
-    "test:database-options": "node tests/database-options.cjs"
+    "test:database-options": "node tests/database-options.cjs",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "devDependencies": {
-    "@playwright/test": "1.51.1"
+    "@playwright/test": "1.51.1",
+    "prettier": "3.6.2",
+    "@prettier/plugin-xml": "3.4.2"
   }
 }

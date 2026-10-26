@@ -1,0 +1,24 @@
+name: Code formatting
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - run: mvn --batch-mode spotless:check
+      - run: npm ci
+      - run: npm run format:check

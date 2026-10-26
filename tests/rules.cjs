@@ -1,40 +1,52 @@
-const {chromium,expect}=require('@playwright/test');
-const assert=require('node:assert/strict');
-const fs=require('node:fs/promises');
-const path=require('node:path');
-(async()=>{
-  const browser=await chromium.launch({headless:true});
-  try{
-    const page=await browser.newPage({viewport:{width:1500,height:1100},locale:'zh-CN'});
-    const errors=[];page.on('pageerror',error=>errors.push(error.message));
-    const base=process.env.OPTILENS_TEST_URL||'http://127.0.0.1:8080';
-    const completed=()=>expect(page.locator('#example-status')).toHaveText(/^Completed/,{timeout:40000});
-    const select=async id=>{await page.fill('#explorer-search',id);await page.locator(`button[data-rule="${id}"]`).click();};
-    await page.goto(base+'/rules');
-    await expect(page.locator('html')).toHaveAttribute('lang','en');
+const { chromium, expect } = require('@playwright/test');
+const assert = require('node:assert/strict');
+const fs = require('node:fs/promises');
+const path = require('node:path');
+(async () => {
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage({
+      viewport: { width: 1500, height: 1100 },
+      locale: 'zh-CN',
+    });
+    const errors = [];
+    page.on('pageerror', (error) => errors.push(error.message));
+    const base = process.env.OPTILENS_TEST_URL || 'http://127.0.0.1:8080';
+    const completed = () =>
+      expect(page.locator('#example-status')).toHaveText(/^Completed/, { timeout: 40000 });
+    const select = async (id) => {
+      await page.fill('#explorer-search', id);
+      await page.locator(`button[data-rule="${id}"]`).click();
+    };
+    await page.goto(base + '/rules');
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
     await completed();
-    assert.equal(await page.locator('#explorer-database option').count(),2);
-    assert.ok(await page.locator('.rule-item').count()>200);
-    assert.equal(await page.locator('#detail-id').textContent(),'CoreRules.PROJECT_REDUCE_EXPRESSIONS');
-    assert.match(await page.locator('#example-raw-after').textContent(),/200/);
-    const firstDownload=await page.locator('#download-example').getAttribute('href');
-    await page.selectOption('#example-view','0');
+    assert.equal(await page.locator('#explorer-database option').count(), 2);
+    assert.ok((await page.locator('.rule-item').count()) > 200);
+    assert.equal(
+      await page.locator('#detail-id').textContent(),
+      'CoreRules.PROJECT_REDUCE_EXPRESSIONS',
+    );
+    assert.match(await page.locator('#example-raw-after').textContent(), /200/);
+    const firstDownload = await page.locator('#download-example').getAttribute('href');
+    await page.selectOption('#example-view', '0');
     await expect(page.locator('#example-scope')).toContainText('Local expressions');
-    await page.locator('#example-after .plan-node').first().focus();await page.keyboard.press('Enter');
-    await expect(page.locator('#example-node')).toHaveAttribute('open','');
+    await page.locator('#example-after .plan-node').first().focus();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#example-node')).toHaveAttribute('open', '');
     await page.locator('[data-zoom="after:1"]').click();
-    await page.selectOption('#example-view','stage');
+    await page.selectOption('#example-view', 'stage');
     await page.check('#examples-only');
-    const library=await (await page.request.get(base+'/api/rule-examples')).json();
-    assert.equal(await page.locator('.rule-item:visible').count(),library.examples.length);
-    assert.ok(library.examples.length>=126);
+    const library = await (await page.request.get(base + '/api/rule-examples')).json();
+    assert.equal(await page.locator('.rule-item:visible').count(), library.examples.length);
+    assert.ok(library.examples.length >= 126);
     await page.uncheck('#examples-only');
-    await page.selectOption('#explorer-category','Enumerable physical rules');
+    await page.selectOption('#explorer-category', 'Enumerable physical rules');
     await page.locator('.rule-item:visible').first().click();
     await expect(page.locator('#no-example')).toBeVisible();
     await expect(page.locator('#open-lab')).toBeHidden();
     await expect(page.locator('#example-section')).toBeHidden();
-    await page.selectOption('#explorer-category','');
+    await page.selectOption('#explorer-category', '');
     await select('CoreRules.COERCE_INPUTS');
     await expect(page.locator('#no-example-title')).toHaveText('No verified example yet');
     await expect(page.locator('#open-lab')).toBeVisible();
@@ -42,86 +54,168 @@ const path=require('node:path');
     await select('CoreRules.FILTER_INTO_JOIN');
     await completed();
     await expect(page.locator('#example-raw-before')).toContainText('LogicalFilter');
-    const exported=await (await page.request.get(new URL(await page.locator('#download-example').getAttribute('href'),base).href)).json();
-    assert.deepEqual(exported.input.rules,['CoreRules.FILTER_INTO_JOIN']);
-    assert.ok(exported.stages[0].events.length>0);
-    await page.fill('#explorer-search','');
-    if(process.env.OPTILENS_SCREENSHOT_DIR){await fs.mkdir(process.env.OPTILENS_SCREENSHOT_DIR,{recursive:true});await page.screenshot({path:path.join(process.env.OPTILENS_SCREENSHOT_DIR,'rules-desktop.png'),fullPage:true});}
-    await select('CoreRules.PROJECT_REDUCE_EXPRESSIONS');await completed();
-    assert.equal(await page.locator('#download-example').getAttribute('href'),firstDownload,'Revisiting a rule reuses its run');
-    await page.route('**/api/runs',route=>route.request().method()==='POST'?route.fulfill({status:429,contentType:'application/json',body:JSON.stringify({error:'The optimization queue is full. Try again later.'})}):route.continue());
+    const exported = await (
+      await page.request.get(
+        new URL(await page.locator('#download-example').getAttribute('href'), base).href,
+      )
+    ).json();
+    assert.deepEqual(exported.input.rules, ['CoreRules.FILTER_INTO_JOIN']);
+    assert.ok(exported.stages[0].events.length > 0);
+    await page.fill('#explorer-search', '');
+    if (process.env.OPTILENS_SCREENSHOT_DIR) {
+      await fs.mkdir(process.env.OPTILENS_SCREENSHOT_DIR, { recursive: true });
+      await page.screenshot({
+        path: path.join(process.env.OPTILENS_SCREENSHOT_DIR, 'rules-desktop.png'),
+        fullPage: true,
+      });
+    }
+    await select('CoreRules.PROJECT_REDUCE_EXPRESSIONS');
+    await completed();
+    assert.equal(
+      await page.locator('#download-example').getAttribute('href'),
+      firstDownload,
+      'Revisiting a rule reuses its run',
+    );
+    await page.route('**/api/runs', (route) =>
+      route.request().method() === 'POST'
+        ? route.fulfill({
+            status: 429,
+            contentType: 'application/json',
+            body: JSON.stringify({ error: 'The optimization queue is full. Try again later.' }),
+          })
+        : route.continue(),
+    );
     await page.click('#rerun-example');
     await expect(page.locator('#example-status')).toHaveClass(/error/);
     await expect(page.locator('#example-result')).toBeHidden();
-    await page.unroute('**/api/runs');await page.click('#rerun-example');await completed();
-    assert.notEqual(await page.locator('#download-example').getAttribute('href'),firstDownload);
+    await page.unroute('**/api/runs');
+    await page.click('#rerun-example');
+    await completed();
+    assert.notEqual(await page.locator('#download-example').getAttribute('href'), firstDownload);
     // Let a real slow request finish after selection has changed.
-    await page.route('**/api/runs/*',async route=>{const response=await route.fetch();await new Promise(resolve=>setTimeout(resolve,1200));await route.fulfill({response});});
-    const delayedSubmission=page.waitForResponse(response=>response.url()===base+'/api/runs'&&response.request().method()==='POST');
+    await page.route('**/api/runs/*', async (route) => {
+      const response = await route.fetch();
+      await new Promise((resolve) => setTimeout(resolve, 1200));
+      await route.fulfill({ response });
+    });
+    const delayedSubmission = page.waitForResponse(
+      (response) => response.url() === base + '/api/runs' && response.request().method() === 'POST',
+    );
     await select('CoreRules.AGGREGATE_REDUCE_FUNCTIONS');
     await expect(page.locator('#example-status')).toContainText('Running this rule');
     await select('CoreRules.COERCE_INPUTS');
-    const delayedJob=await (await delayedSubmission).json();
-    await page.unrouteAll({behavior:'wait'});
-    await expect.poll(async()=> (await (await page.request.get(base+'/api/runs/'+delayedJob.id)).json()).status,{timeout:40000}).toBe('succeeded');
+    const delayedJob = await (await delayedSubmission).json();
+    await page.unrouteAll({ behavior: 'wait' });
+    await expect
+      .poll(
+        async () =>
+          (await (await page.request.get(base + '/api/runs/' + delayedJob.id)).json()).status,
+        { timeout: 40000 },
+      )
+      .toBe('succeeded');
     await expect(page.locator('#detail-id')).toHaveText('CoreRules.COERCE_INPUTS');
     await expect(page.locator('#example-section')).toBeHidden();
-    await select('CoreRules.PROJECT_REDUCE_EXPRESSIONS');await completed();
+    await select('CoreRules.PROJECT_REDUCE_EXPRESSIONS');
+    await completed();
     await page.click('#open-lab');
     await expect(page.locator('#run')).toBeEnabled();
     await expect(page.locator('#sql')).toHaveValue(/10 \* 20/);
-    assert.equal(await page.locator('#rule-options input:checked').count(),1);
+    assert.equal(await page.locator('#rule-options input:checked').count(), 1);
     await expect(page.locator('input[value="CoreRules.PROJECT_REDUCE_EXPRESSIONS"]')).toBeChecked();
     // Prepared examples must display the target stage, never stage zero.
-    await page.goto(base+'/rules?rule=CoreRules.CALC_MERGE');await completed();
-    const prepared=library.examples.find(example=>example.id==='CoreRules.CALC_MERGE');
-    const download=await page.locator('#download-example').getAttribute('href');
-    const preparedRun=await (await page.request.get(base+download)).json();
-    const target=preparedRun.stages.at(-1);
-    assert.equal(target.id,'CoreRules.CALC_MERGE');
-    assert.equal(await page.locator('#example-raw-before').textContent(),target.before.raw);
-    assert.equal(await page.locator('#example-raw-after').textContent(),target.after.raw);
+    await page.goto(base + '/rules?rule=CoreRules.CALC_MERGE');
+    await completed();
+    const prepared = library.examples.find((example) => example.id === 'CoreRules.CALC_MERGE');
+    const download = await page.locator('#download-example').getAttribute('href');
+    const preparedRun = await (await page.request.get(base + download)).json();
+    const target = preparedRun.stages.at(-1);
+    assert.equal(target.id, 'CoreRules.CALC_MERGE');
+    assert.equal(await page.locator('#example-raw-before').textContent(), target.before.raw);
+    assert.equal(await page.locator('#example-raw-after').textContent(), target.after.raw);
     await expect(page.locator('#example-scope')).toContainText('2 preparation stages');
-    assert.equal(await page.locator('#example-program li').count(),3);
-    await page.selectOption('#example-view','0');
-    assert.equal(await page.locator('#example-raw-before').textContent(),target.events[0].before.raw);
-    await page.click('#open-lab');await expect(page.locator('#run')).toBeEnabled();
-    assert.deepEqual(await page.locator('#rule-program li').allTextContents(),prepared.input.rules);
+    assert.equal(await page.locator('#example-program li').count(), 3);
+    await page.selectOption('#example-view', '0');
+    assert.equal(
+      await page.locator('#example-raw-before').textContent(),
+      target.events[0].before.raw,
+    );
+    await page.click('#open-lab');
+    await expect(page.locator('#run')).toBeEnabled();
+    assert.deepEqual(
+      await page.locator('#rule-program li').allTextContents(),
+      prepared.input.rules,
+    );
     await expect(page.locator('#match-limit')).toHaveValue('10');
-    const submitted=page.waitForRequest(request=>request.url()===base+'/api/runs'&&request.method()==='POST');
+    const submitted = page.waitForRequest(
+      (request) => request.url() === base + '/api/runs' && request.method() === 'POST',
+    );
     await page.click('#run');
-    const sent=(await submitted).postDataJSON();
-    assert.deepEqual(sent.rules,prepared.input.rules);
-    assert.deepEqual(sent.options,prepared.input.options);
-    await expect(page.locator('#status')).toHaveText(/^Completed/,{timeout:40000});
-    const rerun=await (await page.request.get(base+await page.locator('#export').getAttribute('href'))).json();
-    assert.ok(rerun.stages.at(-1).events.length>0);
+    const sent = (await submitted).postDataJSON();
+    assert.deepEqual(sent.rules, prepared.input.rules);
+    assert.deepEqual(sent.options, prepared.input.options);
+    await expect(page.locator('#status')).toHaveText(/^Completed/, { timeout: 40000 });
+    const rerun = await (
+      await page.request.get(base + (await page.locator('#export').getAttribute('href')))
+    ).json();
+    assert.ok(rerun.stages.at(-1).events.length > 0);
     // Imported records must retain options and stage order for another run.
-    await page.setInputFiles('#import-file',{name:'prepared.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(preparedRun))});
+    await page.setInputFiles('#import-file', {
+      name: 'prepared.json',
+      mimeType: 'application/json',
+      buffer: Buffer.from(JSON.stringify(preparedRun)),
+    });
     await expect(page.locator('#status')).toContainText('Imported record');
-    assert.deepEqual(await page.locator('#rule-program li').allTextContents(),prepared.input.rules);
+    assert.deepEqual(
+      await page.locator('#rule-program li').allTextContents(),
+      prepared.input.rules,
+    );
     await expect(page.locator('#match-limit')).toHaveValue('10');
-    await page.goto(base+'/rules?rule=CoreRules.FILTER_SUB_QUERY_TO_CORRELATE');await completed();
+    await page.goto(base + '/rules?rule=CoreRules.FILTER_SUB_QUERY_TO_CORRELATE');
+    await completed();
     await expect(page.locator('#example-settings')).toContainText('disabled');
-    await page.click('#open-lab');await expect(page.locator('#run')).toBeEnabled();
+    await page.click('#open-lab');
+    await expect(page.locator('#run')).toBeEnabled();
     await expect(page.locator('#expand-subqueries')).not.toBeChecked();
-    await page.click('#run');await expect(page.locator('#status')).toHaveText(/^Completed/,{timeout:40000});
-    const subqueryRun=await (await page.request.get(base+await page.locator('#export').getAttribute('href'))).json();
-    assert.equal(subqueryRun.input.options.expandSubqueries,false);assert.ok(subqueryRun.stages[0].events.length>0);
-    await page.goto(base+'/rules?rule=CoreRules.JOIN_COMMUTE');await completed();
+    await page.click('#run');
+    await expect(page.locator('#status')).toHaveText(/^Completed/, { timeout: 40000 });
+    const subqueryRun = await (
+      await page.request.get(base + (await page.locator('#export').getAttribute('href')))
+    ).json();
+    assert.equal(subqueryRun.input.options.expandSubqueries, false);
+    assert.ok(subqueryRun.stages[0].events.length > 0);
+    await page.goto(base + '/rules?rule=CoreRules.JOIN_COMMUTE');
+    await completed();
     await expect(page.locator('#example-status')).toContainText('1 transformation');
     await expect(page.locator('#example-settings')).toContainText('Match limit per stage: 1.');
-    await page.goto(base+'/rules?rule=DateRangeRules.FILTER_INSTANCE');await completed();
+    await page.goto(base + '/rules?rule=DateRangeRules.FILTER_INSTANCE');
+    await completed();
     await expect(page.locator('#example-raw-after')).toContainText('2025-06-01');
-    await page.goto(base+'/rules?rule=CoreRules.FILTER_INTO_JOIN');await completed();
+    await page.goto(base + '/rules?rule=CoreRules.FILTER_INTO_JOIN');
+    await completed();
     await expect(page.locator('#detail-id')).toHaveText('CoreRules.FILTER_INTO_JOIN');
-    await page.setViewportSize({width:390,height:844});
-    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,'Mobile page must not overflow');
-    await page.fill('#explorer-search','definitely_no_matching_rule');await expect(page.locator('#list-empty')).toBeVisible();
-    await page.fill('#explorer-search','');
-    if(process.env.OPTILENS_SCREENSHOT_DIR)await page.screenshot({path:path.join(process.env.OPTILENS_SCREENSHOT_DIR,'rules-mobile.png'),fullPage:true});
-    assert.doesNotMatch(await page.locator('body').textContent(),/\p{Script=Han}/u);
-    assert.deepEqual(errors,[]);
-    console.log('Rule explorer checks passed: real examples, filters, unavailable/missing examples, cached selection, retries, stale results, deep links, lab handoff, keyboard and mobile layout.');
-  }finally{await browser.close();}
-})().catch(error=>{console.error(error);process.exitCode=1;});
+    await page.setViewportSize({ width: 390, height: 844 });
+    assert.equal(
+      await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
+      true,
+      'Mobile page must not overflow',
+    );
+    await page.fill('#explorer-search', 'definitely_no_matching_rule');
+    await expect(page.locator('#list-empty')).toBeVisible();
+    await page.fill('#explorer-search', '');
+    if (process.env.OPTILENS_SCREENSHOT_DIR)
+      await page.screenshot({
+        path: path.join(process.env.OPTILENS_SCREENSHOT_DIR, 'rules-mobile.png'),
+        fullPage: true,
+      });
+    assert.doesNotMatch(await page.locator('body').textContent(), /\p{Script=Han}/u);
+    assert.deepEqual(errors, []);
+    console.log(
+      'Rule explorer checks passed: real examples, filters, unavailable/missing examples, cached selection, retries, stale results, deep links, lab handoff, keyboard and mobile layout.',
+    );
+  } finally {
+    await browser.close();
+  }
+})().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});
