@@ -107,6 +107,10 @@ public final class Server implements AutoCloseable {
           reply(x, result.valid() ? 200 : 422, result);
           return;
         }
+        if (path.equals("/api/examples/verification") && method.equals("GET")) {
+          reply(x, 200, ExampleVerification.report(database(x)));
+          return;
+        }
         if (path.equals("/api/starrocks/verification") && method.equals("GET")) {
           reply(x, 200, StarRocks.verification());
           return;
@@ -121,6 +125,17 @@ public final class Server implements AutoCloseable {
         }
         if (path.equals("/api/catalog") && method.equals("GET")) {
           reply(x, 200, Engines.catalog(database(x)));
+          return;
+        }
+        if (path.equals("/api/experiments/step") && method.equals("POST")) {
+          var command = Json.MAPPER.readTree(body(x, 150_000));
+          reply(
+              x,
+              202,
+              jobs.step(
+                  command.path("runId").asText(),
+                  command.path("candidateId").asText(),
+                  Json.MAPPER.treeToValue(command.path("input"), Request.class)));
           return;
         }
         if (path.equals("/api/runs")) {

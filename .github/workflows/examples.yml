@@ -1,0 +1,29 @@
+name: Rule example verification
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  examples:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - run: mvn --batch-mode package
+      - name: Verify bundled Calcite cases in isolated workers
+        run: java -cp target/optilens.jar dev.optilens.CaseVerifier --database calcite --require-runtime
+      - name: Record native availability without claiming coverage
+        run: |
+          java -cp target/optilens.jar dev.optilens.CaseVerifier --database starrocks
+          java -cp target/optilens.jar dev.optilens.CaseVerifier --database trafodion
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: example-verification-reports
+          path: target/example-reports/*.json

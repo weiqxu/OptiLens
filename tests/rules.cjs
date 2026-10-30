@@ -21,7 +21,7 @@ const path = require('node:path');
     await page.goto(base + '/rules');
     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
     await completed();
-    assert.equal(await page.locator('#explorer-database option').count(), 2);
+    assert.equal(await page.locator('#explorer-database option').count(), 3);
     assert.ok((await page.locator('.rule-item').count()) > 200);
     assert.equal(
       await page.locator('#detail-id').textContent(),
@@ -38,7 +38,10 @@ const path = require('node:path');
     await page.selectOption('#example-view', 'stage');
     await page.check('#examples-only');
     const library = await (await page.request.get(base + '/api/rule-examples')).json();
-    assert.equal(await page.locator('.rule-item:visible').count(), library.examples.length);
+    assert.equal(
+      await page.locator('.rule-item:visible').count(),
+      library.coverage.filter((entry) => entry.status === 'verified').length,
+    );
     assert.ok(library.examples.length >= 126);
     await page.uncheck('#examples-only');
     await page.selectOption('#explorer-category', 'Enumerable physical rules');

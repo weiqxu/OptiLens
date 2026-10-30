@@ -8,8 +8,8 @@ import java.util.*;
 public final class Records {
   public static void validate(Run run) {
     Input.require(
-        run != null && (run.formatVersion() == 1 || run.formatVersion() == 2),
-        "Unsupported record format. Import an OptiLens format-version 1 or 2 run record.");
+        run != null && (run.formatVersion() >= 1 && run.formatVersion() <= 3),
+        "Unsupported record format. Import an OptiLens format-version 1, 2 or 3 run record.");
     text(run.engine(), 120);
     text(run.engineVersion(), 80);
     text(run.createdAt(), 80);
@@ -22,7 +22,15 @@ public final class Records {
     Input.require(
         run.stages() != null && run.stages().size() <= Rules.MAX_SELECTED, "Invalid stage count");
     Input.require(
-        run.stages().size() == run.input().rules().size(), "Stages do not match the rule program");
+        (run.formatVersion() == 3
+            ? run.stages().size() <= run.input().rules().size()
+            : run.stages().size() == run.input().rules().size()),
+        "Stages do not match the rule program");
+    if (run.formatVersion() == 3) experiment(run);
+    else
+      Input.require(
+          run.nativeTrace() == null || run.nativeTrace().isNull(),
+          "Native experiments require record format 3");
     int count = 0;
     for (int i = 0; i < run.stages().size(); i++) {
       var s = run.stages().get(i);
@@ -35,7 +43,7 @@ public final class Records {
       text(s.source(), 1000);
       snapshot(s.before());
       snapshot(s.after());
-      if (run.formatVersion() == 2) {
+      if (run.formatVersion() >= 2) {
         Input.require(
             s.scopeBeforeRootId() != null
                 && s.before().nodes().stream().anyMatch(n -> n.id().equals(s.scopeBeforeRootId())),
@@ -86,6 +94,65 @@ public final class Records {
         Plans.validateStructure(editable.plan());
         Input.require(
             editable.reasons().isEmpty(), "Editable plan must not also have unsupported reasons");
+      }
+    }
+  }
+
+  private static void experiment(Run run) {
+    Input.require(
+        "trafodion".equals(run.engine())
+            && "trafodion".equals(run.input().database())
+            && "plan".equals(run.input().inputMode()),
+        "Version 3 currently requires a native Trafodion plan experiment");
+    var trace = run.nativeTrace();
+    Input.require(trace != null && trace.isObject(), "Missing native experiment metadata");
+    Input.require(
+        "trafodion-experiment".equals(trace.path("kind").asText())
+            && trace.path("generationFingerprint").asText().matches("[0-9a-f]{64}")
+            && trace.path("sourceCommit").asText().matches("[0-9a-f]{40}")
+            && run.engineVersion().equals(trace.path("buildId").asText()),
+        "Invalid native experiment build or generation identity");
+    int step = trace.path("stepIndex").asInt(-1);
+    Input.require(
+        step == run.stages().size()
+            && trace.path("replay").isArray()
+            && trace.path("replay").size() == step
+            && trace.path("complete").isBoolean()
+            && trace.path("complete").asBoolean() == (step == run.input().rules().size()),
+        "Invalid native replay position");
+    Input.require(
+        trace.path("currentFingerprint").asText().matches("[0-9a-f]{64}"),
+        "Invalid current plan fingerprint");
+    for (var choice : trace.path("replay")) {
+      Input.require(
+          choice.path("ordinal").canConvertToInt()
+              && choice.path("ordinal").asInt() >= -1
+              && choice.path("ordinal").asInt() < 80
+              && choice.path("fingerprint").asText().matches("[0-9a-f]{64}")
+              && choice.path("generationFingerprint").asText().matches("[0-9a-f]{64}"),
+          "Invalid replay choice");
+    }
+    var candidates = trace.path("candidates");
+    Input.require(
+        candidates.isArray()
+            && candidates.size() <= 80
+            && (step < run.input().rules().size() || candidates.isEmpty()),
+        "Invalid native candidate count");
+    for (int i = 0; i < candidates.size(); i++) {
+      var candidate = candidates.get(i);
+      String fingerprint = candidate.path("fingerprint").asText();
+      Input.require(
+          fingerprint.matches("[0-9a-f]{64}")
+              && candidate.path("ordinal").asInt(-1) == i
+              && candidate.path("id").asText().equals("c" + i + "-" + fingerprint)
+              && candidate.path("compatible").isBoolean(),
+          "Invalid native candidate identity");
+      try {
+        snapshot(Json.MAPPER.treeToValue(candidate.path("before"), Snapshot.class));
+        snapshot(Json.MAPPER.treeToValue(candidate.path("after"), Snapshot.class));
+        snapshot(Json.MAPPER.treeToValue(candidate.path("preview"), Snapshot.class));
+      } catch (java.io.IOException e) {
+        throw new IllegalArgumentException("Invalid native candidate snapshot", e);
       }
     }
   }

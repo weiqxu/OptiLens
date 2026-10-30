@@ -1,0 +1,37 @@
+{
+  "formatVersion" : 1,
+  "validatorVersion" : 1,
+  "database" : "trafodion",
+  "adapterHash" : "4db3cb6e45062b440f44849f60f2c4ba7334a8e6cfb50de962b64db5ad345623",
+  "results" : [ {
+    "caseId" : "Trafodion.HashJoinRule",
+    "caseHash" : "e16976f6ec98183a20aa7cca6c6aed9e3b0324a1c7aa890f59edbef6621f6832",
+    "status" : "passed",
+    "reason" : "Observed 2 real target-rule changes",
+    "engineVersion" : "lite-ecbf9e035d1c",
+    "buildId" : "f1bb021befd8-6b5e1a104d28",
+    "sourceCommit" : "f1bb021befd8ff98451f00b01e1a1d54fe282990",
+    "changes" : 2,
+    "completedAt" : "2026-10-30T03:06:17.933204403Z"
+  }, {
+    "caseId" : "Trafodion.JoinCommutativityRule",
+    "caseHash" : "6d935b7cc60866614d2405b2cbe33b264c119fbec8e0741c9814493867c0511d",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "lite-ecbf9e035d1c",
+    "buildId" : "f1bb021befd8-6b5e1a104d28",
+    "sourceCommit" : "f1bb021befd8ff98451f00b01e1a1d54fe282990",
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:17.933449529Z"
+  }, {
+    "caseId" : "Trafodion.JoinCommutativityRule.replay",
+    "caseHash" : "3f442d1653d6bd363424b9c10966d503b7d6992213a4ce4ad83edbab686fd189",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "lite-ecbf9e035d1c",
+    "buildId" : "f1bb021befd8-6b5e1a104d28",
+    "sourceCommit" : "f1bb021befd8ff98451f00b01e1a1d54fe282990",
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:21.443049517Z"
+  } ]
+}

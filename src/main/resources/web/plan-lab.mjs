@@ -962,7 +962,7 @@ function renderProgram() {
       .filter(
         (r) =>
           r.runnable &&
-          !state().rules.includes(r.id) &&
+          (capabilities.experimentMode === 'candidate-replay' || !state().rules.includes(r.id)) &&
           [r.id, r.description].join(' ').toLowerCase().includes(query),
       )
       .map((r) => new Option(r.id, r.id)),
@@ -1013,13 +1013,24 @@ function render() {
   if ($('lab-mode').value !== 'json') $('lab-json').value = JSON.stringify(state(), null, 2);
   $('lab-undo').disabled = !history.past.length;
   $('lab-redo').disabled = !history.future.length;
+  if (job?.result.nativeTrace) renderNativeExperiment();
   const errors = structuralErrors(state().plan, capabilities.operators);
-  $('lab-structure').textContent = errors.length
-    ? errors.join(' ')
-    : `${state().plan.nodes.length} connected nodes. Validate to check expressions and types.`;
+  $('lab-structure').textContent = !capabilities.inputModes.includes('plan')
+    ? capabilities.message
+    : errors.length
+      ? errors.join(' ')
+      : `${state().plan.nodes.length} connected nodes. Validate to check expressions and types.`;
   $('lab-database').disabled = busy;
-  $('lab-run').disabled = busy || errors.length > 0 || !catalog.runtime.available;
-  $('lab-validate').disabled = busy || errors.length > 0 || !catalog.runtime.available;
+  $('lab-run').disabled =
+    busy ||
+    errors.length > 0 ||
+    !catalog.runtime.available ||
+    !capabilities.inputModes.includes('plan');
+  $('lab-validate').disabled =
+    busy ||
+    errors.length > 0 ||
+    !catalog.runtime.available ||
+    !capabilities.inputModes.includes('plan');
 }
 function loadRequest(request) {
   if (request.inputMode !== 'plan')
@@ -1145,9 +1156,19 @@ async function validate() {
     validatedFields = result.fields;
     $('lab-preview-panel').hidden = false;
     drawPlan($('lab-preview'), result.snapshot, new Map(), 'before', () => {}, 0.8);
-    $('lab-fields').textContent = JSON.stringify(result.fields, null, 2);
+    $('lab-fields').textContent = JSON.stringify(
+      result.nativeNodeMapping && Object.keys(result.nativeNodeMapping).length
+        ? { fields: result.fields, nativeNodeMapping: result.nativeNodeMapping }
+        : result.fields,
+      null,
+      2,
+    );
     renderInspector();
-    status('Valid plan · Initial operator structure preserved.');
+    status(
+      catalog.database === 'trafodion'
+        ? 'Valid native plan · Binding and logical properties initialized without optimizer search.'
+        : 'Valid plan · Initial operator structure preserved.',
+    );
   } catch (e) {
     if (token === revision) displayError(e);
   } finally {
@@ -1176,7 +1197,11 @@ async function run() {
     if (token !== revision) return;
     showResult(result);
     status(
-      `Completed · ${result.result.stages.reduce((n, s) => n + s.events.length, 0)} transformations`,
+      result.result.nativeTrace
+        ? result.result.nativeTrace.complete
+          ? 'Completed · Native rule program verified.'
+          : 'Candidates ready · Preview and choose a native candidate to continue.'
+        : `Completed · ${result.result.stages.reduce((n, s) => n + s.events.length, 0)} transformations`,
     );
     await refreshHistory();
   } catch (e) {
@@ -1203,8 +1228,118 @@ function showResult(result) {
     ? 'The complete result can be copied into a new editable experiment.'
     : `Read-only result: ${editable?.reasons?.join('; ') || 'This older record has no editable plan representation.'}`;
   $('lab-limitations').replaceChildren(...job.result.limitations.map((v) => el('li', v)));
+  renderNativeExperiment();
   updateViews();
 }
+function sameNativeDraft(a, b) {
+  const stable = (value) =>
+    Array.isArray(value)
+      ? value.map(stable)
+      : value && typeof value === 'object'
+        ? Object.fromEntries(
+            Object.keys(value)
+              .filter((key) => key !== 'layout' && value[key] != null)
+              .sort()
+              .map((k) => [k, stable(value[k])]),
+          )
+        : value;
+  return JSON.stringify(stable(a)) === JSON.stringify(stable(b));
+}
+function renderNativeExperiment() {
+  const trace = job?.result.nativeTrace;
+  $('lab-native-experiment').hidden = !trace;
+  if (!trace) return;
+  let stale = true;
+  try {
+    stale = !sameNativeDraft(inputRequest(), job.result.input);
+  } catch {}
+  const complete = trace.complete;
+  $('lab-native-status').textContent = complete
+    ? 'Rule program complete. All choices were replayed and verified.'
+    : `Step ${trace.stepIndex + 1} of ${job.result.input.rules.length} · ${job.result.input.rules[trace.stepIndex]} · ${trace.candidates.length} candidates${trace.truncated ? ' · collection truncated' : ''}.${stale ? ' Draft changed; start a new experiment.' : ''}`;
+  const selectedCandidate = $('lab-native-candidate').value;
+  $('lab-native-candidate').replaceChildren(
+    ...trace.candidates.map(
+      (candidate, index) =>
+        new Option(
+          `${index + 1} · ${candidate.fingerprint.slice(0, 12)}${candidate.compatible ? '' : ' · incompatible outputs'}`,
+          candidate.id,
+        ),
+    ),
+  );
+  if (trace.candidates.some((c) => c.id === selectedCandidate))
+    $('lab-native-candidate').value = selectedCandidate;
+  $('lab-native-preview').disabled = complete || !trace.candidates.length;
+  const candidate = trace.candidates.find((c) => c.id === $('lab-native-candidate').value);
+  $('lab-native-choose').textContent = trace.candidates.length
+    ? 'Choose candidate & continue'
+    : 'Continue without a match';
+  $('lab-native-choose').disabled =
+    busy || complete || stale || job.imported || (candidate && !candidate.compatible);
+  $('lab-native-memo').textContent = candidate
+    ? JSON.stringify(candidate.memo)
+    : 'No rule-generated candidate. The input remains unchanged.';
+}
+$('lab-native-candidate').onchange = renderNativeExperiment;
+$('lab-native-preview').onclick = () => {
+  const candidate = job.result.nativeTrace.candidates.find(
+    (c) => c.id === $('lab-native-candidate').value,
+  );
+  if (!candidate) return;
+  const before = job.result.finalPlan,
+    after = candidate.preview,
+    diff = diffPlans(before, after);
+  drawPlan($('lab-before'), before, diff.left, 'before', () => {}, 0.8);
+  drawPlan($('lab-after'), after, diff.right, 'after', () => {}, 0.8);
+  $('lab-result-scope').textContent =
+    'Unselected candidate preview · The editor and experiment input are unchanged.';
+  $('lab-raw').textContent = JSON.stringify(
+    { before: candidate.before, after: candidate.after, memo: candidate.memo },
+    null,
+    2,
+  );
+};
+$('lab-native-choose').onclick = async () => {
+  if (busy) return;
+  const token = revision,
+    original = job;
+  try {
+    busy = true;
+    renderNativeExperiment();
+    render();
+    const submitted = await api('/api/experiments/step', {
+      method: 'POST',
+      body: JSON.stringify({
+        runId: original.id,
+        candidateId: $('lab-native-candidate').value || 'unchanged',
+        input: inputRequest(),
+      }),
+    });
+    status('Rebuilding native input and verifying selected candidates…');
+    let result;
+    for (let i = 0; i < 360; i++) {
+      result = await api('/api/runs/' + submitted.id);
+      if (['succeeded', 'failed'].includes(result.status)) break;
+      await new Promise((r) => setTimeout(r, 500));
+    }
+    if (result.status !== 'succeeded')
+      throw Error(result.error || 'The native step is still pending.');
+    if (token !== revision) return;
+    showResult(result);
+    status(
+      result.result.nativeTrace.complete
+        ? 'Completed · Native rule program and replay verified.'
+        : 'Candidate selected · Choose the next native candidate.',
+    );
+    await refreshHistory();
+  } catch (error) {
+    if (token === revision) displayError(error);
+  } finally {
+    busy = false;
+    render();
+    if (job?.result.nativeTrace) renderNativeExperiment();
+  }
+};
 function updateViews() {
   const stage = job.result.stages[Number($('lab-stage').value)];
   $('lab-view').replaceChildren(new Option('Complete plans', 'full'));
@@ -1419,16 +1554,51 @@ function starter() {
       },
     ],
   );
+  if (catalog.database === 'trafodion') {
+    return {
+      inputMode: 'plan',
+      database: catalog.database,
+      sql: null,
+      schema,
+      rules: ['Trafodion.JoinCommutativityRule', 'Trafodion.JoinCommutativityRule'],
+      options: { matchLimit: 20 },
+      scopeNodeId: null,
+      plan: {
+        planVersion: 1,
+        rootId: 'join',
+        nodes: [
+          { id: 'left', op: 'TableScan', inputs: [], attributes: { table: schema[0].name } },
+          {
+            id: 'right',
+            op: 'TableScan',
+            inputs: [],
+            attributes: { table: schema[1]?.name || schema[0].name },
+          },
+          {
+            id: 'join',
+            op: 'Join',
+            inputs: ['left', 'right'],
+            attributes: {
+              joinType: 'INNER',
+              condition: { kind: 'call', op: '=', args: [ref(0, 0), ref(1, 0)] },
+            },
+          },
+        ],
+        layout: {},
+      },
+    };
+  }
   return {
     inputMode: 'plan',
     database: catalog.database,
     sql: null,
     schema,
-    rules: [
+    rules:
       catalog.database === 'calcite'
-        ? 'CoreRules.PROJECT_REDUCE_EXPRESSIONS'
-        : 'StarRocks.FoldConstantsRule',
-    ],
+        ? ['CoreRules.PROJECT_REDUCE_EXPRESSIONS']
+        : catalog.database === 'starrocks'
+          ? ['StarRocks.FoldConstantsRule']
+          : [],
     options: { matchLimit: 10 },
     scopeNodeId: null,
     plan: {
@@ -1489,7 +1659,8 @@ async function loadEngine(database) {
   $('lab-palette').replaceChildren();
   for (const op of Object.keys(capabilities.operators).sort()) {
     const b = button(op, () => addNode(op));
-    b.draggable = true;
+    b.draggable = capabilities.inputModes.includes('plan');
+    b.disabled = !capabilities.inputModes.includes('plan');
     b.dataset.operator = op;
     b.ondragstart = (e) => e.dataTransfer.setData('text/optilens-operator', op);
     $('lab-palette').append(b);
@@ -1554,7 +1725,9 @@ try {
   await refreshHistory();
   status(
     catalog.runtime.available
-      ? 'Ready · Build a plan, validate it, and choose a rule program.'
+      ? capabilities.inputModes.includes('plan')
+        ? 'Ready · Build a plan, validate it, and choose a rule program.'
+        : capabilities.message
       : catalog.runtime.message,
   );
 } catch (e) {

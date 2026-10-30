@@ -1,0 +1,37 @@
+[ {
+  "id" : "trafodion-join",
+  "title" : "Native join optimization",
+  "note" : "Full Trafodion optimization; selected rules only filter recorded candidate events. Queries are compiled, never executed.",
+  "input" : {
+    "sql" : "SELECT c.id, o.total FROM customers c JOIN orders o ON c.id = o.customer_id WHERE o.total > 100",
+    "schema" : [ {
+      "name" : "customers",
+      "columns" : [ {
+        "name" : "id",
+        "type" : "INTEGER",
+        "nullable" : false
+      }, {
+        "name" : "name",
+        "type" : "VARCHAR",
+        "nullable" : true
+      } ]
+    }, {
+      "name" : "orders",
+      "columns" : [ {
+        "name" : "customer_id",
+        "type" : "INTEGER",
+        "nullable" : false
+      }, {
+        "name" : "total",
+        "type" : "INTEGER",
+        "nullable" : true
+      } ]
+    } ],
+    "rules" : [ "Trafodion.HashJoinRule", "Trafodion.JoinCommutativityRule" ],
+    "database" : "trafodion",
+    "options" : null,
+    "inputMode" : "sql",
+    "plan" : null,
+    "scopeNodeId" : null
+  }
+} ]

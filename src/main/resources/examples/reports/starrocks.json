@@ -1,0 +1,887 @@
+{
+  "formatVersion" : 1,
+  "validatorVersion" : 1,
+  "database" : "starrocks",
+  "adapterHash" : "4db3cb6e45062b440f44849f60f2c4ba7334a8e6cfb50de962b64db5ad345623",
+  "results" : [ {
+    "caseId" : "StarRocks.ExtractCommonPredicateRule",
+    "caseHash" : "8afc5848fae73580469d694a0fb3495fbabe0d83d932cc38893d12d0ff67a549",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.394521110Z"
+  }, {
+    "caseId" : "StarRocks.FoldConstantsRule",
+    "caseHash" : "943a4d0e00e87874aba8c665508ec969c1aeccee28f3bd2aeed25ff20856f3e0",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.394529686Z"
+  }, {
+    "caseId" : "StarRocks.MvNormalizePredicateRule",
+    "caseHash" : "ca48d3c3cd945aa15cf886316d81a68f7876eceffb09cfceac3a8f8b522a88fd",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.404254616Z"
+  }, {
+    "caseId" : "StarRocks.NormalizePredicateRule",
+    "caseHash" : "42210b83a4db69e2a777ce6516e571c70b4556a94e9b8c354817f051cbed7200",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.404195961Z"
+  }, {
+    "caseId" : "StarRocks.PruneTediousPredicateRule",
+    "caseHash" : "314210926ef938527e91be432a129e7848ccac9d2ca02d316ea104a03e5994b5",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.407056884Z"
+  }, {
+    "caseId" : "StarRocks.ReduceCastRule",
+    "caseHash" : "be0513a866fab23c1bd2db9cbcdefce9c232220b8515e6eef2ffca99f1c498e1",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.408645026Z"
+  }, {
+    "caseId" : "StarRocks.SimplifiedPredicateRule",
+    "caseHash" : "311a3288baae66995fe2e2c2d8595e2fc135364384b23ec7a72e1b014c4aa169",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.410547839Z"
+  }, {
+    "caseId" : "StarRocks.SimplifiedScanColumnRule",
+    "caseHash" : "a9fad0e59a5484461255f2838ab4a772a443396b9f9dbd66006fe296a6d6da9e",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.413554267Z"
+  }, {
+    "caseId" : "StarRocks.CTEAnchorImplementationRule",
+    "caseHash" : "b7a72d6c1d7b95e556e2cc409f879f2c4ca1ccb18817021cd8e8cc16cd154a7f",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.413528636Z"
+  }, {
+    "caseId" : "StarRocks.CTEAnchorToNoCTEImplementationRule",
+    "caseHash" : "d10c5bd1033db0fe956cf60b0615bd03eccb9dc3a84787110da776899a036683",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.416046694Z"
+  }, {
+    "caseId" : "StarRocks.CTEConsumeInlineImplementationRule",
+    "caseHash" : "14affb07e7c85abe5ee5935e29a48cad0d7246c41a0bc6204dd5d479d7662f79",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.415846279Z"
+  }, {
+    "caseId" : "StarRocks.CTEConsumerReuseImplementationRule",
+    "caseHash" : "a8c7f3af0c5a658528585028d3d171aef539e1a45f1d71a877f998397c8685bd",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.418048976Z"
+  }, {
+    "caseId" : "StarRocks.CTEProduceImplementationRule",
+    "caseHash" : "b97149dda3a2541c8e6c7ae17cc683cc3140bda9500898bf9c0e2c9129432dc8",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.417654750Z"
+  }, {
+    "caseId" : "StarRocks.ExceptImplementationRule",
+    "caseHash" : "c42e2861b7eb0b5dc399728e1ebd0ac0fc288c78e57c2f27de879e58e75dabe3",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.421115145Z"
+  }, {
+    "caseId" : "StarRocks.FilterImplementationRule",
+    "caseHash" : "3c08eb5351dd113eaf27cf70844bf4ef7b73ec6f3e4f98beea6c9d6bae8a2e73",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.421088232Z"
+  }, {
+    "caseId" : "StarRocks.HashAggImplementationRule",
+    "caseHash" : "c3da0b1b4a8f3bc497e8a8caac74d6bf4ab31385557ecb0da8158f4fb1630fc4",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.431435998Z"
+  }, {
+    "caseId" : "StarRocks.HashJoinImplementationRule",
+    "caseHash" : "0b223801d3cc59047f1c2d05240eaa2c2d19a93d7c03347f970d30fa5e74f529",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.429372892Z"
+  }, {
+    "caseId" : "StarRocks.IntersectImplementationRule",
+    "caseHash" : "f84805b70e2cf5443d73523f3567f64077b04fff71191eab2609cb4a29241945",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.431908891Z"
+  }, {
+    "caseId" : "StarRocks.MergeJoinImplementationRule",
+    "caseHash" : "7bb898903acc9cc0eb3d5e85a9b7ef95422dcc0888b1db7d807dde2d0edd1784",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.434164920Z"
+  }, {
+    "caseId" : "StarRocks.NestLoopJoinImplementationRule",
+    "caseHash" : "049f36565802b1ccd23cc1af0840cbd1db6ccf7ba752189ccae739029cafbb08",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.434017739Z"
+  }, {
+    "caseId" : "StarRocks.OlapScanImplementationRule",
+    "caseHash" : "a538b054c98d2d7e10a8777f5ef1bc3c8b4af17ab0254b88696b54c18af0aabf",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.435925579Z"
+  }, {
+    "caseId" : "StarRocks.ProjectImplementationRule",
+    "caseHash" : "df049ede51d1ab42728bdaeb62d740712f4ea292f43a37222a5e7adb1a951a9d",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.435925481Z"
+  }, {
+    "caseId" : "StarRocks.RepeatImplementationRule",
+    "caseHash" : "1d6f8b2cb2c2e57d0402691306e697cc32dcef1260d8bfeeed443455d67dc608",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.436981975Z"
+  }, {
+    "caseId" : "StarRocks.TopNImplementationRule",
+    "caseHash" : "9c32227058879a414c83e04fd1a4829637b82274695dce918478879ec4a103b4",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.438959710Z"
+  }, {
+    "caseId" : "StarRocks.UnionImplementationRule",
+    "caseHash" : "1299b4ffedad442e303db261ac90f2ecba476fa38c7125eac3a12a2530ec59c5",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.438875718Z"
+  }, {
+    "caseId" : "StarRocks.ValuesImplementationRule",
+    "caseHash" : "cc45a9c632438bbb38b5adf7d674e9ece193de3c303c9591b7566ab57b3e391c",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.442668923Z"
+  }, {
+    "caseId" : "StarRocks.WindowImplementationRule",
+    "caseHash" : "44740241881091b096f8acb03bf04394edcf61d068450463ad64bd6d03a3b252",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.440934783Z"
+  }, {
+    "caseId" : "StarRocks.ArrayDistinctAfterAggRule",
+    "caseHash" : "e78f42957f74828192e1777d63ec371ed4baf7b0d8f8b8167ee36b4aee121d37",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.444172285Z"
+  }, {
+    "caseId" : "StarRocks.EliminateAggFunctionRule",
+    "caseHash" : "2b334e53817ae4739cc3396ec1401327d18614d2f810f025b2ac4b54f9a2b84d",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.445384932Z"
+  }, {
+    "caseId" : "StarRocks.EliminateAggRule",
+    "caseHash" : "63c41cbbd9d61f7b96dacdfe3c0fc4c08c30083fa945a731b5341a7a75fc86a4",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.445235483Z"
+  }, {
+    "caseId" : "StarRocks.EliminateGroupByConstantRule",
+    "caseHash" : "24b287ded6166f1d9de21c5080a80467741baea1ef21f7bd4abae609c27f8f0a",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.446174271Z"
+  }, {
+    "caseId" : "StarRocks.EliminateJoinWithConstantRule",
+    "caseHash" : "4845fc69c86d73dabda462b15eef88643c7134e915e013c3ece852bbdce37d11",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.447109609Z"
+  }, {
+    "caseId" : "StarRocks.EliminateLimitZeroRule",
+    "caseHash" : "cf4b870aa65460fc854bfd7547a3c203960cac39dab9f1919b2256f7281dfaa4",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.447027885Z"
+  }, {
+    "caseId" : "StarRocks.InlineOneCTEConsumeRule",
+    "caseHash" : "94b5ac6b177ed7a1221c3377e027893eeb6e466a75a105bb4d6d99032a4101f7",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.447476331Z"
+  }, {
+    "caseId" : "StarRocks.JoinAssociativityRule",
+    "caseHash" : "8cd98eec9ea15e46127d2b9b2be41835a8f49942eaaac0f216b1c76dcde03042",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.448370560Z"
+  }, {
+    "caseId" : "StarRocks.JoinCommutativityRule",
+    "caseHash" : "c224a6531ea1ba9d004d49bd3c4bdf05b53bb77af9be9f750c6eca7711a4f38f",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.448063973Z"
+  }, {
+    "caseId" : "StarRocks.JoinCommutativityWithoutInnerRule",
+    "caseHash" : "34a71f214486991d764afd958bcf063f2f12b5c378e2709c67c12b0ce34c0154",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.449694702Z"
+  }, {
+    "caseId" : "StarRocks.JoinLeftAsscomRule",
+    "caseHash" : "2b7b206c506af58ea937f3bdca462e026083d004eaf54011c49e412035a6ed74",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.449694505Z"
+  }, {
+    "caseId" : "StarRocks.MergeLimitDirectRule",
+    "caseHash" : "65f8ba2474368e10a279862617ed0202f2114d32fe3e907fec336a78a2e56418",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.450862790Z"
+  }, {
+    "caseId" : "StarRocks.MergeLimitWithLimitRule",
+    "caseHash" : "1ff7ca373d9fc6ae2421842761583959b1e3e8fb3c2122b904d3a11c164fa25c",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.450902419Z"
+  }, {
+    "caseId" : "StarRocks.MergeLimitWithSortRule",
+    "caseHash" : "9a465a5f43e178d32798537d8afbc18c259969e26ee32f797b109321f7448b29",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.452228927Z"
+  }, {
+    "caseId" : "StarRocks.MergeProjectWithChildRule",
+    "caseHash" : "8d1f0a01fd3f33d87350abf2066e1b67254d6abf02859dbc4175413a2e88caec",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.452225477Z"
+  }, {
+    "caseId" : "StarRocks.MergeTwoFiltersRule",
+    "caseHash" : "d38dc6a1a8b37c0026d5af5b30766d2b6b044940400ddafa117993a7c991d6e3",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.453529015Z"
+  }, {
+    "caseId" : "StarRocks.MergeTwoProjectRule",
+    "caseHash" : "f4031d9e9f79e09b297dc2422b82384eec84b4c8f67ea553ca6ac1831f15693c",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.453681717Z"
+  }, {
+    "caseId" : "StarRocks.OuterJoinEliminationRule",
+    "caseHash" : "3205bf98c19e9f92e3b72477e1855802678c9ef3d32e5f5ae87ce2b4e2019cff",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.455817379Z"
+  }, {
+    "caseId" : "StarRocks.PartitionPruneRule",
+    "caseHash" : "981ab9ee44b22be299c3d8b22f6e51da77df2f891cbeca48a1431760c66ef14e",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.455817773Z"
+  }, {
+    "caseId" : "StarRocks.PruneCTEProduceRule",
+    "caseHash" : "89c15d4288edd5eb2ee79bea59d0b8fb2acd8caf37e960979f4ab464a5fc53bb",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.457435884Z"
+  }, {
+    "caseId" : "StarRocks.PruneEmptyDirectRule",
+    "caseHash" : "35ba01412bb9d22ec7d6f6e060db99166f57184c5b967ebadcc564610f1c70e6",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.457580009Z"
+  }, {
+    "caseId" : "StarRocks.PruneEmptyExceptRule",
+    "caseHash" : "8cc34db0ad9562b141f98b7f5dc418756378f9c495af71e46fd5b90a5919536e",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.459641538Z"
+  }, {
+    "caseId" : "StarRocks.PruneEmptyIntersectRule",
+    "caseHash" : "3e97a924030d27408473170c5ace6b96119ab2e779060ab4ba7c36b32f51dc4d",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.459529451Z"
+  }, {
+    "caseId" : "StarRocks.PruneEmptyJoinRule",
+    "caseHash" : "c076ce806a982e06058611fb339fdf0f067fdae0a373bdcb90fff39552c853bf",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.461685421Z"
+  }, {
+    "caseId" : "StarRocks.PruneEmptyUnionRule",
+    "caseHash" : "d144c86af274426d2b825376f70cf2c00252b31193202fbb159f8b98ee5b8b54",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.461685421Z"
+  }, {
+    "caseId" : "StarRocks.PruneGroupByKeysRule",
+    "caseHash" : "ffe540a128486f2edc0a9960965bd078a9bd8b2a0e2f043338a76c481f19c450",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.463808563Z"
+  }, {
+    "caseId" : "StarRocks.PruneProjectColumnsRule",
+    "caseHash" : "5720d9f3a79e3277e6fc8eff185b0f61467ce01d68b28fd3f48bbf2de1e8ff8b",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.463822660Z"
+  }, {
+    "caseId" : "StarRocks.PruneProjectEmptyRule",
+    "caseHash" : "b0eeffa6db50d8f80f08bf40e1aaa175ec1cd90e991ef0e38e3d7e6ba604d973",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.466408147Z"
+  }, {
+    "caseId" : "StarRocks.PruneProjectRule",
+    "caseHash" : "f990d5bf47fc9e4b3953bfbee107c2a953682f0db729c3430a64357d5f7dda46",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.466407556Z"
+  }, {
+    "caseId" : "StarRocks.PruneScanColumnRule",
+    "caseHash" : "7e4791fd00983c53fafda39115935165344a61766fce902c10d05b884101dc0b",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.468851678Z"
+  }, {
+    "caseId" : "StarRocks.PruneTrueFilterRule",
+    "caseHash" : "28d665cf0a0c78c5f326c1b7d58139408a9b42f464829a72281bf18eb28d48b3",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.468601577Z"
+  }, {
+    "caseId" : "StarRocks.PushDownApplyLeftProjectRule",
+    "caseHash" : "7cb08213049515a6bdc4aff80c8ac09f75da689483734c9301d72c22755bc04f",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.470457958Z"
+  }, {
+    "caseId" : "StarRocks.PushDownApplyProjectRule",
+    "caseHash" : "d8b599385949af8df47a1c74ed16e455d46702de8e3b0c9d100abf9c9ce00055",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.470458057Z"
+  }, {
+    "caseId" : "StarRocks.PushDownJoinOnClauseRule",
+    "caseHash" : "d3563eafba503d06b2941b6e734fa5332cf6865357442965aa7040d84a2fa3b8",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.473284674Z"
+  }, {
+    "caseId" : "StarRocks.PushDownJoinOnExpressionToChildProject",
+    "caseHash" : "303f4515318121778af4ab4a46226eb0482e658790d450903328722561436d95",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.473355455Z"
+  }, {
+    "caseId" : "StarRocks.PushDownLimitDirectRule",
+    "caseHash" : "7ced5bd160f0a4857e245701d25a1d8cfe3bead8bbadf8f165d616609e067098",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.475291490Z"
+  }, {
+    "caseId" : "StarRocks.PushDownLimitJoinRule",
+    "caseHash" : "722b4430f4d37066beb2886cf65be6e267642dadc70417c53b303dcf7a9c7b31",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.475024828Z"
+  }, {
+    "caseId" : "StarRocks.PushDownLimitUnionRule",
+    "caseHash" : "0b494c3ba01e90fbca5b599e16bd15dc59c31622b9dd56a2b25427ed35da0011",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.477313980Z"
+  }, {
+    "caseId" : "StarRocks.PushDownPredicateAggRule",
+    "caseHash" : "73e95deef30ca5d43b892c2e68e16e3d0d7bca7438a7f962626c35c1e531a35e",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.477313882Z"
+  }, {
+    "caseId" : "StarRocks.PushDownPredicateExceptRule",
+    "caseHash" : "df22f4ca3e852375d3f671c006d9afc0d4ce3bb98c4d09836ee843711a784189",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.479724782Z"
+  }, {
+    "caseId" : "StarRocks.PushDownPredicateIntersectRule",
+    "caseHash" : "4b1eac40aa05e28917bb95def86c16a981ec33678d9bf77fef277a6e8041a042",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.479925395Z"
+  }, {
+    "caseId" : "StarRocks.PushDownPredicateJoinRule",
+    "caseHash" : "c615c0dd26ceb6acd0ccdb302df13490b8b3403630c07125ae816f6b80be4668",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.482256148Z"
+  }, {
+    "caseId" : "StarRocks.PushDownPredicateProjectRule",
+    "caseHash" : "59d13da250c0f17ac77f9af9ad0b39debe0063350f56bbc1cc2050d57562249a",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.482255951Z"
+  }, {
+    "caseId" : "StarRocks.PushDownPredicateScanRule",
+    "caseHash" : "36727c7bec4cc2d3aaa03f995b5af1699003658e6e2c4c1046e13b3c6add46fd",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.484171185Z"
+  }, {
+    "caseId" : "StarRocks.PushDownPredicateUnionRule",
+    "caseHash" : "e88a33baf87110bb0e629d8bcdd6d176067d729a28b99678aba15e35bf7faa63",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.484211505Z"
+  }, {
+    "caseId" : "StarRocks.QuantifiedApply2JoinRule",
+    "caseHash" : "115c10e6c0ba17d506471a3cd301f74c631d5d0be2d81033a5371e3f41ab2e55",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.485861457Z"
+  }, {
+    "caseId" : "StarRocks.ReorderIntersectRule",
+    "caseHash" : "e10b10797cf7f4fe3722d65bb9ce14654fed6320cd8eb3aac714b19692d6d210",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.485913114Z"
+  }, {
+    "caseId" : "StarRocks.RewriteCountIfFunction",
+    "caseHash" : "a47bc7510b366261489aa8c95a88c828a2d34c257dce9c6f8c22a530a5a22f55",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.487643016Z"
+  }, {
+    "caseId" : "StarRocks.RewriteDuplicateAggregateFnRule",
+    "caseHash" : "7df568fc6d20b6dc64a6775e2c031c5b2d6a61e025a79535848e17675c0bf3cb",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.487610090Z"
+  }, {
+    "caseId" : "StarRocks.RewriteGroupingSetsByCTERule",
+    "caseHash" : "f5d2eb20494d19db1607e3c2f823cbe4ab1491a477d7403deeca099c2dce6a84",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.491132689Z"
+  }, {
+    "caseId" : "StarRocks.RewriteMultiDistinctRule",
+    "caseHash" : "e9a82de17636b3e890444c3b37821e242b1746f6f7c793ec6714667c8799e700",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.491296630Z"
+  }, {
+    "caseId" : "StarRocks.RewriteSimpleAggToMetaScanRule",
+    "caseHash" : "c2ce5c21d7bc58de8f823eb1d4bcf16a1defd884de463e27eba226d2dab834eb",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.492962552Z"
+  }, {
+    "caseId" : "StarRocks.RewriteSumByAssociativeRule",
+    "caseHash" : "363c3bd0c91aa7b73c79a246d6d6519d177082fa02f883e67f92f5b90ab413c6",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.492962651Z"
+  }, {
+    "caseId" : "StarRocks.ScalarApply2JoinRule",
+    "caseHash" : "5806a26bf0dced05a6908b3cf1bc53d6b5c3ba85363574e0ed05218a15ae3d52",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.494649177Z"
+  }, {
+    "caseId" : "StarRocks.SeparateProjectRule",
+    "caseHash" : "713b0476fedc20c78e11969d623692bc3bffa1f7ff3b81aff081c36efbf16026",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.494633009Z"
+  }, {
+    "caseId" : "StarRocks.SplitLimitRule",
+    "caseHash" : "856eab0889787afe8a0b9eeeb16af6080f32de8b80f4df535a94aff9fe624fd8",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.496580874Z"
+  }, {
+    "caseId" : "StarRocks.SplitMultiPhaseAggRule",
+    "caseHash" : "bd83bf931964e5fd8d8f1b2b00d4fe1fcfdf43309ae54c76aa49c42744788e9a",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.496602956Z"
+  }, {
+    "caseId" : "StarRocks.SplitTopNRule",
+    "caseHash" : "888eed284b7f14e98941d468df522d7a5b336b36110005c3546b1e8c0310ce06",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.498566988Z"
+  }, {
+    "caseId" : "StarRocks.SplitTwoPhaseAggRule",
+    "caseHash" : "ddebb63ff960f7adedf5c103615b04b8921043b80cafe500f88cc25dc94abee8",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.498566988Z"
+  }, {
+    "caseId" : "StarRocks.UnionToValuesRule",
+    "caseHash" : "98d597aa9690aad8f4f939c736988e7e9a2f8b2c7cb9c221f23419fcc1a05f8a",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.500586225Z"
+  }, {
+    "caseId" : "StarRocks.PushDownSubfieldRule",
+    "caseHash" : "d5ed686716cc86a1eb585913521a9b6217a49705e8d1f0d4a6cd753c1664e438",
+    "status" : "skipped",
+    "reason" : "Required runtime is not installed or has incompatible provenance",
+    "engineVersion" : "4.0.14",
+    "buildId" : null,
+    "sourceCommit" : "7c18dd9dded1587dad24d912dcf8e777daf919f7",
+    "changes" : 0,
+    "completedAt" : "2026-10-30T03:06:14.500466154Z"
+  } ]
+}

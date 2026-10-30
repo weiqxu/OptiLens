@@ -28,7 +28,19 @@ public final class Model {
   public record PlanIssue(String nodeId, String path, String message) {}
 
   public record PlanValidation(
-      boolean valid, Snapshot snapshot, Map<String, List<String>> fields, List<PlanIssue> errors) {}
+      boolean valid,
+      Snapshot snapshot,
+      Map<String, List<String>> fields,
+      List<PlanIssue> errors,
+      Map<String, List<String>> nativeNodeMapping) {
+    public PlanValidation(
+        boolean valid,
+        Snapshot snapshot,
+        Map<String, List<String>> fields,
+        List<PlanIssue> errors) {
+      this(valid, snapshot, fields, errors, Map.of());
+    }
+  }
 
   public record Request(
       String sql,
@@ -107,7 +119,37 @@ public final class Model {
       Snapshot finalPlan,
       List<Stage> stages,
       List<String> limitations,
-      EditableResult editableResult) {
+      EditableResult editableResult,
+      com.fasterxml.jackson.databind.JsonNode nativeTrace) {
+    public Run {
+      if (nativeTrace != null && nativeTrace.isNull()) nativeTrace = null;
+    }
+
+    public Run(
+        int formatVersion,
+        String engine,
+        String engineVersion,
+        String createdAt,
+        Request input,
+        Snapshot initial,
+        Snapshot finalPlan,
+        List<Stage> stages,
+        List<String> limitations,
+        EditableResult editableResult) {
+      this(
+          formatVersion,
+          engine,
+          engineVersion,
+          createdAt,
+          input,
+          initial,
+          finalPlan,
+          stages,
+          limitations,
+          editableResult,
+          null);
+    }
+
     public Run(
         int formatVersion,
         String engine,

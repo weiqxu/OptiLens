@@ -11,8 +11,21 @@ class TrafodionTests {
     assertEquals(66, Trafodion.rules().stream().map(Model.RuleCard::id).distinct().count());
     assertTrue(
         Trafodion.rules().stream()
-            .allMatch(r -> !r.runnable() && r.source().matches("core/sql/optimizer/.*:[0-9]+")));
-    assertEquals(false, Trafodion.runtime().get("available"));
+            .allMatch(
+                r ->
+                    r.runnable()
+                        && r.source()
+                            .matches(
+                                "https://github.com/weiqxu/Trafodion-Lite/blob/"
+                                    + Trafodion.COMMIT
+                                    + "/core/sql/optimizer/.*#L[0-9]+")));
+    assertTrue(
+        Trafodion.examples().get("examples") instanceof java.util.List<?> list && list.size() == 2);
+    Trafodion.sqlExamples().forEach(e -> Input.validate(e.input()));
+    Trafodion.ruleExamples().forEach(e -> Input.validate(e.input()));
+    assertEquals(66, Trafodion.coverage().size());
+    assertTrue(
+        Trafodion.coverage().stream().filter(c -> c.status().equals("verified")).count() <= 2);
   }
 
   @Test
@@ -22,8 +35,16 @@ class TrafodionTests {
     assertThrows(
         IllegalArgumentException.class,
         () -> Engines.validateRule("trafodion", "CoreRules.FILTER_MERGE"));
-    assertThrows(
-        IllegalArgumentException.class,
-        () -> Engines.validateRule("trafodion", "Trafodion.HashJoinRule"));
+    assertDoesNotThrow(() -> Engines.validateRule("trafodion", "Trafodion.HashJoinRule"));
+    assertEquals(java.util.List.of("sql", "plan"), Trafodion.capabilities().get("inputModes"));
+  }
+
+  @Test
+  void missingOrWrongProvenanceNeverEnablesNativeRuntime(
+      @org.junit.jupiter.api.io.TempDir java.nio.file.Path home) throws Exception {
+    assertEquals(false, Trafodion.runtime(home).get("available"));
+    java.nio.file.Files.writeString(
+        home.resolve("provenance.json"), "{\"engine\":\"calcite\",\"protocolVersion\":1}");
+    assertEquals(false, Trafodion.runtime(home).get("available"));
   }
 }

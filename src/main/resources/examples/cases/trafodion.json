@@ -1,0 +1,234 @@
+{
+  "formatVersion": 1,
+  "cases": [
+    {
+      "id": "Trafodion.HashJoinRule",
+      "targetRule": "Trafodion.HashJoinRule",
+      "title": "Hash join implementation rule",
+      "note": "Observed changed native candidates for this query in adapters/trafodion/test-native.py. Full native search remains enabled; rerun to confirm on your installed build.",
+      "engineVersion": "lite-ecbf9e035d1c",
+      "sourceCommit": "ecbf9e035d1c7fd5bd36caf73c27840b2dc6c478",
+      "input": {
+        "sql": "SELECT c.id, o.total FROM customers c JOIN orders o ON c.id = o.customer_id WHERE o.total > 100",
+        "schema": [
+          {
+            "name": "customers",
+            "columns": [
+              {
+                "name": "id",
+                "type": "INTEGER",
+                "nullable": false
+              },
+              {
+                "name": "name",
+                "type": "VARCHAR",
+                "nullable": true
+              }
+            ]
+          },
+          {
+            "name": "orders",
+            "columns": [
+              {
+                "name": "customer_id",
+                "type": "INTEGER",
+                "nullable": false
+              },
+              {
+                "name": "total",
+                "type": "INTEGER",
+                "nullable": true
+              }
+            ]
+          }
+        ],
+        "rules": [
+          "Trafodion.HashJoinRule"
+        ],
+        "database": "trafodion",
+        "options": null,
+        "inputMode": "sql",
+        "plan": null,
+        "scopeNodeId": null
+      },
+      "expectation": {
+        "kind": "target-change",
+        "stageIndex": 0,
+        "minimumChanges": 1
+      },
+      "choices": []
+    },
+    {
+      "id": "Trafodion.JoinCommutativityRule",
+      "targetRule": "Trafodion.JoinCommutativityRule",
+      "title": "Join commutativity",
+      "note": "Observed changed native candidates for this query in adapters/trafodion/test-native.py. Full native search remains enabled; rerun to confirm on your installed build.",
+      "engineVersion": "lite-ecbf9e035d1c",
+      "sourceCommit": "ecbf9e035d1c7fd5bd36caf73c27840b2dc6c478",
+      "input": {
+        "sql": "SELECT c.id, o.total FROM customers c JOIN orders o ON c.id = o.customer_id WHERE o.total > 100",
+        "schema": [
+          {
+            "name": "customers",
+            "columns": [
+              {
+                "name": "id",
+                "type": "INTEGER",
+                "nullable": false
+              },
+              {
+                "name": "name",
+                "type": "VARCHAR",
+                "nullable": true
+              }
+            ]
+          },
+          {
+            "name": "orders",
+            "columns": [
+              {
+                "name": "customer_id",
+                "type": "INTEGER",
+                "nullable": false
+              },
+              {
+                "name": "total",
+                "type": "INTEGER",
+                "nullable": true
+              }
+            ]
+          }
+        ],
+        "rules": [
+          "Trafodion.JoinCommutativityRule"
+        ],
+        "database": "trafodion",
+        "options": null,
+        "inputMode": "sql",
+        "plan": null,
+        "scopeNodeId": null
+      },
+      "expectation": {
+        "kind": "target-change",
+        "stageIndex": 0,
+        "minimumChanges": 1
+      },
+      "choices": []
+    },
+    {
+      "id": "Trafodion.JoinCommutativityRule.replay",
+      "targetRule": "Trafodion.JoinCommutativityRule",
+      "title": "Swap a native join twice",
+      "note": "Explicitly choose both candidates in fresh native workers and verify replay. No other rule search runs.",
+      "engineVersion": "lite-ecbf9e035d1c",
+      "sourceCommit": "ecbf9e035d1c7fd5bd36caf73c27840b2dc6c478",
+      "input": {
+        "sql": null,
+        "schema": [
+          {
+            "name": "customers",
+            "columns": [
+              {
+                "name": "id",
+                "type": "INTEGER",
+                "nullable": false
+              },
+              {
+                "name": "name",
+                "type": "VARCHAR",
+                "nullable": true
+              }
+            ]
+          },
+          {
+            "name": "orders",
+            "columns": [
+              {
+                "name": "customer_id",
+                "type": "INTEGER",
+                "nullable": false
+              },
+              {
+                "name": "total",
+                "type": "INTEGER",
+                "nullable": true
+              }
+            ]
+          }
+        ],
+        "rules": [
+          "Trafodion.JoinCommutativityRule",
+          "Trafodion.JoinCommutativityRule"
+        ],
+        "database": "trafodion",
+        "options": null,
+        "inputMode": "plan",
+        "plan": {
+          "planVersion": 1,
+          "rootId": "join",
+          "nodes": [
+            {
+              "id": "left",
+              "op": "TableScan",
+              "inputs": [],
+              "attributes": {
+                "table": "customers"
+              }
+            },
+            {
+              "id": "right",
+              "op": "TableScan",
+              "inputs": [],
+              "attributes": {
+                "table": "orders"
+              }
+            },
+            {
+              "id": "join",
+              "op": "Join",
+              "inputs": [
+                "left",
+                "right"
+              ],
+              "attributes": {
+                "joinType": "INNER",
+                "condition": {
+                  "kind": "call",
+                  "op": "=",
+                  "args": [
+                    {
+                      "kind": "ref",
+                      "input": 0,
+                      "index": 0
+                    },
+                    {
+                      "kind": "ref",
+                      "input": 1,
+                      "index": 0
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "scopeNodeId": null
+      },
+      "expectation": {
+        "kind": "target-change",
+        "stageIndex": 1,
+        "minimumChanges": 1
+      },
+      "choices": [
+        {
+          "ordinal": 0,
+          "fingerprint": null
+        },
+        {
+          "ordinal": 0,
+          "fingerprint": null
+        }
+      ]
+    }
+  ]
+}

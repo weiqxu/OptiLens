@@ -15,8 +15,7 @@ public final class StarRocks {
   private static final JsonNode DATA = load("/starrocks-catalog.json");
   private static final List<RuleCard> RULES =
       List.of(Json.MAPPER.convertValue(DATA.get("rules"), RuleCard[].class));
-  private static final List<Example> EXAMPLES =
-      List.of(Json.MAPPER.convertValue(load("/starrocks-examples.json"), Example[].class));
+  private static final List<Example> EXAMPLES = ExampleCases.examples("starrocks");
 
   static JsonNode load(String name) {
     try (var in = StarRocks.class.getResourceAsStream(name)) {
@@ -36,7 +35,17 @@ public final class StarRocks {
   }
 
   public static List<RuleExamples.Coverage> coverage() {
-    return List.of(Json.MAPPER.convertValue(DATA.get("coverage"), RuleExamples.Coverage[].class));
+    return rules().stream()
+        .map(
+            r -> {
+              var evidence = ExampleVerification.coverage("starrocks", r.id());
+              if (evidence != null) return evidence;
+              return new RuleExamples.Coverage(
+                  r.id(),
+                  r.runnable() ? "not-covered" : "requires-environment",
+                  r.runnable() ? "No bundled case for this rule." : r.unavailableReason());
+            })
+        .toList();
   }
 
   public static String scope() {
@@ -60,7 +69,7 @@ public final class StarRocks {
   }
 
   public static JsonNode verification() {
-    return DATA.get("verification");
+    return ExampleVerification.report("starrocks");
   }
 
   public static Map<String, Object> runtime() {

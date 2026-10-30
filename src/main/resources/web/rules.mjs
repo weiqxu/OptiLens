@@ -35,6 +35,12 @@ function displayName(rule) {
         .replace(/^./, (c) => c.toUpperCase())
     : rule.title;
 }
+function verified(ruleId) {
+  return coverage.get(ruleId)?.status === 'verified';
+}
+function verifiedCount() {
+  return rules.filter((rule) => verified(rule.id)).length;
+}
 function renderList() {
   const query = $('explorer-search').value.trim().toLowerCase(),
     category = $('explorer-category').value,
@@ -45,12 +51,12 @@ function renderList() {
     button.hidden = !(
       button.dataset.search.includes(query) &&
       (!category || rule.category === category) &&
-      (!onlyExamples || examples.has(rule.id))
+      (!onlyExamples || verified(rule.id))
     );
     button.setAttribute('aria-pressed', String(rule.id === selected?.id));
     if (!button.hidden) visible++;
   }
-  text('list-count', `${visible} of ${rules.length} rules · ${examples.size} verified examples`);
+  text('list-count', `${visible} of ${rules.length} rules · ${verifiedCount()} verified examples`);
   $('list-empty').hidden = visible > 0;
   const active = [...$('explorer-list').children].find(
     (button) => button.dataset.rule === selected?.id && !button.hidden,
@@ -89,8 +95,8 @@ function choose(rule) {
   text(
     'detail-availability',
     rule.runnable
-      ? examples.has(rule.id)
-        ? 'Verified native example'
+      ? verified(rule.id)
+        ? 'Verified example'
         : coverage.get(rule.id)?.status || 'Available to experiment'
       : 'Requires setup',
   );
@@ -123,7 +129,7 @@ function choose(rule) {
   $('open-lab').textContent = manual ? 'Try in Plan lab →' : 'Try in Query lab →';
   $('example-sql').setAttribute('aria-label', manual ? 'Manual plan JSON' : 'Example SQL');
   text('example-title', example.title);
-  text('example-note', example.note);
+  text('example-note', `${example.note} ${coverage.get(rule.id)?.reason || ''}`);
   text('example-sql', manual ? JSON.stringify(example.input.plan, null, 2) : example.input.sql);
   text('example-schema', JSON.stringify(example.input.schema, null, 2));
   $('example-program').replaceChildren(
@@ -136,7 +142,9 @@ function choose(rule) {
   const options = example.input.options;
   text(
     'example-settings',
-    `Match limit per stage: ${options?.matchLimit ?? 100}. Input: ${manual ? 'hand-built logical plan; SQL conversion is bypassed' : `SQL; subquery expansion ${options?.expandSubqueries === false ? 'disabled, preserving subqueries for the target rule' : 'enabled'}`}. Planner time zone: UTC. A bounded demonstration does not imply a fixed point or a globally optimal plan.`,
+    catalog.executionMode === 'native-search'
+      ? `Full native SQL optimization. Selected rules filter observations. Up to ${Math.min(80, options?.matchLimit ?? 100)} candidate events are recorded across the search; no user query is executed.`
+      : `Match limit per stage: ${options?.matchLimit ?? 100}. Input: ${manual ? 'hand-built logical plan; SQL conversion is bypassed' : `SQL; subquery expansion ${options?.expandSubqueries === false ? 'disabled, preserving subqueries for the target rule' : 'enabled'}`}. Planner time zone: UTC. A bounded demonstration does not imply a fixed point or a globally optimal plan.`,
   );
   $('rerun-example').disabled = true;
   if (!catalog.runtime.available) {
@@ -175,7 +183,12 @@ async function showExample(example, token) {
     job = result;
     const stage = targetStage();
     $('example-view').replaceChildren(
-      new Option('Complete plan · stage boundary', 'stage'),
+      new Option(
+        catalog.executionMode === 'native-search'
+          ? 'Complete plan · native search boundaries'
+          : 'Complete plan · stage boundary',
+        'stage',
+      ),
       ...stage.events.map(
         (event, index) => new Option(`Local event ${index + 1} · ${event.rule}`, String(index)),
       ),
@@ -184,7 +197,7 @@ async function showExample(example, token) {
     $('example-result').hidden = false;
     setStatus(
       stage.events.length
-        ? `Completed · ${counted(stage.events.length, 'transformation')} · ${counted(stage.attempts.length, 'attempt')} · ${job.result.engine} ${job.result.engineVersion}`
+        ? `Completed · ${counted(stage.events.length, catalog.executionMode === 'native-search' ? 'candidate' : 'transformation')} · ${counted(stage.attempts.length, 'attempt')} · ${job.result.engine} ${job.result.engineVersion}`
         : 'Completed without a recorded transformation. Inspect the plans and attempts; no rewrite is claimed.',
     );
     $('example-limitations').replaceChildren(
@@ -310,12 +323,14 @@ async function loadEngine(database, requested) {
     const id = document.createElement('small');
     id.textContent = rule.id;
     const tag = document.createElement('small');
-    tag.textContent = examples.has(rule.id)
+    tag.textContent = verified(rule.id)
       ? '● Verified example'
-      : rule.runnable
-        ? 'No example yet'
-        : 'Requires setup';
-    if (examples.has(rule.id)) tag.className = 'example-tag';
+      : examples.has(rule.id)
+        ? `Example · ${coverage.get(rule.id)?.status || 'unverified'}`
+        : rule.runnable
+          ? 'No example yet'
+          : 'Requires setup';
+    if (verified(rule.id)) tag.className = 'example-tag';
     button.append(title, id, tag);
     button.addEventListener('click', () => choose(rule));
     $('explorer-list').append(button);
@@ -329,7 +344,7 @@ async function loadEngine(database, requested) {
     rules[0];
   text(
     'catalog-status',
-    `${rules.length} catalog rules · ${examples.size} verified examples / ${rules.filter((rule) => rule.runnable).length} runnable rules · Select a rule to explore. Examples run locally and appear in Query lab history.`,
+    `${rules.length} catalog rules · ${verifiedCount()} verified examples / ${rules.filter((rule) => rule.runnable).length} runnable rules · Select a rule to explore. Examples run locally and appear in Query lab history.`,
   );
   if (requested && !rules.some((rule) => rule.id === requested))
     text(
@@ -384,7 +399,12 @@ if (catalog)
       $('example-result').hidden = false;
       $('example-section').hidden = false;
       $('example-view').replaceChildren(
-        new Option('Complete plan · stage boundary', 'stage'),
+        new Option(
+          catalog.executionMode === 'native-search'
+            ? 'Complete plan · native search boundaries'
+            : 'Complete plan · stage boundary',
+          'stage',
+        ),
         ...stage.events.map((e, i) => new Option('Local event ' + (i + 1), String(i))),
       );
       $('example-view').value = ref.event < 0 ? 'stage' : String(ref.event);

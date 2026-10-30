@@ -59,7 +59,7 @@ Open **Rule Explorer**, choose a database, and search the rule list. Select a ru
 
 ![Rule Explorer showing a selected rule and its real transformation](docs/screenshots/rule-explorer.png)
 
-Some rules require preparation stages, adapter configuration, or specialized metadata. The explorer shows these requirements and identifies rules that do not yet have a verified example.
+Some rules require preparation stages, adapter configuration, or specialized metadata. The explorer shows these requirements and identifies rules that do not yet have a verified example. A Verified label means a current verification report records a real change from the target rule. Having an example alone does not grant this label, and does not prove a performance improvement.
 
 ## Assistant
 
@@ -80,6 +80,10 @@ The optimizer works without a model. Keys stay on the server. Review suggestions
 ## StarRocks
 
 Calcite works out of the box. To run StarRocks experiments, install the pinned runtime and build its adapter by following the [StarRocks setup guide](plan/starrocks.md). Set `OPTILENS_STARROCKS_HOME` before starting the service, then select **StarRocks** in the database menu.
+
+## Trafodion Lite
+
+Install the native compiler and bridge using the [Trafodion adapter guide](adapters/trafodion/README.md), then set `OPTILENS_TRAFODION_HOME` before starting OptiLens. Query Lab supports native SQL optimization with request-provided table definitions. Selected rules filter actual candidate events during full native search. Rule Explorer includes two verified join examples. Plan Lab also supports direct native manual-plan construction, explicit candidate selection and verified fresh-process replay. See the adapter guide for the workflow and current limitations.
 
 ## Save and share experiments
 

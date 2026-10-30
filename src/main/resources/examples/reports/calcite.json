@@ -1,0 +1,1357 @@
+{
+  "formatVersion" : 1,
+  "validatorVersion" : 1,
+  "database" : "calcite",
+  "adapterHash" : "4db3cb6e45062b440f44849f60f2c4ba7334a8e6cfb50de962b64db5ad345623",
+  "results" : [ {
+    "caseId" : "CoreRules.PROJECT_REDUCE_EXPRESSIONS",
+    "caseHash" : "dc3c0f9d217105508435ddab5ca0ef0407f19a2133a2d15f21953fb943586250",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:19.699796840Z"
+  }, {
+    "caseId" : "CoreRules.FILTER_REDUCE_EXPRESSIONS",
+    "caseHash" : "1880aacb59ab0f31f9c2ee6eee24d7476e3dd50366ee68f675457b7c5f5f9c19",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:19.699605467Z"
+  }, {
+    "caseId" : "CoreRules.FILTER_INTO_JOIN",
+    "caseHash" : "a2110f57e6bc4d12e92c28e30a7f52729a9878199ebc848b9cc66d8e11a426a3",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:21.748828254Z"
+  }, {
+    "caseId" : "CoreRules.FILTER_PROJECT_TRANSPOSE",
+    "caseHash" : "0b1ed055c9866af9dd612cbad52ad15c9d0032520cb6e5ac84a1408afb2cfe24",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:21.748042237Z"
+  }, {
+    "caseId" : "CoreRules.PROJECT_JOIN_TRANSPOSE",
+    "caseHash" : "22d07beb3997e3dbd4889e659273900101760f62a8fe2e2ebad5887f7b834fa3",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:24.079338667Z"
+  }, {
+    "caseId" : "CoreRules.PROJECT_REMOVE",
+    "caseHash" : "a4a2846f528079b13098c922639c62bf6867a8c15d587377bd449044be3d3e9c",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:23.978648753Z"
+  }, {
+    "caseId" : "CoreRules.JOIN_TO_CORRELATE",
+    "caseHash" : "8cf85290d0e2da59be07a5f2aa836dea1b45177ed1f223e779862c0782c22b7f",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:25.805025835Z"
+  }, {
+    "caseId" : "CoreRules.JOIN_EXTRACT_FILTER",
+    "caseHash" : "1543bc6b4ed5ca7bfb54dd415a6ddf41d8b2010e7589400cfa4ff8704ed8ee5a",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:26.080760412Z"
+  }, {
+    "caseId" : "CoreRules.JOIN_CONDITION_PUSH",
+    "caseHash" : "11ecd9c85ec506dfc9dc7ef446464413bef97ff85d7befc08f673d10b2273b53",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:27.908144385Z"
+  }, {
+    "caseId" : "CoreRules.JOIN_REDUCE_EXPRESSIONS",
+    "caseHash" : "4628153b851970acfa01ef96caf7cb4bd4e79f33a5778b2711dd67ef4a21abff",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:28.231502850Z"
+  }, {
+    "caseId" : "CoreRules.FILTER_TO_CALC",
+    "caseHash" : "40a42e8c9d087b749f1dd9c87c0f93787c81f30ba110d8b8bfa5d9311489018a",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:29.854749497Z"
+  }, {
+    "caseId" : "CoreRules.PROJECT_TO_CALC",
+    "caseHash" : "2c8d52d50fc2df5b5a468bb81cc8f4e1ae0087584f4c7f188d9ccad2e543f53a",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:30.227911377Z"
+  }, {
+    "caseId" : "CoreRules.PROJECT_FILTER_TRANSPOSE",
+    "caseHash" : "72cd69d2c3e279a817124673e395198c7615aecb4909ca79ece4aea128a59559",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:32.259895563Z"
+  }, {
+    "caseId" : "CoreRules.AGGREGATE_REDUCE_FUNCTIONS",
+    "caseHash" : "fe0f40082ba7fc4a0ff961f04149846aeaed018fe7f524a4ec8ccb652cf139b4",
+    "status" : "passed",
+    "reason" : "Observed 2 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 2,
+    "completedAt" : "2026-10-30T03:06:32.659708631Z"
+  }, {
+    "caseId" : "CoreRules.AGGREGATE_EXPAND_DISTINCT_AGGREGATES",
+    "caseHash" : "276c8950e9b976b7a6302879483c4c95ffe9199dc1794bd59db85188fc17d7bd",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:34.618327826Z"
+  }, {
+    "caseId" : "CoreRules.AGGREGATE_PROJECT_MERGE",
+    "caseHash" : "afbee26a2c88c07725d6b08caac39dc9d0f03492e603428fa84ec893bc5f31e0",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:34.946680741Z"
+  }, {
+    "caseId" : "CoreRules.AGGREGATE_CASE_TO_FILTER",
+    "caseHash" : "8340412c3bd9ae0ea5f5208a18ddba2a71a032feb9595b254eea957869b92c8c",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:36.595003746Z"
+  }, {
+    "caseId" : "CoreRules.AGGREGATE_UNION_TRANSPOSE",
+    "caseHash" : "4f8b34ecbedb5e35dfbced9058327e5ec7f19561ea6cf66b858e5d82f44647a6",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:36.972765422Z"
+  }, {
+    "caseId" : "CoreRules.SORT_PROJECT_TRANSPOSE",
+    "caseHash" : "0b4872ef57a4d9072e6891f7c7897890b5043ce751e89fb285586d9284beb0e0",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:38.440107891Z"
+  }, {
+    "caseId" : "CoreRules.UNION_TO_DISTINCT",
+    "caseHash" : "b01acc40ed38a6efad844c0a96fa088f1721522c412410dfe3c9014d22789574",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:38.894245759Z"
+  }, {
+    "caseId" : "CoreRules.INTERSECT_TO_DISTINCT",
+    "caseHash" : "006063fbc33fe256468ac4dee403d85ac4831d5805fd26b56076201959973724",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:40.749706047Z"
+  }, {
+    "caseId" : "CoreRules.MINUS_TO_DISTINCT",
+    "caseHash" : "909f5aff2d0690e3f34c69f3860dc941fd4cb54ab980d58bdf39593eb9651b77",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:41.349206034Z"
+  }, {
+    "caseId" : "CoreRules.FILTER_VALUES_MERGE",
+    "caseHash" : "677642256384ca7f11a8eff064c0369af1cc3c097a9879a5abfe310d0900e624",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:43.510088052Z"
+  }, {
+    "caseId" : "CoreRules.PROJECT_VALUES_MERGE",
+    "caseHash" : "b92a44abd1bdd433730036cfee950e8e9249983d4d89dcfa61fc522b6b1af374",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:44.016039319Z"
+  }, {
+    "caseId" : "PruneEmptyRules.SORT_FETCH_ZERO_INSTANCE",
+    "caseHash" : "862a4531622f9d7d36cbc8083e634ae0200daf81e897c68efdb3f29d7519596f",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:45.411698965Z"
+  }, {
+    "caseId" : "SingleValuesOptimizationRules.JOIN_LEFT_INSTANCE",
+    "caseHash" : "ede15b72fb81699e12ec096adb70583a27b15362a530d8f7570c1a811f9a6f32",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:45.892264116Z"
+  }, {
+    "caseId" : "CoreRules.AGGREGATE_ANY_PULL_UP_CONSTANTS",
+    "caseHash" : "f69293af5c2ff60222de257d9d3b33a2cb6d3be81aa81c29d392a184c63da6a4",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:47.464262718Z"
+  }, {
+    "caseId" : "CoreRules.AGGREGATE_EXPAND_DISTINCT_AGGREGATES_TO_JOIN",
+    "caseHash" : "4015afebbcf41843d442f40e256cf77c9f355e9eb297aeaa302d93dfacbb7192",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:48.045872281Z"
+  }, {
+    "caseId" : "CoreRules.AGGREGATE_EXPAND_WITHIN_DISTINCT",
+    "caseHash" : "ac8c92e7b3dcacdfb33810d5f27ebf66fcec2d0092413834a442defba5d66b03",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:49.842470357Z"
+  }, {
+    "caseId" : "CoreRules.AGGREGATE_FILTER_TRANSPOSE",
+    "caseHash" : "b92aade2cbffef063a7588b11bd16668dfeaad2fc894df00c538fa14ec8ac9f1",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:50.806979114Z"
+  }, {
+    "caseId" : "CoreRules.AGGREGATE_JOIN_JOIN_REMOVE",
+    "caseHash" : "a7ea5866989eb9426e031b08f2057fe5c7cc83fb7a032d3c982e0c72b238dfb4",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:53.203656684Z"
+  }, {
+    "caseId" : "CoreRules.AGGREGATE_JOIN_REMOVE",
+    "caseHash" : "7f108baa0aebda3755fe8d6822a360767f13abdd6dd71e4423388896ff6bf209",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:54.118004421Z"
+  }, {
+    "caseId" : "CoreRules.AGGREGATE_JOIN_TRANSPOSE_EXTENDED",
+    "caseHash" : "8d70ceb874c284c5ae3f803f6f70ceb6c922f0021b9047cb5065a7e846479097",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:56.034136436Z"
+  }, {
+    "caseId" : "CoreRules.AGGREGATE_MERGE",
+    "caseHash" : "895485c4561e3a016cc19d9a36d28c9d0e874b0041bb42576f70a0ab2bde425d",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:56.907221652Z"
+  }, {
+    "caseId" : "CoreRules.AGGREGATE_PROJECT_PULL_UP_CONSTANTS",
+    "caseHash" : "a73046e906d4ea55b2d58caa695eeff986398cbb9c04e74c113e6b30da5448de",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:58.929260915Z"
+  }, {
+    "caseId" : "CoreRules.AGGREGATE_REMOVE",
+    "caseHash" : "817be29313d2e3bf392d8973a71844b86d01a8e4ee0f85c75ae204d8ad499f41",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:06:59.836651763Z"
+  }, {
+    "caseId" : "CoreRules.AGGREGATE_UNION_AGGREGATE",
+    "caseHash" : "8c330a986dc0b5f673433f1be7fd224eb308116461ea01a0c0d6fa9e39909b07",
+    "status" : "passed",
+    "reason" : "Observed 2 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 2,
+    "completedAt" : "2026-10-30T03:07:02.417415959Z"
+  }, {
+    "caseId" : "CoreRules.AGGREGATE_UNION_AGGREGATE_FIRST",
+    "caseHash" : "91d1f8d7e7c21087ef964033c1aca9a4d47d8e2da6f25da31bcdd8f26ff9ee94",
+    "status" : "passed",
+    "reason" : "Observed 2 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 2,
+    "completedAt" : "2026-10-30T03:07:03.351696704Z"
+  }, {
+    "caseId" : "CoreRules.AGGREGATE_UNION_AGGREGATE_SECOND",
+    "caseHash" : "1a1484663b384a878928fa9862cc391fbe6b86163ad7ad72c26b4eaeb4222b17",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:05.801107952Z"
+  }, {
+    "caseId" : "CoreRules.AGGREGATE_VALUES",
+    "caseHash" : "9bdd5f1f1e652285224435fd1679fb6496effd64bcf09b9b54d6a83583e1d24a",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:06.782771306Z"
+  }, {
+    "caseId" : "CoreRules.CALC_MERGE",
+    "caseHash" : "dd0a81007ca22c572ca7bee7b461c43c5f13c491d6f5ac6287c85c50203fed69",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:09.317090630Z"
+  }, {
+    "caseId" : "CoreRules.CALC_REDUCE_DECIMALS",
+    "caseHash" : "f0042f872e6f92c08619724dc92125778ca34a30aab39cacd495270be1dc9c0e",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:09.943119521Z"
+  }, {
+    "caseId" : "CoreRules.CALC_REDUCE_EXPRESSIONS",
+    "caseHash" : "8ca6b28e68918788a4c877af974d4c710d5ab2f5b2511e533c97ac3de25597a3",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:12.294528846Z"
+  }, {
+    "caseId" : "CoreRules.CALC_REMOVE",
+    "caseHash" : "9d275ae954a8f9cb034a552c900f94960afb3875edb8ef4f166df5d921e65c48",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:12.821278296Z"
+  }, {
+    "caseId" : "CoreRules.CALC_SPLIT",
+    "caseHash" : "5a6218ca7b205e51a030df170e0ebf70f8b42b043ae1f70f279f45d3655529ca",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:15.249262989Z"
+  }, {
+    "caseId" : "CoreRules.CALC_TO_WINDOW",
+    "caseHash" : "14742e01704579b11c6968afa832b4e8301761ea69c2d4fc5b5d82fc6d8beddd",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:15.499244614Z"
+  }, {
+    "caseId" : "CoreRules.FILTER_AGGREGATE_TRANSPOSE",
+    "caseHash" : "2176319b965e33feaffb2d911ff660cac62e6321448a4f0478b930b54287d31c",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:18.964072570Z"
+  }, {
+    "caseId" : "CoreRules.FILTER_CALC_MERGE",
+    "caseHash" : "c3f233ba60995a5481b5b163425d8d0d953c7207558fbfcc74882a6718c283a9",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:19.493465796Z"
+  }, {
+    "caseId" : "CoreRules.FILTER_CORRELATE",
+    "caseHash" : "af04ca0a181a35a0b2451443a115feb01086d40ca052affafbcd900b292bd627",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:24.261537836Z"
+  }, {
+    "caseId" : "CoreRules.FILTER_INTO_JOIN_DUMB",
+    "caseHash" : "fa2324f0cac6160d0866154804722fdbaecb059e6044c09c7e4ff43a049f614f",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:25.146312544Z"
+  }, {
+    "caseId" : "CoreRules.FILTER_MERGE",
+    "caseHash" : "7214cf42c74d094e0e8c9b6f1ada75f0190d92fe551e1a9850c6597fad3a56bb",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:28.696434341Z"
+  }, {
+    "caseId" : "CoreRules.FILTER_MULTI_JOIN_MERGE",
+    "caseHash" : "51aa1a29d8f90fb686d9829c01919906d372182021bd11dc977ad68d6d8ae69e",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:29.574176287Z"
+  }, {
+    "caseId" : "CoreRules.FILTER_SAMPLE_TRANSPOSE",
+    "caseHash" : "c626eabeecf5646267bc4abcab98aa5927789a294abebcd43b68d6c17c2e4fa9",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:31.652353738Z"
+  }, {
+    "caseId" : "CoreRules.FILTER_SET_OP_TRANSPOSE",
+    "caseHash" : "8ded660a20bc7f86a0aec8646097d484b765d03597831c2d70f82a0752e36b62",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:33.034787052Z"
+  }, {
+    "caseId" : "CoreRules.FILTER_SUB_QUERY_TO_CORRELATE",
+    "caseHash" : "8d44e00a09688d1a59cb809a45172ec8ae9f6fd9b97d0f35c23c2226cd0a2203",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:35.466291181Z"
+  }, {
+    "caseId" : "CoreRules.FILTER_WINDOW_TRANSPOSE",
+    "caseHash" : "bf33143713233deff23f2dffd4b4d37f85d24164184a5cac9fe106cddf817889",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:36.042370545Z"
+  }, {
+    "caseId" : "CoreRules.HYPER_GRAPH_OPTIMIZE",
+    "caseHash" : "6fc891858d3fcdcec34e78103d4a37c7cb54dc70a6267bf72238c82faa52c03a",
+    "status" : "passed",
+    "reason" : "Observed 2 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 2,
+    "completedAt" : "2026-10-30T03:07:37.992261030Z"
+  }, {
+    "caseId" : "CoreRules.INTERSECT_MERGE",
+    "caseHash" : "e51457326f34aef8a1b7f4316ef03709c66aaab33442291a9a897f319a40b523",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:38.367149074Z"
+  }, {
+    "caseId" : "CoreRules.JOIN_ADD_REDUNDANT_SEMI_JOIN",
+    "caseHash" : "149885e23cdcdccc3cd46d8f523c79e11ade811cd02c807efc40c226fee1d1ca",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:39.710897313Z"
+  }, {
+    "caseId" : "CoreRules.JOIN_ASSOCIATE",
+    "caseHash" : "c0b52619c619b018506d2da2405cc40c190eb036dcbd8eadf149c93a5ba3d423",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:40.187965532Z"
+  }, {
+    "caseId" : "CoreRules.JOIN_COMMUTE",
+    "caseHash" : "510ba147f8b0f413c22652ddfa9f5c336031a4669f3910d53dfe3b26698c9890",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:41.554592123Z"
+  }, {
+    "caseId" : "CoreRules.JOIN_COMMUTE_OUTER",
+    "caseHash" : "c632c89a7e378bdb55d6518a16d3794676e4c9c695e19ef11400ef8278e4e83f",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:42.007406899Z"
+  }, {
+    "caseId" : "CoreRules.JOIN_DERIVE_IS_NOT_NULL_FILTER_RULE",
+    "caseHash" : "090844c3984b6426283ce1893b0cdaed91377ac2dda58beb394f510435e3e4ea",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:43.602401721Z"
+  }, {
+    "caseId" : "CoreRules.JOIN_LEFT_UNION_TRANSPOSE",
+    "caseHash" : "2994789ef739d320ae7c5dab61cf35724feb2859f8735aed749391353e19b695",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:44.155000050Z"
+  }, {
+    "caseId" : "CoreRules.JOIN_ON_UNIQUE_TO_SEMI_JOIN",
+    "caseHash" : "dec8acd1cd9da6407b6faee373c87b51a17d185b8eb00a041c04cfcb557590c5",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:46.002965847Z"
+  }, {
+    "caseId" : "CoreRules.JOIN_PROJECT_BOTH_TRANSPOSE",
+    "caseHash" : "b209aeacee8617bedc9b1c7ad4eb90d3044ba90d2039fac3834c9f72fb1ba370",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:46.606651614Z"
+  }, {
+    "caseId" : "CoreRules.JOIN_PROJECT_BOTH_TRANSPOSE_INCLUDE_OUTER",
+    "caseHash" : "783d1f8f720f0ab68d54350b46549bc795a210530c43674ff9602789c5cc7ca0",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:48.250793456Z"
+  }, {
+    "caseId" : "CoreRules.JOIN_PROJECT_LEFT_TRANSPOSE",
+    "caseHash" : "a2294a9bcea184a27c0a9ba5b277d5a8bc4527c41d4de3367d33d321f3f9d369",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:48.711307223Z"
+  }, {
+    "caseId" : "CoreRules.JOIN_PROJECT_LEFT_TRANSPOSE_INCLUDE_OUTER",
+    "caseHash" : "51998012650bd0a81269faedeb00cc7329e01e5d2e55cbfc4af131992873b051",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:50.150615946Z"
+  }, {
+    "caseId" : "CoreRules.JOIN_PROJECT_RIGHT_TRANSPOSE",
+    "caseHash" : "75c8909c7e3f1441122174e0c76b677cbb5f782fef3a9b7c4d0739c6d60976a4",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:50.605880799Z"
+  }, {
+    "caseId" : "CoreRules.JOIN_PROJECT_RIGHT_TRANSPOSE_INCLUDE_OUTER",
+    "caseHash" : "f81b7c410ea44bc5e34a87e7f9d9541cf226fceed807dc7b211592930c091bbd",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:51.994938962Z"
+  }, {
+    "caseId" : "CoreRules.JOIN_PUSH_TRANSITIVE_PREDICATES",
+    "caseHash" : "e99d80be98002314130ae38537f68de48aa90286eb078c1af398264a2f935e57",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:52.579701796Z"
+  }, {
+    "caseId" : "CoreRules.JOIN_RIGHT_UNION_TRANSPOSE",
+    "caseHash" : "2f1fe53ec41c8b6be99c753ce7275ae46f70a31f6ba124a735b428d5cfeb29d2",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:54.319950274Z"
+  }, {
+    "caseId" : "CoreRules.JOIN_SUB_QUERY_TO_CORRELATE",
+    "caseHash" : "5e69f8bc71c09ae3ae460e7203dd7637771b360e6c6ade02ba83771b83daa255",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:55.031493155Z"
+  }, {
+    "caseId" : "CoreRules.JOIN_TO_HYPER_GRAPH",
+    "caseHash" : "57bd424f9cd647baa7817c8c9b0935ed4697b8b41acdef719298062b75585f26",
+    "status" : "passed",
+    "reason" : "Observed 2 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 2,
+    "completedAt" : "2026-10-30T03:07:56.522841624Z"
+  }, {
+    "caseId" : "CoreRules.JOIN_TO_MULTI_JOIN",
+    "caseHash" : "51488abcb6a525f27fe88a714d56cde9bef333c5008d1a0016e5bc6654f628d8",
+    "status" : "passed",
+    "reason" : "Observed 2 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 2,
+    "completedAt" : "2026-10-30T03:07:57.262798694Z"
+  }, {
+    "caseId" : "CoreRules.LIMIT_MERGE",
+    "caseHash" : "643d5ad165b0dcaa5b820ef78438ae30d9c149dd6d8a444941c474bc9a1ac749",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:58.418133368Z"
+  }, {
+    "caseId" : "CoreRules.MINUS_MERGE",
+    "caseHash" : "db27af3d909654632a0c32d2c487c6e98cf3ba7db63ac52bbd5604e2fd03b568",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:07:59.183048808Z"
+  }, {
+    "caseId" : "CoreRules.MULTI_JOIN_OPTIMIZE",
+    "caseHash" : "bea0c1eb9ec50b8db1f8349307bab1cfac6519675288612be835b91fddcfc372",
+    "status" : "passed",
+    "reason" : "Observed 2 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 2,
+    "completedAt" : "2026-10-30T03:08:00.521528078Z"
+  }, {
+    "caseId" : "CoreRules.MULTI_JOIN_OPTIMIZE_BUSHY",
+    "caseHash" : "69add1899a885b2fe59c7d6534f6eee1e962164652f3ddf42917ebbe3b148e88",
+    "status" : "passed",
+    "reason" : "Observed 2 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 2,
+    "completedAt" : "2026-10-30T03:08:01.128270753Z"
+  }, {
+    "caseId" : "CoreRules.PROJECT_AGGREGATE_MERGE",
+    "caseHash" : "0d2df991c8fd4021dc95c3fee95d1c683ae0258553cd7249d04e9dfa394abfcd",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:02.844926369Z"
+  }, {
+    "caseId" : "CoreRules.PROJECT_CALC_MERGE",
+    "caseHash" : "f707847660a37c712771b9a196fbbdb2e4c2c032e4f2bc53fc203f593769f159",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:03.476466076Z"
+  }, {
+    "caseId" : "CoreRules.PROJECT_CORRELATE_TRANSPOSE",
+    "caseHash" : "d5a88505abcfc9cfa070afcb98d185b997903235179eb8c2c13dde884e5d3bcb",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:04.992609873Z"
+  }, {
+    "caseId" : "CoreRules.PROJECT_FILTER_TRANSPOSE_WHOLE_EXPRESSIONS",
+    "caseHash" : "fbf54f71f29bd8dd988aef3f9e76d8e052d345360cbc22be06ad0cdb8b4fd473",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:05.956409354Z"
+  }, {
+    "caseId" : "CoreRules.PROJECT_FILTER_TRANSPOSE_WHOLE_PROJECT_EXPRESSIONS",
+    "caseHash" : "43af65e0c19ed95a64e53d6698cd64d4f11089add2e50e4de62a80a1a9a7ca10",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:07.266794388Z"
+  }, {
+    "caseId" : "CoreRules.PROJECT_FILTER_VALUES_MERGE",
+    "caseHash" : "f7832814083eaf4171807649aaf3ee04b8b9d016eafc7a13770ce85e5746ae88",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:08.077586127Z"
+  }, {
+    "caseId" : "CoreRules.PROJECT_JOIN_JOIN_REMOVE",
+    "caseHash" : "f6df062a59f44a5c47d3d76e4825f7e1caacc7595cbcf8b909a97efe7ae9781b",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:09.389662750Z"
+  }, {
+    "caseId" : "CoreRules.PROJECT_JOIN_REMOVE",
+    "caseHash" : "043d0dc68c9a459a8d5472791e96c56dfee47b2515e24a68bc5a7b1414262605",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:10.072646874Z"
+  }, {
+    "caseId" : "CoreRules.PROJECT_MERGE",
+    "caseHash" : "dbc5c81bf41632816816286534ff97506ac75e9c2697a6effbba881997cbf3d1",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:11.360089917Z"
+  }, {
+    "caseId" : "CoreRules.PROJECT_MULTI_JOIN_MERGE",
+    "caseHash" : "ff18ffb5e0435828aec3ac5ec56bd99a14529252745a49eba94bfb8cf3c61a4e",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:12.192081288Z"
+  }, {
+    "caseId" : "CoreRules.PROJECT_OVER_SUM_TO_SUM0_RULE",
+    "caseHash" : "c36c190031f8dc0c7900ba824135a544db6ee89399ebea512a5bf7adffa4a1cd",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:13.482199575Z"
+  }, {
+    "caseId" : "CoreRules.PROJECT_SET_OP_TRANSPOSE",
+    "caseHash" : "95dca2cf5b75f91f13634abd52465d395cb2828c6647c16cc4406c93685dd522",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:14.591033087Z"
+  }, {
+    "caseId" : "CoreRules.PROJECT_SUB_QUERY_TO_CORRELATE",
+    "caseHash" : "b4d55858782bf69be6f291162b5bbbd3ebc290dd7e5d6736c8e1069a24b91958",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:15.655772523Z"
+  }, {
+    "caseId" : "CoreRules.PROJECT_TO_LOGICAL_PROJECT_AND_WINDOW",
+    "caseHash" : "09baf73715856996d4bbe9668d9c6467c6c306428430d85d7170b278181fe6b3",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:16.435883180Z"
+  }, {
+    "caseId" : "CoreRules.PROJECT_TO_SEMI_JOIN",
+    "caseHash" : "9d2493bf901d4b312ef9d85e2916be4bcf9670b1d19c17897474405e18b30c36",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:17.805098324Z"
+  }, {
+    "caseId" : "CoreRules.PROJECT_WINDOW_TRANSPOSE",
+    "caseHash" : "3e86991c54c463ee9c0ab9f9aa77a4b24a2b63243f3b3fd1f5150a6d1dd25148",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:18.303889770Z"
+  }, {
+    "caseId" : "CoreRules.SAMPLE_TO_FILTER",
+    "caseHash" : "171372681c35a6efd2df701f4955ef18be2ba30d9f39c60050fe00deec59b97d",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:19.598780291Z"
+  }, {
+    "caseId" : "CoreRules.SEMI_JOIN_FILTER_TRANSPOSE",
+    "caseHash" : "dc21f7a4a56bbaab2fc7e8bbed423b679aa18f9f06045b1a9dd55f3163295381",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:20.375392964Z"
+  }, {
+    "caseId" : "CoreRules.SEMI_JOIN_JOIN_TRANSPOSE",
+    "caseHash" : "f6ba94d8a5c819a328b65b317f29d5122fd512047c8c3b11bd36c08f2916b23d",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:22.081056423Z"
+  }, {
+    "caseId" : "CoreRules.SEMI_JOIN_PROJECT_TRANSPOSE",
+    "caseHash" : "6a85eab6e03dc0c7cfdb0afcec75ed7b4c0761f29b40d19fdbb02d72ead78f02",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:22.876256967Z"
+  }, {
+    "caseId" : "CoreRules.SEMI_JOIN_REMOVE",
+    "caseHash" : "0b06ff70b0f2ebf89f1b7cc26cf529a07fdabc31b63d9832ac971f09e758ba67",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:24.205024494Z"
+  }, {
+    "caseId" : "CoreRules.SORT_JOIN_COPY",
+    "caseHash" : "8dda7a86a52241132557e379f7e0a4c083e093e519c72a9c3d63cb1f4ef11f51",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:25.074282312Z"
+  }, {
+    "caseId" : "CoreRules.SORT_JOIN_TRANSPOSE",
+    "caseHash" : "3bfa8605eb1149419e06727ebb7aee6c0ab19f50e8f210cf46fb7055398bd462",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:26.209409435Z"
+  }, {
+    "caseId" : "CoreRules.SORT_REMOVE_CONSTANT_KEYS",
+    "caseHash" : "b1c966be5bb49fcb7f4118286657c14db34351bb81b8f37a16ef2eb30e102424",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:27.220898055Z"
+  }, {
+    "caseId" : "CoreRules.SORT_REMOVE_REDUNDANT",
+    "caseHash" : "bffa16897f74a641bc1af86edc8a47cdbb5fdaccd604ae4197172ccbadd4439c",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:28.357342478Z"
+  }, {
+    "caseId" : "CoreRules.SORT_UNION_TRANSPOSE",
+    "caseHash" : "bf61471df83a817b800f4129110e25689d9250fbb2958202f5a54fc66cac89bb",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:29.141704495Z"
+  }, {
+    "caseId" : "CoreRules.SORT_UNION_TRANSPOSE_MATCH_NULL_FETCH",
+    "caseHash" : "4ab7c3d4abbe3a182d48d4619180282645355fdbdb7d9a28c6daacebf228e50f",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:30.629490734Z"
+  }, {
+    "caseId" : "CoreRules.UNION_MERGE",
+    "caseHash" : "37177a7ddbace9c3a7702b3034976dde6be69d286ba79be0afbb875d535c2aaa",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:31.596297704Z"
+  }, {
+    "caseId" : "CoreRules.UNION_PULL_UP_CONSTANTS",
+    "caseHash" : "35f3acbe47a534fc07ecca521064c987b7ec9f29b932773403b087826cfbbcb1",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:33.152803517Z"
+  }, {
+    "caseId" : "CoreRules.UNION_TO_VALUES",
+    "caseHash" : "f8ee84c69f2e57b16e5d8285b7fa99321c772321c73259728a7eec06b1a683db",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:34.070344185Z"
+  }, {
+    "caseId" : "CoreRules.WINDOW_REDUCE_EXPRESSIONS",
+    "caseHash" : "dea9b438bf46a6909b25424dee57674e6abec306e591ef191d5c1ebb4e28751a",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:35.274236473Z"
+  }, {
+    "caseId" : "DateRangeRules.FILTER_INSTANCE",
+    "caseHash" : "f230584b42e6b8916afde021f94177013c554c5a39d8f8221afa55c4dd17c4c5",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:36.012054127Z"
+  }, {
+    "caseId" : "PruneEmptyRules.AGGREGATE_INSTANCE",
+    "caseHash" : "499f6e6bda69da68be604d830a0434308a49d4c3b4ef8a0c1cbb2138ee06bbb7",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:37.603767944Z"
+  }, {
+    "caseId" : "PruneEmptyRules.CORRELATE_LEFT_INSTANCE",
+    "caseHash" : "60761673886d164f7b954a9f6efd13b0ea0b50d00bab582447fbc46986de5e5d",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:38.586990991Z"
+  }, {
+    "caseId" : "PruneEmptyRules.CORRELATE_RIGHT_INSTANCE",
+    "caseHash" : "1586a76a4025ec209da77a04c3acbd29fd9235f1fcaf6ffab114c10fb8b11b71",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:40.934478802Z"
+  }, {
+    "caseId" : "PruneEmptyRules.FILTER_INSTANCE",
+    "caseHash" : "7e75cf6b13e0bf2136cd05d83de0e84de2beed9311aca0d4ac6eadc1694a3913",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:41.968351531Z"
+  }, {
+    "caseId" : "PruneEmptyRules.INTERSECT_INSTANCE",
+    "caseHash" : "daf6269090239fc438b60cd716e48900424772d8e15ac1dd994e64293cc2bef5",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:43.888322913Z"
+  }, {
+    "caseId" : "PruneEmptyRules.JOIN_LEFT_INSTANCE",
+    "caseHash" : "714a2535c3ba66c9738adfb4bf9f0120e02ca46e954a595b6b1d825f077c1596",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:44.593524996Z"
+  }, {
+    "caseId" : "PruneEmptyRules.JOIN_RIGHT_INSTANCE",
+    "caseHash" : "9bc50f9cccd7047ae13a113a390b56f3c2664a802d1845aa375a06c853f30f9b",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:45.959260370Z"
+  }, {
+    "caseId" : "PruneEmptyRules.MINUS_INSTANCE",
+    "caseHash" : "8d25447a7a4f6136d864910f30399d867fb16cd14d667b19ac55c070fb06c136",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:46.612779856Z"
+  }, {
+    "caseId" : "PruneEmptyRules.PROJECT_INSTANCE",
+    "caseHash" : "f00fed7955a15a3ee3ee374fbbe7e34e4de4ca7566f090c9e710d3e444508f56",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:47.977721664Z"
+  }, {
+    "caseId" : "PruneEmptyRules.SORT_INSTANCE",
+    "caseHash" : "9d5a4551b623c5aad5b5cda98fe24778e5020095a8f6fed32671a233763c638f",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:48.833940781Z"
+  }, {
+    "caseId" : "PruneEmptyRules.UNION_INSTANCE",
+    "caseHash" : "88ad636e214c373bbe9a05b644de5fe45cf40b8fd1eca5f0d4cab912b173f165",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:50.675164187Z"
+  }, {
+    "caseId" : "SingleValuesOptimizationRules.JOIN_LEFT_PROJECT_INSTANCE",
+    "caseHash" : "22740db747e4262b1e73eaa407a2c663318d7b409215092e5bacee7f32a917d0",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:51.457231220Z"
+  }, {
+    "caseId" : "SingleValuesOptimizationRules.JOIN_RIGHT_INSTANCE",
+    "caseHash" : "d66a08a8597694329d20b3a5d6193705bb80328f9f5afe3d9b2198c1d5e91245",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:53.022910886Z"
+  }, {
+    "caseId" : "SingleValuesOptimizationRules.JOIN_RIGHT_PROJECT_INSTANCE",
+    "caseHash" : "60f28df0304328f9e1dab0ceb16f3ee45a538601197ca12038c0c6f61b16aa85",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:53.779464625Z"
+  }, {
+    "caseId" : "CoreRules.UNION_REMOVE",
+    "caseHash" : "0fe2e7713a1027c1e31358e1cd678dee71632d668d070aec1bb76831ac3308a0",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:54.896204734Z"
+  }, {
+    "caseId" : "CoreRules.FILTER_EXPAND_IS_NOT_DISTINCT_FROM",
+    "caseHash" : "4705204984a5a61a951c4b32de97022e7531c14422a6edb08e2e4301ed16b233",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:55.622949122Z"
+  }, {
+    "caseId" : "CoreRules.JOIN_PUSH_EXPRESSIONS",
+    "caseHash" : "13ba29c8f86c6ad3351c279116769a9b804259decce44d22f3c575a1d8d91207",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:56.815233650Z"
+  }, {
+    "caseId" : "CoreRules.JOIN_TO_SEMI_JOIN",
+    "caseHash" : "40094080bfd52f04d8244a407b3c3941e5083e9e4c057c6bf16598c3c5da6118",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:57.468124768Z"
+  }, {
+    "caseId" : "CoreRules.MULTI_JOIN_BOTH_PROJECT",
+    "caseHash" : "4430577f3000bb9ad5e4ca0c3878ddc6eefd4168dc5ca33332f8dd57e6cb9d88",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:58.683475419Z"
+  }, {
+    "caseId" : "CoreRules.MULTI_JOIN_LEFT_PROJECT",
+    "caseHash" : "13b0ba5cc4553ebd09016b93266630ac32dc72694ab17290d7681db19e271e7b",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:08:59.541018230Z"
+  }, {
+    "caseId" : "CoreRules.MULTI_JOIN_RIGHT_PROJECT",
+    "caseHash" : "5be18248b23aa1d6c1207b31169dfa5971cac3b349a8195865060b948f5df9a9",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:09:01.031652276Z"
+  }, {
+    "caseId" : "CoreRules.EXCHANGE_REMOVE_CONSTANT_KEYS",
+    "caseHash" : "ddff798e2747c72e01cda2a31a9e368c76170151b4affb092be2a0b4bacb6c80",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:09:01.813600285Z"
+  }, {
+    "caseId" : "CoreRules.SORT_EXCHANGE_REMOVE_CONSTANT_KEYS",
+    "caseHash" : "18405c1710c9fb3a3332fcfe0a01377e0ca2e0e520edd2d0643b9af6c05ba606",
+    "status" : "passed",
+    "reason" : "Observed 1 real target-rule changes",
+    "engineVersion" : "1.39.0",
+    "buildId" : "calcite-1.39.0",
+    "sourceCommit" : null,
+    "changes" : 1,
+    "completedAt" : "2026-10-30T03:09:02.900570510Z"
+  } ]
+}

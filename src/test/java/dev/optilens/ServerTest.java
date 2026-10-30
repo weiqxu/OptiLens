@@ -17,7 +17,8 @@ class ServerTest {
       throws Exception {
     var b =
         HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + server.port() + path))
-            .timeout(Duration.ofSeconds(10));
+            // Worker validation may use its complete 25-second execution budget.
+            .timeout(Duration.ofSeconds(35));
     if (method.equals("POST"))
       b.header("Content-Type", "application/json").POST(HttpRequest.BodyPublishers.ofString(data));
     else b.GET();
@@ -39,13 +40,16 @@ class ServerTest {
       assertTrue(databases.get(0).path("available").asBoolean());
       assertEquals(
           StarRocks.runtime().get("available"), databases.get(1).path("available").asBoolean());
-      assertFalse(databases.get(2).path("available").asBoolean());
+      assertEquals(
+          Trafodion.runtime().get("available"), databases.get(2).path("available").asBoolean());
       assertFalse(databases.get(1).path("message").asText().isBlank());
       var trafodion =
           Json.MAPPER.readTree(
               request(server, "GET", "/api/catalog?database=trafodion", null).body());
       assertEquals(66, trafodion.path("rules").size());
-      assertFalse(trafodion.path("runtime").path("available").asBoolean());
+      assertEquals(
+          Trafodion.runtime().get("available"),
+          trafodion.path("runtime").path("available").asBoolean());
       var capabilities =
           Json.MAPPER.readTree(
               request(server, "GET", "/api/plan-capabilities?database=starrocks", null).body());

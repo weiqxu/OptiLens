@@ -67,6 +67,8 @@
               <include>src/main/java/**/*.java</include>
               <include>src/test/java/**/*.java</include>
               <include>adapters/starrocks/src/main/java/**/*.java</include>
+              <include>adapters/trafodion/src/main/java/**/*.java</include>
+              <include>adapters/trafodion/ProtocolTest.java</include>
             </includes>
             <googleJavaFormat>
               <version>1.24.0</version>

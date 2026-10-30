@@ -22,5 +22,11 @@ operators={'TableScan':0,'Values':0,'Filter':1,'Project':1,'Join':2,'Aggregate':
 cap=dict(planVersion=1,operators=operators,expressions=['+','-','*','/','=','<>','<','<=','>','>=','AND','OR','NOT','IS NULL','IS NOT NULL','IS NOT DISTINCT FROM','COALESCE','CASE'],aggregates=['COUNT','SUM','AVG','MIN','MAX'],types=['INTEGER','BIGINT','DOUBLE','BOOLEAN','DATE','TIMESTAMP','VARCHAR','DECIMAL'],limits=dict(nodes=250,depth=40,expressionDepth=32,expressionItems=2000,valueRows=1000),parameters=dict(joinTypes=['INNER','LEFT','RIGHT','FULL','SEMI','ANTI'],distributions=[],sortDirections=['ASC','DESC'],nullOrdering=['FIRST','LAST'],decimal=dict(precisionMin=1,precisionMax=38,defaultPrecision=18,defaultScale=2),varchar=dict(lengthMin=1,lengthMax=65536,defaultLength=255),timestampPrecision=0),notes=['Native results are currently read-only.','INTERSECT and EXCEPT require DISTINCT. Aggregate FILTER and SUM0 are not supported.','Exact expression signatures are required; insert CAST explicitly.'])
 report={**audit,'version':inv['version'],'commit':inv['commit'],'scope':inv['scope'],'ruleTypeCount':len(inv['ruleTypes']),'implementationCount':len(inv['classes']),'catalogCount':len(rules),'unmappedEnumEntries':[r['id'] for r in rules if r['category']=='Unmapped enum entries'],'coverage':coverage}
 data=dict(rules=rules,coverage=coverage,scope=inv['scope'],capabilities=cap,verification=report)
-a.resources.mkdir(parents=True,exist_ok=True);(a.resources/'starrocks-catalog.json').write_text(json.dumps(data,indent=2)+'\n');(a.resources/'starrocks-examples.json').write_text(json.dumps(examples,indent=2)+'\n')
+a.resources.mkdir(parents=True,exist_ok=True);(a.resources/'starrocks-catalog.json').write_text(json.dumps(data,indent=2)+'\n');cases=[]
+for example in examples:
+    cases.append(dict(id=example['id'],targetRule=example['id'],title=example['title'],note=example['note'],
+        engineVersion=inv['version'],sourceCommit=inv['commit'],input=example['input'],
+        expectation=dict(kind='target-change',stageIndex=len(example['input']['rules'])-1,minimumChanges=1),choices=[]))
+case_dir=a.resources/'examples/cases';case_dir.mkdir(parents=True,exist_ok=True)
+(case_dir/'starrocks.json').write_text(json.dumps(dict(formatVersion=1,cases=cases),indent=2)+'\n')
 print(f'Catalog: {len(rules)} entries, {len(examples)} verified examples')

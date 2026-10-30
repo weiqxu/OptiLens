@@ -248,7 +248,10 @@ function renderSelection() {
     const stage = run.stages[selection.i];
     ({ before, after, description, conditions, source, attempts } = stage);
     title = stage.title;
-    scope = 'Complete plan · Stage boundary';
+    scope =
+      run.engine === 'trafodion'
+        ? 'Complete plan · Native search boundaries'
+        : 'Complete plan · Stage boundary';
     if (selection.kind === 'event') {
       const e = stage.events[selection.j];
       ({ before, after } = e);
@@ -272,7 +275,9 @@ function renderSelection() {
     'provenance',
     current.imported
       ? 'Imported record · Provenance not verified by re-execution'
-      : `Real local ${run.engine} run · Stage order follows the selected rule program`,
+      : run.engine === 'trafodion'
+        ? 'Real native search · Selected rules filter observations; order does not control optimization'
+        : `Real local ${run.engine} run · Stage order follows the selected rule program`,
   );
   const link = $('source');
   link.hidden = !source;
@@ -555,7 +560,10 @@ try {
           }),
           rules: [requestedRule],
         },
-        note: 'Only the selected rule is enabled. Edit the SQL to match its pattern; this query is not a verified example for that rule.',
+        note:
+          catalog.database === 'trafodion'
+            ? 'Full native search remains enabled; this rule filters candidate observations. This query is not a verified example for the rule.'
+            : 'Only the selected rule is enabled. Edit the SQL to match its pattern; this query is not a verified example for that rule.',
       },
     );
     $('examples').value = '';

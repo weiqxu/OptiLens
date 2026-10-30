@@ -60,7 +60,10 @@ public final class Input {
           "Match limit must be between 1 and 100");
     var seen = new HashSet<String>();
     for (String id : r.rules()) {
-      require(id != null && seen.add(id), "Rule IDs must not be null or duplicated");
+      boolean repeatedNativeStep = "trafodion".equals(r.database()) && "plan".equals(r.inputMode());
+      require(
+          id != null && (repeatedNativeStep || seen.add(id)),
+          "Rule IDs must not be null or duplicated");
       Engines.validateRule(r.database(), id);
     }
   }

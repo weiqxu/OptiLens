@@ -74,8 +74,6 @@ public final class Engines {
 
   public static List<String> workerCommand(
       Request request, Path input, Path output, boolean validation) {
-    Input.require(
-        !request.database().equals("trafodion"), (String) Trafodion.runtime().get("message"));
     String javaExecutable = Path.of(System.getProperty("java.home"), "bin", "java").toString();
     String cp =
         System.getProperty("surefire.test.class.path", System.getProperty("java.class.path"));
@@ -83,7 +81,13 @@ public final class Engines {
         new ArrayList<>(
             List.of(javaExecutable, "-Xmx384m", "-Xss1m", "-XX:ActiveProcessorCount=2"));
     String worker = Worker.class.getName();
-    if (request.database().equals("starrocks")) {
+    if (request.database().equals("trafodion")) {
+      var runtime = Trafodion.runtime();
+      Input.require(Boolean.TRUE.equals(runtime.get("available")), (String) runtime.get("message"));
+      Path home = Path.of(System.getenv("OPTILENS_TRAFODION_HOME"));
+      cp = home.resolve("adapter/optilens-trafodion.jar") + java.io.File.pathSeparator + cp;
+      worker = "dev.optilens.trafodion.TrafodionWorker";
+    } else if (request.database().equals("starrocks")) {
       var runtime = StarRocks.runtime();
       Input.require(Boolean.TRUE.equals(runtime.get("available")), (String) runtime.get("message"));
       Path home = Path.of(System.getenv("OPTILENS_STARROCKS_HOME"));

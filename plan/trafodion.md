@@ -2,8 +2,12 @@
 
 ## Current support
 
-OptiLens and Trafodion-Lite both contain integration foundations. They do not
-yet provide an end-to-end Trafodion optimization experiment.
+The development branch `codex/trafodion-native-adapter` adds a native SQL
+adapter in both repositories. See [native adapter installation and use](trafodion-native-adapter.md)
+and [the adapter README](../adapters/trafodion/README.md). The instructions below
+for `codex/trafodion-optimizer-research` describe the earlier standalone runtime
+and inspection foundation; that branch does not contain the new SQL worker.
+Native manual construction, candidate selection and replay are now implemented on the adapter branch; see [the implementation guide](trafodion-native-adapter.md) for the current behavior and remaining boundaries. The sections below preserve the original design contract.
 
 | Capability | Status |
 | --- | --- |
@@ -12,7 +16,7 @@ yet provide an end-to-end Trafodion optimization experiment.
 | Runtime availability in all three database selectors | Implemented; unavailable engines are grey, labelled Not installed, and disabled |
 | Optional native compiler, candidate, task and solution callbacks | Implemented in Trafodion-Lite |
 | Standalone Lite SQLCI and local SQL server | Existing native runtime; requires its own successful build |
-| OptiLens native optimizer worker and structured plan export | Pending |
+| OptiLens native SQL optimizer worker and structured plan export | Implemented on `codex/trafodion-native-adapter`; requires successful build and installation smoke test |
 | Manual plan construction, single-rule candidates and deterministic replay | Pending |
 | Editable native results, experiment endpoint and format-v3 history | Pending |
 
@@ -39,8 +43,8 @@ used by OptiLens's bundled rule inventory.
 The earlier `codex/optimizer-inspection` branch contains the initial native
 foundation only. Although that foundation was merged into local native
 `master`, do not assume another checkout's `origin/master` contains it. Use the
-explicit research branch above for this installation. No branch currently
-completes the OptiLens native optimizer worker.
+explicit research branch above for this installation. Use `codex/trafodion-native-adapter` for the newer OptiLens SQL worker;
+the research branch alone is insufficient.
 
 For a new checkout:
 

@@ -4,7 +4,7 @@ Calcite version: **1.39.0**. Verified examples: **135 / 222 catalog entries**, c
 
 ## Verification and execution
 
-Each example executes real Calcite rules. Tests require an event attributed to the target rule and at least one changed local-expression snapshot. Preparation stages, when present, precede the target and are retained in exported records. The explorer compares the target stage only. Source-defined examples are in `RuleExamples.java`; additional SQL programs are in `src/main/resources/rule-examples.json`. Nine direct-plan programs are in `src/main/resources/plan-examples.json`; they use Plan Lab without SQL conversion.
+Each example executes real Calcite rules. Tests require an event attributed to the target rule and at least one changed local-expression snapshot. Preparation stages, when present, precede the target and are retained in exported records. The explorer compares the target stage only. All rule cases now live in `src/main/resources/examples/cases/`. Direct-plan cases use Plan Lab without SQL conversion. Verification and coverage come from the generated reports described in [JSON examples and verification](json-example-verification.md).
 
 Subquery-removal examples disable SQL-conversion expansion. Reversible rewrites use bounded matches, including one match for join commuting. Dates use a UTC planner context. These are optimizer demonstrations over declared schemas, not query executions or proofs of better performance. A rule producing a candidate does not establish equivalence on every possible input or global optimality.
 

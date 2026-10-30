@@ -9,7 +9,7 @@ The documentation, interface, built-in examples, rule catalog descriptions, and 
 
 ## Code formatting
 
-Java production code, tests and the StarRocks adapter use
+Java production code, tests and engine adapters use
 [Google Java Style](https://google.github.io/styleguide/javaguide.html), applied
 by google-java-format 1.24.0 through Spotless Maven 2.43.0. These pinned versions
 run on the project's JDK 17 baseline. Google formatting uses two-space block

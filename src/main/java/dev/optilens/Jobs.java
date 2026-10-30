@@ -55,12 +55,65 @@ public final class Jobs implements AutoCloseable {
   }
 
   public synchronized Job submit(Request request) throws Exception {
+    return submit(request, Json.MAPPER.valueToTree(request));
+  }
+
+  public synchronized Job step(String runId, String candidateId, Request input) throws Exception {
+    Job previous = jobs.get(runId);
+    Input.require(
+        previous != null && !previous.imported() && "succeeded".equals(previous.status()),
+        "Continue from a locally executed, successful experiment");
+    Run run = previous.result();
+    Input.require(
+        run.formatVersion() == 3
+            && run.nativeTrace() != null
+            && !run.nativeTrace().path("complete").asBoolean(),
+        "This run has no pending native experiment step");
+    Input.require(
+        executionInput(run.input()).equals(executionInput(input)),
+        "The current draft changed. Start a new experiment before choosing a candidate.");
+    var runtime = Trafodion.runtime();
+    Input.require(
+        Boolean.TRUE.equals(runtime.get("available"))
+            && run.engineVersion().equals(runtime.get("buildId")),
+        "Native engine build changed. Start a new experiment.");
+    var replay =
+        (com.fasterxml.jackson.databind.node.ArrayNode) run.nativeTrace().path("replay").deepCopy();
+    var choice = Json.MAPPER.createObjectNode();
+    if ("unchanged".equals(candidateId)) {
+      Input.require(
+          run.nativeTrace().path("candidates").isEmpty(),
+          "Select a generated candidate before continuing");
+      choice
+          .put("ordinal", -1)
+          .put("fingerprint", run.nativeTrace().path("currentFingerprint").asText());
+    } else {
+      com.fasterxml.jackson.databind.JsonNode selected = null;
+      for (var candidate : run.nativeTrace().path("candidates"))
+        if (candidate.path("id").asText().equals(candidateId)) selected = candidate;
+      Input.require(
+          selected != null && selected.path("compatible").asBoolean(),
+          "Unknown or incompatible native candidate");
+      choice
+          .put("ordinal", selected.path("ordinal").asInt())
+          .put("fingerprint", selected.path("fingerprint").asText());
+    }
+    choice.put("generationFingerprint", run.nativeTrace().path("generationFingerprint").asText());
+    replay.add(choice);
+    var envelope = Json.MAPPER.createObjectNode();
+    envelope.set("request", Json.MAPPER.valueToTree(run.input()));
+    envelope.set("replay", replay);
+    return submit(run.input(), envelope);
+  }
+
+  private Job submit(Request request, com.fasterxml.jackson.databind.JsonNode workerInput)
+      throws Exception {
     Input.validate(request);
     capacity();
     String id = UUID.randomUUID().toString();
     Job job = new Job(id, "queued", false, Instant.now().toString(), null, null);
     Path input = directory.resolve(id + ".input.json");
-    Json.MAPPER.writeValue(input.toFile(), request);
+    Json.MAPPER.writeValue(input.toFile(), workerInput);
     save(job);
     try {
       executor.execute(() -> execute(job, input, request));
@@ -121,7 +174,7 @@ public final class Jobs implements AutoCloseable {
                 return outcome.validation();
               } finally {
                 if (process != null && process.isAlive()) {
-                  process.destroyForcibly();
+                  terminate(process);
                   process.waitFor(5, TimeUnit.SECONDS);
                 }
                 Files.deleteIfExists(input);
@@ -137,6 +190,19 @@ public final class Jobs implements AutoCloseable {
       Thread.currentThread().interrupt();
       throw e;
     }
+  }
+
+  private static com.fasterxml.jackson.databind.JsonNode executionInput(Request input) {
+    var tree = Json.MAPPER.valueToTree(input);
+    if (tree.path("plan").isObject())
+      ((com.fasterxml.jackson.databind.node.ObjectNode) tree.path("plan")).remove("layout");
+    return tree;
+  }
+
+  private static void terminate(Process process) {
+    var descendants = process.descendants().toList();
+    for (int i = descendants.size() - 1; i >= 0; i--) descendants.get(i).destroyForcibly();
+    process.destroyForcibly();
   }
 
   private void capacity() {
@@ -209,7 +275,7 @@ public final class Jobs implements AutoCloseable {
       if (e instanceof InterruptedException) Thread.currentThread().interrupt();
     } finally {
       if (process != null && process.isAlive()) {
-        process.destroyForcibly();
+        terminate(process);
         try {
           process.waitFor(5, TimeUnit.SECONDS);
         } catch (InterruptedException ignored) {
