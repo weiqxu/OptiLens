@@ -8,10 +8,10 @@ Trafodion inputs.
 ## Install
 
 Use a Trafodion-Lite checkout containing `trafodion-lite-optimizer` (the
-`codex/trafodion-native-adapter` branch during development):
+`master` branch):
 
 ```sh
-git clone --branch codex/trafodion-native-adapter https://github.com/weiqxu/Trafodion-Lite.git Trafodion-Lite
+git clone --branch master https://github.com/weiqxu/Trafodion-Lite.git Trafodion-Lite
 cd Trafodion-Lite
 OMPI_CXX=/usr/bin/g++ make -j4 lite
 cd /path/to/OptiLens

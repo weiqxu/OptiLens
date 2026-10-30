@@ -6,8 +6,8 @@
 script. `Trafodion.java` validates installation identity and rule-source
 compatibility. `Engines` routes Trafodion requests exclusively to this bridge.
 The native entry point is `core/sql/bin/TrafodionLiteOptimizerMain.cpp` in the
-Trafodion-Lite `codex/trafodion-native-adapter` branch. Both branches remain
-unmerged until real native validation is complete.
+Trafodion-Lite `master` branch. The native adapter and its OptiLens integration
+are merged into `master` in both repositories.
 
 The worker bootstraps the embedded compiler, parses and checks a read-only AST,
 then stops compilation at `OPTIMIZE`. It does not generate or execute a user

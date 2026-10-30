@@ -2,12 +2,12 @@
 
 ## Current support
 
-The development branch `codex/trafodion-native-adapter` adds a native SQL
-adapter in both repositories. See [native adapter installation and use](trafodion-native-adapter.md)
-and [the adapter README](../adapters/trafodion/README.md). The instructions below
-for `codex/trafodion-optimizer-research` describe the earlier standalone runtime
-and inspection foundation; that branch does not contain the new SQL worker.
-Native manual construction, candidate selection and replay are now implemented on the adapter branch; see [the implementation guide](trafodion-native-adapter.md) for the current behavior and remaining boundaries. The sections below preserve the original design contract.
+Both repositories include the native SQL adapter, manual plan construction,
+explicit candidate selection and deterministic replay on `master`. See
+[native adapter installation and use](trafodion-native-adapter.md) and
+[the adapter README](../adapters/trafodion/README.md) for the current workflow
+and remaining limitations. The later sections preserve the original design
+contract and describe the standalone Lite runtime.
 
 | Capability | Status |
 | --- | --- |
@@ -16,9 +16,10 @@ Native manual construction, candidate selection and replay are now implemented o
 | Runtime availability in all three database selectors | Implemented; unavailable engines are grey, labelled Not installed, and disabled |
 | Optional native compiler, candidate, task and solution callbacks | Implemented in Trafodion-Lite |
 | Standalone Lite SQLCI and local SQL server | Existing native runtime; requires its own successful build |
-| OptiLens native SQL optimizer worker and structured plan export | Implemented on `codex/trafodion-native-adapter`; requires successful build and installation smoke test |
-| Manual plan construction, single-rule candidates and deterministic replay | Pending |
-| Editable native results, experiment endpoint and format-v3 history | Pending |
+| OptiLens native SQL optimizer worker and structured plan export | Implemented on `master`; requires successful build and installation smoke test |
+| Manual plan construction, single-rule candidates and deterministic replay | Implemented |
+| Experiment endpoint and format-v3 history | Implemented |
+| Lossless native results back to the editable canvas | Pending; continue native experiments through replay |
 
 The bundled inventory is pinned to source commit
 `ecbf9e035d1c7fd5bd36caf73c27840b2dc6c478`. It contains 30 transformation,
@@ -27,31 +28,20 @@ hashes. Rule registration is not evidence that a rule has been triggered.
 
 ## Repositories and installation branches
 
-Use these repositories and branches for the installation steps below:
-
-| Repository | Branch | Purpose |
-| --- | --- | --- |
-| `weiqxu/OptiLens` | `master` | Web UI, rule catalog, runtime availability and integration documentation |
-| `weiqxu/Trafodion-Lite` | `codex/trafodion-optimizer-research` | Native inspection hooks, inventory exporter, usage guides and optimizer research documents |
-
-The required Trafodion-Lite branch includes both the inspection code and the
-research documents. Its reference revision for this guide is
-`f1bb021be`; record `git rev-parse HEAD` after checkout when reproducing an
-experiment. This checkout revision is distinct from the older source baseline
-used by OptiLens's bundled rule inventory.
-
-The earlier `codex/optimizer-inspection` branch contains the initial native
-foundation only. Although that foundation was merged into local native
-`master`, do not assume another checkout's `origin/master` contains it. Use the
-explicit research branch above for this installation. Use `codex/trafodion-native-adapter` for the newer OptiLens SQL worker;
-the research branch alone is insufficient.
+Use `master` in both `weiqxu/OptiLens` and `weiqxu/Trafodion-Lite` for new
+installations. Trafodion-Lite master includes the inspection foundation,
+optimizer research documents and the native OptiLens worker. The earlier
+research branch remains historical and does not contain the complete adapter.
+Record `git rev-parse HEAD` after checkout when reproducing an experiment;
+the checkout revision is distinct from the source baseline used by the bundled
+rule inventory.
 
 For a new checkout:
 
 ```bash
 mkdir -p "$HOME/src"
 git clone --branch master https://github.com/weiqxu/OptiLens.git "$HOME/src/OptiLens"
-git clone --branch codex/trafodion-optimizer-research --single-branch \
+git clone --branch master --single-branch \
   https://github.com/weiqxu/Trafodion-Lite.git "$HOME/src/Trafodion-Lite"
 ```
 
@@ -61,20 +51,20 @@ switching branches, then fetch and update the required branch:
 ```bash
 cd "$HOME/src/Trafodion-Lite"
 git fetch origin
-git switch codex/trafodion-optimizer-research
-git pull --ff-only origin codex/trafodion-optimizer-research
+git switch master
+git pull --ff-only origin master
 git branch --show-current
 git rev-parse HEAD
 ```
 
-The expected branch name is `codex/trafodion-optimizer-research`. An existing
+The expected branch name is `master`. An existing
 single-branch clone that does not fetch this branch can first create its remote
 tracking reference explicitly:
 
 ```bash
 git fetch origin \
-  refs/heads/codex/trafodion-optimizer-research:refs/remotes/origin/codex/trafodion-optimizer-research
-git switch codex/trafodion-optimizer-research
+  refs/heads/master:refs/remotes/origin/master
+git switch master
 ```
 
 ## Inspect support in OptiLens
@@ -123,7 +113,7 @@ optimizer. These hooks are not yet a JSON snapshot exporter, complete Memo trace
 or proof that a candidate was selected in the final root plan.
 
 The native repository's
-[inspection guide](https://github.com/weiqxu/Trafodion-Lite/blob/codex/trafodion-optimizer-research/plan/optilens-integration.md)
+[inspection guide](https://github.com/weiqxu/Trafodion-Lite/blob/master/plan/optilens-integration.md)
 describes the API and remaining work.
 
 ## Build and use standalone Trafodion Lite
@@ -131,7 +121,7 @@ describes the API and remaining work.
 This is a separate SQL runtime. It executes SQL and persists data; it is useful
 for checking the native compiler/runtime while the OptiLens worker is unfinished.
 
-After checking out `codex/trafodion-optimizer-research` as described above,
+After checking out `master` as described above,
 install dependencies and build:
 
 ```bash
@@ -184,7 +174,7 @@ In a second terminal with the same environment:
 This uses the repository's reduced Trafodion Type 4 protocol. Starting this
 server does not activate OptiLens: no automatic server connection or Trafodion
 runtime-home setting is implemented. See the native
-[build and usage guide](https://github.com/weiqxu/Trafodion-Lite/blob/codex/trafodion-optimizer-research/plan/trafodion-lite-usage.md).
+[build and usage guide](https://github.com/weiqxu/Trafodion-Lite/blob/master/plan/trafodion-lite-usage.md).
 
 ## Verify the implemented foundation
 
